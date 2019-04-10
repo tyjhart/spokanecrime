@@ -1,0 +1,149 @@
+---
+title: "R Notebook"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+```{r setup, echo = FALSE, message = FALSE}
+library(readr)
+library(tidyverse)
+library(maps)
+```
+
+## Data Import
+
+Spokane's crime data is available [on the Open GIS Data portal](http://data-spokane.opendata.arcgis.com/search?tags=public%20safety) for 2013, 2014, and 2015. We import crime data from the downloaded CSV files: 
+
+```{r data_import}
+# Import CSV data
+df.crime_2013 <- read_csv("Crime%202013.csv", 
+    col_types = cols(Location = col_skip(), 
+        OBJECTID = col_skip(), Offense = col_skip()))
+
+df.crime_2014 <- read_csv("Crime%202014.csv", 
+    col_types = cols(Location = col_skip(), 
+        OBJECTID = col_skip(), Offense = col_skip()))
+
+
+df.crime_2015 <- read_csv("Crime%202015.csv", 
+    col_types = cols(Location = col_skip(), 
+        OBJECTID = col_skip(), Offense = col_skip()))
+
+df.crime <- rbind(df.crime_2013, df.crime_2014, df.crime_2015)
+
+# Format dates as YEAR-MONTH-DAY, no time
+df.crime$BeginDate <- as.Date(df.crime$BeginDate, "%Y-%m-%d", tz = "UTC")
+df.crime$EndDate <- as.Date(df.crime$EndDate, "%Y-%m-%d", tz = "UTC")
+```
+
+Next, we'll convert offense description and day names to factors:
+
+```{r offense_day_factors}
+df.crime$OffGen <- as.factor(df.crime$OffGen)
+df.crime$Day <- factor(df.crime$Day, c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))
+```
+
+## Offense Types
+
+Let's look at the different amounts of offenses spread across all three years:
+
+```{r offense_types}
+total.crime_types <- df.crime %>%
+  count(OffGen) %>%
+  mutate(
+    "total" = n,
+    "percentage" = n / sum(n)
+  )
+
+total.crime_types %>% 
+  ggplot(aes(reorder(OffGen, -total), total)) + 
+  geom_bar(stat = "identity") +
+  xlab("Offense Types") +
+  ylab("Total Offenses") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.25))
+```
+
+Theft is by far the offense perpetrated most. Robbery is one of the offenses perpetrated the least. This may raise the question - what is the difference between theft and robbery?  Theft is the taking of someone else's property. Robbery is the taking of someone else's property by means of force or intimidation. All robberies are thefts, but not all thefts are robberies. For example, stealing a parked car with no occupant is theft. Carjacking a vehicle at gunpoint is robbery. 
+
+Malicious mischief is the second-most common offense. For those who are curious, [here are the RCWs](https://app.leg.wa.gov/rcw/default.aspx?cite=9A.48) that define malicious mischief and its levels:
+
+1. [First degree](https://app.leg.wa.gov/RCW/default.aspx?cite=9A.48.070)
+1. [Second degree](https://app.leg.wa.gov/RCW/default.aspx?cite=9A.48.080)
+1. [Third degree](https://app.leg.wa.gov/RCW/default.aspx?cite=9A.48.090)
+
+Vehicle prowling is the third most common offense. [Here are the RCWs](https://app.leg.wa.gov/rcw/default.aspx?cite=9a.52) for the offense and its levels as well:
+
+1. [First degree](https://app.leg.wa.gov/RCW/default.aspx?cite=9A.52.095)
+1. [Second degree](https://app.leg.wa.gov/RCW/default.aspx?cite=9A.52.100)
+
+## Week Days
+
+With days of the week converted to factors we can easily see how many offenses occur on each day:
+
+```{r crime_day_table}
+table(df.crime$Day)
+```
+
+Offenses seem to be fairly well-distributed throughout the week, with the most occurring on Friday in 2015. However, from Monday to Friday there is only a 6.49% increase. From Monday to Saturday and Sunday there are increases of 2.11% and 5.86%, respectively. Let's graph the total, overall offenses by day of the week:
+
+```{r crime_day_of_week, fig.cap="Total Offenses by Day"}
+total.crime_days <- df.crime %>% 
+  count(Day) %>%
+  mutate(
+    "day_total" = n,
+    "day_percentage" = n / sum(n)
+    )
+  
+total.crime_days %>% ggplot(aes(Day, day_total)) +
+  geom_bar(stat = "identity") +
+  xlab("Day") +
+  ylab("Total Offenses") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.25))
+```
+
+Let's look at those same numbers again, but split-out the types of offenses over those same days:
+
+```{r crime_type_by_day, fig.cap="Total Offenses by Type, Day"}
+df.crime %>% ggplot(aes(Day, length(Day), fill = OffGen)) +
+  geom_bar(stat = "identity") +
+  xlab("Day") +
+  ylab("Total Offenses") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.25))
+```
+
+Again, there appears to be very little variability in the occurence of offense types. 
+
+## Offenses Over Time
+
+Let's look at total offenses over the course of 2015 as time series data. Perhaps we can find some seasonality to crime trends:
+
+```{r total_offenses_time_series}
+df.crime %>% 
+  count(BeginDate) %>%
+  ggplot(aes(BeginDate, n)) + 
+  geom_point() +
+  geom_smooth(method = "auto") +
+  geom_smooth(method = "lm", color = "red")
+```
+
+Offenses seem to peak late-summer then taper off towards year-end. Then they pick back up in the first few months. Overall, the amount of offenses are dropping slowly year-over-year. Let's do the same visualization for the most common offenses - theft, malicious mischief, and vehicle prowling:
+
+```{r common_offenses_theft}
+common_offenses <- c("Theft", "Malicious Mischief", "Vehicle Prowling", "Burglary")
+
+for (offense in common_offenses) {
+  offense_plot <- df.crime %>% 
+    filter(OffGen == offense) %>%
+    count(BeginDate) %>%
+    ggplot(aes(BeginDate, n)) + 
+    geom_point() +
+    geom_smooth(method = "auto", color = "blue") +
+    geom_smooth(method = "lm", color = "red") +
+    xlab("Date") + 
+    ylab(paste("Total", offense))
+  print(offense_plot)
+}
+```
+
+Vehicle prowling and malicious mischief are down year-over-year, but theft offenses remain stable.
