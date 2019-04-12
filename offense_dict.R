@@ -234,6 +234,8 @@ offense_names <- c(
   "assault 4d"
 )
 
+offense_names <-  offense_names[order(-nchar(offense_names), offense_names)]
+
 offense_list <- c(
   "ARSON",
   "ASSAULT",
