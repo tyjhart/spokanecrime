@@ -25,13 +25,13 @@ https://www.ucrdatatool.gov/Search/Crime/Local/JurisbyJuris.cfm
 
 We can select from a number of crime types. For this report we chose all available types. The output of a search for Spokane data results in a simple HTML table output to the screen:
 
-```{r}
+```{r echo = FALSE}
 knitr::include_graphics('./ucr_data_table_snip.png')
 ```
 
 Fortunately, there is a handy link to download the data in CSV format so no web scraping is required. The download is named "LocalCrimeJurisbyJuris.csv". Unfortunately, some HTML header information from the webpage is included in the CSV file, along with loads of extraneous spaces. We can see the extra "data" when opening the CSV file in Excel:
 
-```{r}
+```{r echo = FALSE}
 knitr::include_graphics('./ucr_csv_formatting_trouble.png')
 ```
 
@@ -58,7 +58,10 @@ plot.annual_crime <- df.crime_data %>%
   xlab("Year")
 ```
 
-Setting the X-axis label in the ggplot object also saves us work later. Let's leverage that reusable plot object and create a basic line plot of overall population. We'll also include the data points to make the line more meaningful. This plot gives us a feel for how Spokane has grown from 1985-2014:
+Setting the X-axis label in the ggplot object also saves us work later. Let's leverage that reusable plot object and create a basic line plot of overall population. We'll also include the data points to make the line more meaningful. 
+
+\newpage
+This plot gives us a feel for how Spokane has grown from 1985-2014:
 
 ```{r population_plot, cap = "Population (1985-2014)", results='asis'}
 plot.annual_crime +
@@ -67,7 +70,11 @@ plot.annual_crime +
   ylab("Population")
 ```
 
-The population has grown quite a bit according to the graph. Let's create the same plot, but with the total number of violent crimes per year instead of population numbers:
+The population has grown quite a bit according to the graph. 
+
+\newpage
+
+Let's create the same plot, but with the total number of violent crimes per year instead of population numbers:
 
 ```{r violent_crime_plot, cap = "Total Violent Crime (1985-2014", results='asis'}
 plot.annual_crime +
