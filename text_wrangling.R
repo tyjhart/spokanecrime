@@ -56,12 +56,5 @@ for (file_name in text_file_list) {
   }
 }
 
-# Factorize districts
-df.crimes$district <- factor(df.crimes$district, c("P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8", "Oth"))
-
-# Factorize offenses
-df.crimes$offense <- stri_trans_totitle(df.crimes$offense)
-df.crimes$offense <-as.factor(df.crimes$offense)
-
 # Isolate locations
 df.crimes$location <- str_replace_all(df.crimes$location, paste(offense_names, collapse = "|"), "")
