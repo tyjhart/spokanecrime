@@ -35,17 +35,10 @@ df.old_crime$long <- NULL
 # Remove "Day" column
 df.old_crime$Day <- NULL
 
-# Add filler columns that need to have parsing fixed
+# Add filler columns for rbind'ing with newer data
 df.old_crime$degree <- NA
-df.old_crime$district <- "Unk"
-
-# Motor vehicle involvement
-df.old_crime$motor_vehicle_involved <- ifelse(
-  TRUE %in% str_detect(offense, motor_veh_terms) == TRUE,
-  1,
-  0
-)
-df.old_crime$motor_vehicle_involved <- 0
+df.old_crime$district <- NA
+df.old_crime$line <- NA
 
 # Add old crime data to new data
 df.crimes <- rbind(df.crimes, df.old_crime)

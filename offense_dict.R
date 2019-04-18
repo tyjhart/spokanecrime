@@ -1,28 +1,4 @@
 offense_names <- c(
-  "vehicle prowling-2d/theft of motor vehicle parts or acce",
-  "ibr purposes only - all other larceny",
-  "ibr purposes only - aggravated assault",
-  "ibr purposes only - motor vehicle theft",
-  "ibr purposes only - robbery",
-  "ibr purposes only - shoplifting",
-  "ibr purposes only - theft from motor vehicle",
-  "ibr purposes only - theft from building",
-  "ibr purposes only - parts or accessori",
-  "ibr purposes only - burglary/breaking \\& entering",
-  "ibr purposes only - theft of motor vehicle parts or accessori",
-  "assault-1d \\(d\\)or\\(f\\) \\(weapon/instrument/bodily harm\\)",
-  "assault-2d \\(d\\)or\\(f\\) \\(weapon/instrument/bodily harm\\)",
-  "assault-3d \\(d\\)or\\(f\\) \\(weapon/instrument/bodily harm\\)",
-  "assault 1d weapon or negligent injury",
-  "assault 2d weapon or negligent injury",
-  "assault 3d weapon or negligent injury",
-  "assault 4d weapon and prior dv convictions",
-  "mail theft \\(all others\\)",
-  "mail theft \\(from a building\\)",
-  "mail theft \\(from a motor vehicle\\)",
-  "child assault-1d\\(crim neg\\)dvca",
-  "child assault-2d\\(crim neg\\)dvca",
-  "child assault-3d\\(crim neg\\)dvca",
   "arson-1st deg",
   "arson-2nd deg",
   "arson-3rd deg",
@@ -34,6 +10,11 @@ offense_names <- c(
   "arson 2d",
   "arson 3d",
   "arson 4d",
+  
+  "assault 1d",
+  "assault 2d",
+  "assault 3d",
+  "assault 4d",
   "assault - 1d \\(weapon involved\\)",
   "assault - 2d \\(weapon involved\\)",
   "assault - 3d \\(weapon involved\\)",
@@ -46,8 +27,15 @@ offense_names <- c(
   "assault-2d",
   "assault-3d",
   "assault-4d",
-  
-  
+  "assault-sub bdly harm",
+  "assault-weapon",
+  "assault-1d \\(d\\)or\\(f\\) \\(weapon/instrument/bodily harm\\)",
+  "assault-2d \\(d\\)or\\(f\\) \\(weapon/instrument/bodily harm\\)",
+  "assault-3d \\(d\\)or\\(f\\) \\(weapon/instrument/bodily harm\\)",
+  "assault 1d weapon or negligent injury",
+  "assault 2d weapon or negligent injury",
+  "assault 3d weapon or negligent injury",
+  "assault 4d weapon and prior dv convictions",
   
   "assault of a child-1d",
   "assault of a child-2d",
@@ -55,6 +43,10 @@ offense_names <- c(
   "assault of a child 1d",
   "assault of a child 2d",
   "assault of a child 3d",
+  "child assault-1d\\(crim neg\\)dvca",
+  "child assault-2d\\(crim neg\\)dvca",
+  "child assault-3d\\(crim neg\\)dvca",
+  
   "burglary 1d from residence",
   "burglary 2d from residence",
   "burglary 3d from residence",
@@ -70,31 +62,43 @@ offense_names <- c(
   "burglary 1d residential",
   "burglary 2d residential",
   "burglary 3d residential",
+  "burglary-1st",
+  "burglary-2nd",
+  "burglary-3rd",
+  "burglary-1d",
+  "burglary-2d",
+  "burglary-3d",
+  "burglary-1st deg",
+  "burglary-2nd deg",
+  "burglary-3rd deg",
   "burglary-residential",
-  "child \\(crim neg\\)dvca",
-  "custodial assault \\(aggravated assault\\)",
-  "drive by shooting",
+  "burglary-residntl",
+  "burglary-commercial",
+  "burglary-garage",
+  "residential burglary",
+  
   "harassment weapon involved",
   "harassment \\(weapon involved\\)",
   "harassment felony weapon involved",
-  "homicide by abuse",
-  "vehicular assault",
+  
+  "intimidation w/wpn",
+  
+  "mail theft",
   "mail theft\\(all others\\)",
+  "mail theft \\(all others\\)",
+  "mail theft \\(from a building\\)",
+  "mail theft \\(from a motor vehicle\\)",
+  
   "murder-1d",
   "murder-2d",
   "murder-3d",
   "murder 1d",
   "murder 2d",
   "murder 3d",
-  "theft-1d \\(all other thefts\\)",
-  "theft-2d \\(all other thefts\\)",
-  "theft-3d \\(all other thefts\\)",
-  "theft-1d \\(from motor vehicle\\)",
-  "theft-2d \\(from motor vehicle\\)",
-  "theft-3d \\(from motor vehicle\\)",
-  "theft-1d \\(shoplifting\\)",
-  "theft-2d \\(shoplifting\\)",
-  "theft-3d \\(shoplifting\\)",
+  
+  "rape 1d",
+  "rape 2d",
+  "rape 3d",
   "rape-1d \\(rape\\)",
   "rape-2d \\(rape\\)",
   "rape-3d \\(rape\\)",
@@ -110,10 +114,11 @@ offense_names <- c(
   "rape of a child 1d",
   "rape of a child 2d",
   "rape of a child 3d",
+  "rape-forcible",
   
-  "residential burglary",
-  "retail theft with special circumstances",
-  "retail theft w/ special circumstances",
+  
+  
+  
   "robbery 1d commercial \\(not purse snatching\\)",
   "robbery 2d commercial \\(not purse snatching\\)",
   "robbery 3d commercial \\(not purse snatching\\)",
@@ -136,17 +141,23 @@ offense_names <- c(
   "robbery 2d person",
   "robbery 3d person",
   
-  
-  
   "taking motor vehicle without permission 1d",
   "taking motor vehicle without permission 2d",
   "taking motor vehicle without permission 3d",
+  "tmvwop-1d",
+  "tmvwop-2d",
+  "tmvwop-3d",
+  
+  "theft-1d \\(all other thefts\\)",
+  "theft-2d \\(all other thefts\\)",
+  "theft-3d \\(all other thefts\\)",
+  "theft-1d \\(shoplifting\\)",
+  "theft-2d \\(shoplifting\\)",
+  "theft-3d \\(shoplifting\\)",
   "theft\\(firearm\\) \\(all other\\)",
   "theft\\(firearm\\) \\(from building\\)",
-  "theft\\(firearm\\) \\(from motor vehicle\\)",
   "theft of a firearm all other locations",
   "theft of a firearm from building",
-  "theft of a firearm from motor vehicle",
   "theft from a vulnerable adult 1d",
   "theft from a vulnerable adult 2d",
   "theft from a vulnerable adult 3d",
@@ -159,15 +170,9 @@ offense_names <- c(
   "theft-1d \\(from building\\)",
   "theft-2d \\(from building\\)",
   "theft-3d \\(from building\\)",
-  "theft 1d from motor vehicle",
-  "theft 2d from motor vehicle",
-  "theft 3d from motor vehicle",
   "theft 1d city all other",
   "theft 2d city all other",
   "theft 3d city all other",
-  "theft 1d city from motor vehicle",
-  "theft 2d city from motor vehicle",
-  "theft 3d city from motor vehicle",
   "theft 1d city from building",
   "theft 2d city from building",
   "theft 3d city from building",
@@ -180,12 +185,9 @@ offense_names <- c(
   "theft 1d shoplifting",
   "theft 2d shoplifting",
   "theft 3d shoplifting",
-  "theft 1d vehicle parts and accessories",
-  "theft 2d vehicle parts and accessories",
-  "theft 3d vehicle parts and accessories",
-  "theft-1d \\(motor vehicle parts or accessories\\)",
-  "theft-2d \\(motor vehicle parts or accessories\\)",
-  "theft-3d \\(motor vehicle parts or accessories\\)",
+  "theft-1d \\(shoplifting\\)",
+  "theft-2d \\(shoplifting\\)",
+  "theft-3d \\(shoplifting\\)",
   "theft-1d \\(from coin operated machine or device\\)",
   "theft-2d \\(from coin operated machine or device\\)",
   "theft-3d \\(from coin operated machine or device\\)",
@@ -200,14 +202,12 @@ offense_names <- c(
   "theft 3d all other",
   "theft-city \\(all other thefts\\)",
   "theft-city \\(from building\\)",
-  "theft-city \\(from motor vehicle\\)",
   "theft-city \\(from coin operated machine or device\\)",
   "theft-city \\(shoplifting\\)",
-  "theft-city \\(motor vehicle parts or accessories\\)",
-  "tmvwop-1d",
-  "tmvwop-2d",
-  "tmvwop-3d",
+  "retail theft with special circumstances",
+  "retail theft w/ special circumstances",
   
+  "veh-prowl",
   "vehicle prowling-1d/no theft",
   "vehicle prowling-2d/no theft",
   "vehicle prowling-3d/no theft",
@@ -220,42 +220,115 @@ offense_names <- c(
   "vehicle prowling 1st",
   "vehicle prowling 2nd",
   "vehicle prowling 3rd",
-  "veh\\(theft of fuel\\)",
-  "vehicle trespass",
+  "veh prowling-1d(motorhome/vessel)/theft of motor v",
+  "veh prowling-2d(motorhome/vessel)/theft of motor v",
+  "veh prowling-3d(motorhome/vessel)/theft of motor v",
+  "veh prowling-1d(motorhome/vessel)/theft of motor vehi",
+  "veh prowling-2d(motorhome/vessel)/theft of motor vehi",
+  "veh prowling-3d(motorhome/vessel)/theft of motor vehi",
+  "vehicle prowling-1d/theft of motor vehicle parts or acce",
+  "vehicle prowling-2d/theft of motor vehicle parts or acce",
+  "vehicle prowling-3d/theft of motor vehicle parts or acce",
+  
+  "veh-theft",
   "theft of motor vehicle",
+  "theft-1d \\(from motor vehicle\\)",
+  "theft-2d \\(from motor vehicle\\)",
+  "theft-3d \\(from motor vehicle\\)",
+  "theft-city \\(from motor vehicle\\)",
+  "theft-city \\(motor vehicle parts or accessories\\)",
+  "theft 1d vehicle parts and accessories",
+  "theft 2d vehicle parts and accessories",
+  "theft 3d vehicle parts and accessories",
+  "theft-1d \\(motor vehicle parts or accessories\\)",
+  "theft-2d \\(motor vehicle parts or accessories\\)",
+  "theft-3d \\(motor vehicle parts or accessories\\)",
+  "theft 1d city from motor vehicle",
+  "theft 2d city from motor vehicle",
+  "theft 3d city from motor vehicle",
+  "theft\\(firearm\\) \\(from motor vehicle\\)",
+  "theft 1d from motor vehicle",
+  "theft 2d from motor vehicle",
+  "theft 3d from motor vehicle",
+  "theft of a firearm from motor vehicle",
+  "veh\\(theft of fuel\\)",
+  
+  "vehicle trespass",
+  
+  "vehicular assault",
+  
   "weapon\\(intimidate with\\)",
-  "rape 1d",
-  "rape 2d",
-  "rape 3d",
-  "mail theft",
-  "assault 1d",
-  "assault 2d",
-  "assault 3d",
-  "assault 4d"
+  
+  "child \\(crim neg\\)dvca",
+  
+  "custodial assault \\(aggravated assault\\)",
+  
+  "drive by shooting",
+  
+  "homicide by abuse",
+  
+  "ibr purposes only \\- all other larceny",
+  "ibr purposes only \\- aggravated assault",
+  "ibr purposes only \\- motor vehicle theft",
+  "ibr purposes only \\- robbery",
+  "ibr purposes only \\- shoplifting",
+  "ibr purposes only \\- theft from motor vehicle",
+  "ibr purposes only \\- theft from building",
+  "ibr purposes only \\- parts or accessori",
+  "ibr purposes only \\- burglary/breaking \\& entering",
+  "ibr purposes only \\- theft of motor vehicle parts or accessori"
 )
 
-offense_names <-  offense_names[order(-nchar(offense_names), offense_names)]
-
-offense_list <- c(
-  "ARSON",
-  "ASSAULT",
-  "BURGLARY",
-  "DRIVE BY SHOOTING",
-  "HARASSMENT",
-  "MAIL THEFT",
-  "MURDER",
-  "RAPE",
-  "ROBBERY",
-  "TAKING MOTOR VEHICLE",
-  "THEFT-CITY",
-  "THEFT",
-  "TMVWOP",
-  "VEHICLE PROWLING",
-  "INTIMIDATE"
+offense_summary <- c(
+  rep("Arson", times = 11),
+  rep("Assault", times = 25),
+  rep("Assault (Child)", times = 9),
+  rep("Burglary", times = 29),
+  rep("Harassment", times = 3),
+  rep("Intimidation", times = 1),
+  rep("Mail Theft", times = 5),
+  rep("Murder", times = 6),
+  rep("Rape", times = 19),
+  rep("Robbery", times = 21),
+  rep("Taking Motor Vehicle", times = 6),
+  rep("Theft", times = 58),
+  rep("Theft (Vehicle-Related)", times = 22),
+  rep("Vehicle Prowling", times = 22),
+  rep("Other", times = 17)
 )
 
-degree_strings <- c("1D", "1st deg", "2D", "2nd deg", "3D", "3rd deg", "4D")
+offense_lengths <- nchar(offense_names)
+
+df.offenses <- data.frame(
+  "string" = offense_names, 
+  "summary" = offense_summary, 
+  "length.string" = offense_lengths,
+  stringsAsFactors = FALSE
+  )
+
+df.offenses_sorted <- df.offenses[order(-df.offenses$length.string),]
+
+# offense_names <-  offense_names[order(-nchar(offense_names), offense_names)]
+
+# offense_list <- c(
+#   "arson",
+#   "assault",
+#   "burglary",
+#   "drive by shooting",
+#   "harassment",
+#   "mail theft",
+#   "murder",
+#   "rape",
+#   "robbery",
+#   "taking motor vehicle",
+#   "theft-city",
+#   "theft",
+#   "tmvwop",
+#   "vehicle prowling",
+#   "intimidate"
+# )
+
+# Degree of offense (when applicable)
+degree_strings <- c("1d", "1st deg", "2d", "2nd deg", "3d", "3rd deg", "4d")
 degree_nums <- c(1, 1, 2, 2, 3, 3, 4)
 df.degrees <- data.frame(name.degree = degree_strings, number.degree = degree_nums, stringsAsFactors = FALSE)
-
-motor_veh_terms <- c("MOTOR VEHICLE", "VEHICULAR")

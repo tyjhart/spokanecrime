@@ -12,36 +12,23 @@ output:
 library(readtext)
 library(tidyverse)
 library(stringi)
+library(data.table)
 library(knitr)
 knitr::opts_chunk$set(
-    echo = FALSE
+    echo = FALSE,
+    dpi = 400,
+    fig.path = "plots/"
 )
+setwd(".") # For Knitr plots
+
 source("./offense_dict.R") # Offense types, categories
-source("./text_wrangling.R") # Build crime data frame
+source("./summer_dates.R") # Dates for start / end of summer
+source("./new_crimes.R") # Build crime data frame
 source("./old_crime_data.R") # Old data from 2013, 2014, and 2015
+source("./vehicle_offense.R") # Check for vehicle-related offenses
+source("./normalize_offenses.R") # True-up offenses
 source("./factorize.R") # Factorize offenses, districts
 source("./plot_data.R") # Build data frames for plotting
-source("./summer_dates.R") # Dates for start / end of summer
-```
-
-```{r total_data_frames}
-# Total by district
-total.crimes_district <- df.crimes %>%
-  count(district) %>%
-  mutate(
-    "total" = n,
-    "percentage" = (n / sum(n)) * 100
-  )
-
-# Total auto-involved by district
-total.auto_district <-  aggregate(motor_vehicle_involved ~ district, df.crimes, sum)
-
-# Total offenses by type
-total.offense_types <- df.crimes %>%
-  group_by(offense) %>%
-  summarize(
-    "total" = length(offense)
-  )
 ```
 
 Spokane is divided into eight police districts, P1 - P8. Most offenses that occur have a district number associated in the data. Some offenses that occur outside a defined district or in an unknown location are marked as Other ("Oth"). Here are the districts:
@@ -57,8 +44,8 @@ Spokane is divided into eight police districts, P1 - P8. Most offenses that occu
 
 The Northwest District includes Indian Trail, Five Mile, and some of Five Mile Prarie neighborhoods...
 
-```{r plot.total_offenses_over_time, fig.cap = "Total Offenses Over Time", fig.align = 'center'}
-df.crimes %>% 
+```{r plot.total_offenses_over_time, fig.cap = "Total Offenses Over Time", fig.align = 'center', dev='png', fig.width = 10, fig.height = 7.5}
+df.plot_data %>%
   count(date) %>%
   ggplot(aes(date, n)) + 
   geom_point() +
@@ -67,11 +54,60 @@ df.crimes %>%
   geom_vline(xintercept=c(summer_dates$summer_start, summer_dates$summer_end), linetype=4) +
   xlab("Date") +
   ylab("Total Daily Offenses") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-```
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  ggtitle("Total Crime")
 
-```{r table.total_offenses_by_district}
-district_count <- table(df.crimes$district)
+df.plot_data %>%
+  filter(offense == "BURGLARY") %>%
+  count(date) %>%
+  ggplot(aes(date, n)) + 
+  geom_point() +
+  geom_smooth(method = "auto", color = "blue") +
+  geom_smooth(method = "lm", color = "red") +
+  geom_vline(xintercept=c(summer_dates$summer_start, summer_dates$summer_end), linetype=4) +
+  xlab("Date") +
+  ylab("Burglaries") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  ggtitle("Burglaries")
+
+df.plot_data %>%
+  filter(offense == "MURDER") %>%
+  count(date) %>%
+  ggplot(aes(date, n)) + 
+  geom_point() +
+  geom_smooth(method = "auto", color = "blue") +
+  geom_smooth(method = "lm", color = "red") +
+  geom_vline(xintercept=c(summer_dates$summer_start, summer_dates$summer_end), linetype=4) +
+  xlab("Date") +
+  ylab("Murders") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  ggtitle("Murders")
+
+df.plot_data %>%
+  filter(offense == "THEFT") %>%
+  count(date) %>%
+  ggplot(aes(date, n)) + 
+  geom_point() +
+  geom_smooth(method = "auto", color = "blue") +
+  geom_smooth(method = "lm", color = "red") +
+  geom_vline(xintercept=c(summer_dates$summer_start, summer_dates$summer_end), linetype=4) +
+  xlab("Date") +
+  ylab("Thefts") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  ggtitle("Thefts (Non-Vehicle)")
+
+df.plot_data %>%
+  filter(offense == "VEHICLE THEFT") %>%
+  count(date) %>%
+  ggplot(aes(date, n)) + 
+  geom_point() +
+  geom_smooth(method = "auto", color = "blue") +
+  geom_smooth(method = "lm", color = "red") +
+  geom_vline(xintercept=c(summer_dates$summer_start, summer_dates$summer_end), linetype=4) +
+  xlab("Date") +
+  ylab("Vehicle Thefts") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  ggtitle("Vehicle Thefts")
 ```
 
 ```{r plot.total_crimes_by_district}
