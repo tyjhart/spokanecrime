@@ -1,11 +1,12 @@
 ---
 title: "Spokane Population Growth and Crime"
-subtitle: "FBI UCR Data (1985-2014)"
 author: "Tyler Hart"
 date: "April 8, 2019"
 output:
   pdf_document: default
+  word_document: default
   html_document: default
+subtitle: FBI UCR Data (1985-2014)
 ---
 
 ```{r setup, include=FALSE}
@@ -13,102 +14,120 @@ library(readr)
 library(tidyverse)
 library(knitr)
 knitr::opts_chunk$set(
-  echo = FALSE, 
+  echo = TRUE, 
+  message = FALSE,
   fig.pos = 'h',
   fig.align = 'center',
   collapse = TRUE,
-  results = 'asis'
+  results = 'asis',
+  dpi = 400,
+  fig.path='./figures/',
+  dev=c('pdf', 'png')
   )
 ```
 
-Someone I was talking with recently about Spokane's economy and growth mentioned their concern about crime increasing as the city grows. It makes sense on the surface - more people could mean more criminals, and therefore more crime. But there are many factors that contribute to an environment where criminality occurs. Communities also experience a diversity of crime - violent and non-violent. Within each type are varying degrees of offense as well. Saying "crime went up" may be accurate, but within that trend violent crime (murder, robbery, etc.) could go down while non-violent crime (theft, malicious mischief) goes up. I decided to do a quick exploration of what data is available and what it says about changes in population and crime. We'll compare different types of crime, both violent and non-violent, with population data to see if correlations exist.    
+I was recently talking with someone about Spokane's economy and growth, and they mentioned their concern about crime increasing as the city grows. It's a concern that makes sense on the surface; More people could mean more criminals, and therefore more crime. However, there are many factors that contribute to an environment where criminality occurs. Unemployment, local education levels, and support programs for vulnerable members of the community all affect crime levels. Communities also experience a diversity of crime - violent and non-violent. Within each type are varying degrees of offense as well. Saying "crime went up" may be accurate, but within that trend violent crime (murder, robbery, etc.) could go down while non-violent crime (theft, malicious mischief) goes up. I decided to do a quick exploration of available data and what it says about changes in population and crime. I compared different types of crime, both violent and non-violent, with population data over time to see if correlations exist.    
 
 ## Data
 
-The Federal Bureau of Investigation (FBI) makes crime data available for many localities through the Uniform Crime Reporting (UCR) webpage. In the case of Spokane, WA there is data available from 1985 through 2014. All the data used in this report is sourced from the FBI UCR webpage at this URL:
+The Federal Bureau of Investigation (FBI) makes crime data available for many localities through the Uniform Crime Reporting (UCR) webpage. In the case of Spokane, WA there is data available from 1985 through 2014. All the data used in this report is sourced [from the FBI UCR webpage](https://www.ucrdatatool.gov/Search/Crime/Local/JurisbyJuris.cfm). I was able to select from a number of different crime types, and for this report chose all available. The output of a search for Spokane data results in a simple HTML table output to the screen:
 
-https://www.ucrdatatool.gov/Search/Crime/Local/JurisbyJuris.cfm
-
-We can select from a number of crime types. For this report we chose all available types. The output of a search for Spokane data results in a simple HTML table output to the screen:
-
-```{r}
+```{r UCR_screenshot, echo = FALSE}
 knitr::include_graphics('./ucr_data_table_snip.png')
 ```
 
-Fortunately, there is a handy link to download the data in CSV format so no web scraping is required. The download is named "LocalCrimeJurisbyJuris.csv". Unfortunately, some HTML header information from the webpage is included in the CSV file, along with loads of extraneous spaces. We can see the extra "data" when opening the CSV file in Excel:
+Fortunately, there is a handy link to download the data in CSV format so no web scraping is required. The download is named "LocalCrimeJurisbyJuris.csv". Unfortunately, some HTML header information from the webpage is included in the CSV file, along with loads of extraneous spaces. The extra "data" is easily seen when opening the CSV file in Excel:
 
-```{r}
+```{r excel_screenshot, echo = FALSE}
 knitr::include_graphics('./ucr_csv_formatting_trouble.png')
 ```
 
-We need to strip out data from the first 10 rows in the file and the last 11 rows. Using Excel is the quickest way to drop the extra stuff and get to the data. Next, we import raw data from the CSV and format the *Year* column: 
+I need to strip out data from the first 10 rows in the file and the last 11 rows. Using Excel was the quickest way to drop the extra stuff and get to the data. Next, I imported raw data from the CSV and formatted the *Year* column: 
 
-```{r data_import, echo = TRUE}
+```{r data_import}
 df.crime_data <- read_csv(
   "LocalCrimeJurisbyJuris.csv",
   col_types = cols(Year = col_date(format = "%Y"))
   )
 ```
 
-To make handling columns in the data frame easier we'll switch all the names from mixed-case to lower-case:
+To make handling columns in the data frame easier I switched all the names from mixed-case to lower-case:
 
-```{r column_case, echo = TRUE}
+```{r column_case}
 names(df.crime_data) <- tolower(names(df.crime_data))
 ```
 
-Next, we'll load up the *df.crime_data* data frame into a reusable ggplot object. In the process we'll also set the *year* column as the *X* aesthetic so it won't need to be done repeatedly:
+Next, I loaded up the *df.crime_data* data frame into a reusable ggplot object. In the process I also set the *year* column as the *X* aesthetic so it didn't need to be done repeatedly:
 
-```{r ggplot_object, echo = TRUE}
+```{r ggplot_object}
 plot.annual_crime <- df.crime_data %>% 
   ggplot(aes(year)) +
   xlab("Year")
 ```
 
-Setting the X-axis label in the ggplot object also saves us work later. Let's leverage that reusable plot object and create a basic line plot of overall population. We'll also include the data points to make the line more meaningful. 
+I created a basic line plot of overall population, leveraging that reusable ggplot object. In the process I also include the data points to make the line more meaningful. 
 
 \newpage
 
-This plot gives us a feel for how Spokane has grown from 1985-2014:
+This plot gives us a feel for how Spokane has grown from 1985-2014, including a smoothed line showing the conditional mean:
 
-```{r population_plot, echo = TRUE, cap = "Population (1985-2014)"}
+```{r population_plot, cap = "Population (1985-2014)"}
 plot.annual_crime +
   geom_line(aes(y = population)) +
   geom_point(aes(y = population)) +
-  ylab("Population")
+  geom_smooth(aes(y = population)) +
+  ylab("Population") + 
+  ggtitle("Population by Year (1985-2014)")
+
 ```
 
-The population has grown quite a bit according to the graph. 
+From 1985 to 2014 (175,732 and 211,025 people, respectively) there was a 20% increase in Spokane's population.
 
 \newpage
 
-Let's create the same plot, but with the total number of violent crimes per year instead of population numbers:
+I created the same plot, but with the total number of violent crimes per year instead of population numbers:
 
-```{r violent_crime_plot, cap = "Total Violent Crime (1985-2014"}
+```{r violent_crime_plot, cap = "Total Violent Crime (1985-2014)"}
 plot.annual_crime +
   geom_line(aes(y = `violent crime total`)) +
   geom_point(aes(y = `violent crime total`)) +
-  ylab("Violent Crimes")
+  ylab("Violent Crimes") +
+  ggtitle("Violent Crimes by Year (1985-2014)")
 ```
 
-There doesn't appear to be a hard-and-fast link between violent crime numbers and population count. 
+From its peak in 1994 to 2014 (1,688 and 1,156 incidents, respectively) Spokane saw a 31.5% decrease in total violent crime. Over that same period Spokane's population grew 8.37%. When comparing violent crime against population number there doesn't appear to be a hard-and-fast association. Howerver, breaking down the types of violent crime yielded more insights into associations between population and crime. 
 
 \newpage
 
-Let's create the same plot for motor vehicle theft and compare again:
+I did the same type of graph for property crime totals:
 
-```{r motor_veh_theft_plot, cap = "Motor Vehicle Theft (1985-2014"}
+```{r property_crime_plot, cap = "Total Property Crime (1985-2014)"}
+plot.annual_crime +
+  geom_line(aes(y = `property crime total`)) +
+  geom_point(aes(y = `property crime total`)) +
+  ylab("Property Crimes") +
+  ggtitle("Property Crimes by Year (1985-2014)")
+```
+
+Again, there doesn't appear to be an immediately-apparent link between population growth and this type of crime overall. Any insights into the relationship between crime and population will probably be found within individual types of crime. First I broke out a graph for motor vehicle thefts, then for larceny-theft and burglaries.
+
+\newpage
+
+Here is the plot just for motor vehicle thefts:
+
+```{r motor_veh_theft_plot, cap = "Motor Vehicle Theft (1985-2014)"}
 plot.annual_crime +
   geom_line(aes(y = `motor vehicle theft`)) +
   geom_point(aes(y = `motor vehicle theft`)) +
   ylab("Motor Vehicle Theft") +
-  ggtitle("Motor Vehicle Theft (1985-2014")
+  ggtitle("Motor Vehicle Theft (1985-2014)")
 ```
 
-In the case of motor vehicle theft there does appear to be a steady upward trend that resembles population growth. 
+In the case of motor vehicle theft there does appear to be a steady upward trend that resembles population growth. From 1985 to 2014 (606 and 2,242 incidents, respectively) there was a 269.9% increase in motor vehicle thefts.
 
 \newpage
 
-We'll use a scatter plot to visualize the two values together:
+I used a scatter plot to visualize the population and motor vehicle thefts, and added a smoothed conditional means (*geom_smooth*) plot over the top:
 
 ```{r pop_vs_vehicle_theft, message = FALSE}
 df.crime_data %>% 
@@ -117,50 +136,88 @@ df.crime_data %>%
   geom_smooth() +
   xlab("Population") +
   ylab("Motor Vehicle Theft") +
-  ggtitle("Population & Motor Vehicle Theft")
+  ggtitle("Population & Motor Vehicle Theft (1985-2014)")
 ```
 
-It looks like a relationship may exist between population and vehicle thefts. We'll use scatter plots for the other types of crime as well:
+It appears that a relationship may exist between population and vehicle thefts. 
 
-```{r population_crime_scatter, message = FALSE}
+\newpage
+
+I used code for the previous scatter plot with other types of crime, including total violent crime:
+
+```{r}
 df.crime_data %>% 
   ggplot(aes(population, `violent crime total`)) +
   geom_point() +
   geom_smooth() +
   xlab("Population") +
   ylab("Total Violent Crimes") +
-  ggtitle("Population & Total Violent Crime")
+  ggtitle("Total Violent Crime")
+```
 
+\newpage
+
+Total property crime:
+
+```{r}
 df.crime_data %>% 
   ggplot(aes(population, `property crime total`)) +
   geom_point() +
   geom_smooth() +
   xlab("Population") +
   ylab("Total Property Crimes") +
-  ggtitle("Population & Total Property Crime")
+  ggtitle("Total Property Crime")
+```
 
+\newpage
+
+Larceny-theft:
+
+```{r}
 df.crime_data %>% 
   ggplot(aes(population, `larceny-theft`)) +
   geom_point() +
   geom_smooth() +
   xlab("Population") +
   ylab("Larceny-Theft") +
-  ggtitle("Population & Larceny-Theft")
+  ggtitle("Larceny-Theft")
+```
 
+\newpage
+
+Murder and non-negligent manslaughter:
+
+```{r}
+df.crime_data %>% 
+  ggplot(aes(population, `murder and nonnegligent manslaughter`)) +
+  geom_point() +
+  geom_smooth() +
+  xlab("Population") +
+  ylab("Murder, Non-Neg. Manslaughter") +
+  ggtitle("Murder, Non-Neg. Manslaughter")
+```
+
+\newpage
+
+Burglary:
+
+```{r}
 df.crime_data %>% 
   ggplot(aes(population, burglary)) +
   geom_point() +
   geom_smooth() +
   xlab("Population") +
   ylab("Burglary") +
-  ggtitle("Population & Burglary")
+  ggtitle("Burglary")
 ```
 
 While the first scatter plot we looked at seemed clear, I'm not confident there is much positive correlation between crime and population outside of motor vehicle theft. 
 
+\newpage
+
 ## Correlations
 
-We can use the Pearson correlation coefficient to quantify (possible) relationships between the two sets of data. The coefficient value is always in the range of -1 to 1. Values less than zero mean there is a negative correlation; When one value increases, the other decreases. Values above zero indicate a positive correlation; When one value increases, the other does as well. A zero value indicates no correlation at all. Let's look at the correlation values for total violent and property crimes:
+The Pearson correlation coefficient quantifies (possible) relationships between the two sets of data. I used this built-in R feature so there would be a numeric value for easy comparison. The coefficient value is always in the range of negative-one to one (-1:1). Values less than zero mean there is a negative correlation; When one value increases, the other decreases. Values above zero indicate a positive correlation; When one value increases, the other does as well. A zero value indicates no correlation at all, and values near zero are "weak". First, I looked at overall correlation values for total violent and property crimes:
 
 ```{r population_crime_correlation}
 corr.crimes <- c(
@@ -183,13 +240,13 @@ df.correlation_values <- data.frame(
 kable(df.correlation_values, caption = "Total Crime Correlations")
 ```
 
-There is a weak positive correlation between total violent crime and population. An even weaker correlation exists for property crime. Given more recent data and the continuing downturn in crime, it's possible they have become weaker or even turn negative. I wouldn't be confident making the blanket statement, "crime goes up along with population in Spokane". 
+There is a weak positive correlation between total violent crime and population. An even weaker correlation exists for property crime. Given more recent data and the continuing downturn in crime, it's possible they have become weaker or even turned negative. I wouldn't be confident making and defending the blanket statement, "crime goes up along with population in Spokane". 
 
 \newpage
 
-Now let's look at the same correlation values for individual types of crime like robbery and murder:
+Finally, I looked at correlation values for individual types of crime and built a table:
 
-```{r population_crime_correlatio, results='asis'}
+```{r population_crime_type_correlation}
 corr.specific_crimes <- c(
   cor(
     df.crime_data$population, 
@@ -235,15 +292,16 @@ df.correlation_values <- data.frame(
 )
 
 kable(
-  df.correlation_values[order(-df.correlation_values$correlation_coef),], 
-  caption = "Crime-Type Correlations"
+  df.correlation_values[
+    order(-df.correlation_values$correlation_coef),
+    ], caption = "Crime-Type Correlations"
   )
 ```
 
-There was a strong positive correlation between motor vehicle theft and population. We could argue that more cars were being stolen while the population increased. However, it's important to remember that *correlation is not causation*. More research is needed before we can say definitively that more cars were being stolen *because of* population growth. A positive correlation existed for robbery as well, though it was less than half as strong. The coefficient for murder and non-negligent manslaughter was almost zero - we couldn't really say, "more people were being murdered as the population grew". Nor could we say, "less people were being murdered as the population grew", because it was pretty much static. 
+There was a strong positive correlation between motor vehicle theft and population. I could comfortably make the statement, "more cars were being stolen while the population increased." However, it's important to remember that *correlation is not causation*. More research is needed before I could say definitively that more cars were being stolen *because of* population growth. A positive correlation existed for robbery as well, though it was less than half as strong. The coefficient for murder and non-negligent manslaughter was almost zero - I wouldn't really say, "more people were being murdered as the population grew". Nor would I say, "fewer people were being murdered as the population grew", because it was pretty much static. 
 
-One surprising result is the negative correlation between population and burglaries. As the population grew, burglaries went down. Again, we can't say the population change was the *cause* of reduction in burglaries. However, we can be comfortable saying, "burglaries went down as the population increased".
+One surprising result was the negative correlation between population and burglaries. As the population grew, burglaries went down. Again, I can't say the population change was the *cause* of a reduction in burglaries. However, I might be comfortable saying, "burglaries went down as the population increased".
 
 ## Summary
 
-Was there a correlation between population growth and crime? **Yes**. Can we argue for the blanket statement that crime *in-general* went up along with the population? **No**. While motor vehicle theft and robbery increased along with the population, murders stayed the same, while burglaries went down.
+Was there a correlation between population growth and crime? **Yes**. Can I argue for the blanket statement that crime *in-general* went up along with the population? **No**. While motor vehicle theft and robbery increased along with the population, murders stayed the same, while burglaries went down.
