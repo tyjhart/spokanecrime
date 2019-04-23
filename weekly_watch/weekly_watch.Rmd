@@ -3,9 +3,9 @@ title: "Testing"
 author: "Tyler Hart"
 date: "4/13/2019"
 output:
-  pdf_document: default
   html_document:
     df_print: paged
+  pdf_document: default
 ---
 
 ```{r setup}
@@ -15,16 +15,21 @@ library(stringi)
 library(data.table)
 library(knitr)
 knitr::opts_chunk$set(
-    echo = FALSE,
-    dpi = 400,
-    fig.path = "plots/"
-)
-setwd(".") # For Knitr plots
+  echo = FALSE, 
+  message = FALSE,
+  fig.pos = 'h',
+  fig.align = 'center',
+  collapse = TRUE,
+  results = 'asis',
+  dpi = 400,
+  fig.path='./figures/',
+  dev=c('pdf', 'png')
+  )
 
 source("./offense_dict.R") # Offense types, categories
 source("./summer_dates.R") # Dates for start / end of summer
 source("./new_crimes.R") # Build crime data frame
-source("./old_crime_data.R") # Old data from 2013, 2014, and 2015
+# source("./old_crime_data.R") # Old data from 2013, 2014, and 2015
 source("./vehicle_offense.R") # Check for vehicle-related offenses
 source("./normalize_offenses.R") # True-up offenses
 source("./factorize.R") # Factorize offenses, districts
