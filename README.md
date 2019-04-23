@@ -34,4 +34,3 @@ Crime never stops, unfortunately. To keep track of trends over time we have ongo
 Older data can give us context for what's happening today. For that reason, we periodically look backward in time with data that won't be updated again. Despite the data being somewhat "stale" it can still give us insight.
 
 1. [FBI Crime and Population Data (UCR, 1985-2014)](/fbi_ucr/annual_report/)
-
