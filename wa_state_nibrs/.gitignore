@@ -1,8 +1,8 @@
 # CSV files
-.csv
+*.csv
 
 # HTML files
-.html
+*.html
 
 # History files
 .Rhistory
