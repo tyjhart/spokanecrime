@@ -1,7 +1,7 @@
 ---
-title: "Testing"
+title: "Spokane Weekly Watch"
 author: "Tyler Hart"
-date: "4/13/2019"
+date: "4/25/2019"
 output:
   pdf_document: default
   html_document:
@@ -56,7 +56,7 @@ df.crimes %>%
   xlab("Date") +
   ylab("Daily Offenses") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
-  ggtitle("Total Crime by Day")
+  ggtitle("Spokane Crime by Day")
 ```
 
 ```{r}
@@ -64,7 +64,11 @@ df.crimes %>%
   filter(date >= "2017-09-12") %>%
   count(district) %>%
   ggplot(aes(reorder(district, -n),n)) +
-  geom_bar(stat = "identity")
+  geom_col() +
+  xlab("Police Districts") +
+  ylab("Offenses") +
+  ggtitle("Offenses by Police District")
+  
 ```
 
 ```{r}
