@@ -13,6 +13,7 @@ df.old_crime_2015 <- read_csv("Crime%202015.csv",
                                                OBJECTID = col_skip(), Offense = col_skip()))
 
 df.old_crime <- rbind(df.old_crime_2013, df.old_crime_2014, df.old_crime_2015)
+rm(df.old_crime_2013, df.old_crime_2014, df.old_crime_2015)
 
 # Format dates as YEAR-MONTH-DAY, no time
 df.old_crime$BeginDate <- as.Date(df.old_crime$BeginDate, "%Y-%m-%d", tz = "UTC")
@@ -41,4 +42,5 @@ df.old_crime$district <- NA
 df.old_crime$line <- NA
 
 # Add old crime data to new data
-df.crimes <- rbind(df.crimes, df.old_crime)
+df.parsed_old_crime <- data.frame(ac = df.old_crime$ac, district = df.old_crime$district, date = df.old_crime$date, line = NA, stringsAsFactors = FALSE)
+df.crimes <- rbind(df.crimes, df.parsed_old_crime)

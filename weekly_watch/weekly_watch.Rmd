@@ -61,6 +61,7 @@ df.crimes %>%
 
 ```{r}
 df.crimes %>%
+  filter(date >= "2017-09-12") %>%
   count(district) %>%
   ggplot(aes(reorder(district, -n),n)) +
   geom_bar(stat = "identity")
@@ -68,6 +69,7 @@ df.crimes %>%
 
 ```{r}
 df.district_summary <- df.crimes %>%
+  filter(date >= "2017-09-12") %>%
   group_by(district) %>%
   summarize(dist_sum = n())
 
