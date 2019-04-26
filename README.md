@@ -1,23 +1,25 @@
 # Spokane Crime Analysis Project
 
-Spokane Crime Analysis Project (SCAP) is dedicated to discovering, analyzing, and visualizing crime data in Spokane, WA. Informed residents can make better decisions about where to live, raise families, work, and play in our wonderful city with up-to-date information on crime. With data in-hand, residents can engage actively and factually with local leaders and law enforcement. 
+Spokane Crime Analysis Project (CAP) is dedicated to discovering, analyzing, and visualizing crime data in Spokane, WA. Informed residents can make better decisions about where to live, raise families, work, and play in our wonderful city with up-to-date information on crime. With data in-hand, residents can engage actively and factually with local leaders and law enforcement. 
 
 ## Goals
 
-The Spokane Crime Analysis Project works to meet these goals for the community:
+The Crime Analysis Project works to meet these goals for the local community:
 
 1. Identify and visualize long-term crime trends
 1. Discover associations between crime and social, natural, and economic conditions
 1. Make meaningful comparisons with cities across the nation
 1. Leverage data from diverse, trusted sources
-1. Be honest in the use of statistics, models, and estimates
+1. Be honest and open in the use of statistics, models, estimates, and assumptions
 1. Publish objective, independent reports and analysis
 
 ## Ongoing Analysis
 
-Crime never stops, unfortunately. To keep track of trends over time we have ongoing analysis sub-projects running on a weekly basis. These track fairly close with data published regularly by the City of Spokane and the County.
+Crime never stops, unfortunately. To keep track of trends over time we have ongoing analysis sub-projects running on a weekly basis. These track fairly close with data published regularly by the City of Spokane and the County. Most people are interested in the overall trend of crime over time - the "big picture". Using the COMPSTAT reports made available by the city we put a plot together of daily offenses post-September 12, 2017:
 
-*Pending upload*
+![Offenses by Day](./weekly_watch/figures/plot.total_offenses_over_time-1.png)
+
+Dashed vertical lines show the beginning and end of summer, which appears to correspond with a rise in crime. Two additional lines (red and blue), show smoothed averages using linear and LOESS methods, respectively. As more weekly COMPSTAT reports are released and incorporated into the analysis our view over time will improve.
 
 ## Static Analysis
 
