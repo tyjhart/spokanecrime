@@ -33,7 +33,7 @@ registerDoParallel(cl)
 
 source("./offense_dict.R") # Offense types, categories
 source("./summer_dates.R") # Dates for start / end of summer
-source("./new_crimes.R") # Build crime data frame
+source("./csv_import.R") # Build crime data frame
 # source("./old_crime_data.R") # Old data from 2013, 2014, and 2015
 # source("./vehicle_offense.R") # Check for vehicle-related offenses
 # source("./normalize_offenses.R") # True-up offenses
@@ -49,7 +49,7 @@ df.crimes %>%
   group_by(date) %>%
   summarize(offenses = n()) %>%
   ggplot(aes(date, offenses)) + 
-  geom_point() +
+  geom_point(size = 3, alpha = 0.5) +
   geom_smooth(method = "auto", color = "blue") +
   geom_smooth(method = "lm", color = "red") +
   geom_vline(xintercept=c(summer_dates$summer_start, summer_dates$summer_end), linetype=4) +
