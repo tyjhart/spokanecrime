@@ -1,8 +1,8 @@
-# Project Overview
+# CompStat Weekly Watch
 
 Spokane Crime Analysis Project (CAP) is dedicated to discovering, analyzing, and visualizing crime data in Spokane, WA. Informed residents can make better decisions about where to live, raise families, work, and play in our wonderful city with up-to-date information on crime. With data in-hand, residents can engage actively and factually with local leaders and law enforcement. Using Computer Statistics (CompStat) [data provided by Spokane Police Department (SPD)](https://my.spokanecity.org/police/prevention/compstat/) we're able to analyze crime that has already happened, discover trends in the data, and make predictions.
 
-Currently, the Spokane Police Department (SPD) makes weekly CompStat reports available each Monday. Reports cover reported crime for the prior week in PDF format, broken down by policing districts. We crawl the PDF files, extract data, and transform it into a format useful for analysis.
+Currently, the SPD makes weekly CompStat reports available each Monday. Reports cover reported crime for the prior week in PDF format, broken down by policing districts. We crawl the PDF files, extract data, and transform it into a format useful for analysis.
 
 ## Data Limitations
 
@@ -14,11 +14,11 @@ It is well-known that many crimes are not reported to the authorities. This phen
 
 ## Data Availability
 
-Spokane's reporting of crime data has undergone multiple transformations in the last decade. CompStat data is available on the SpokaneCity.org portal from 2019 all the way back to 2015. On October 4, 2016 the SPD moved from one crime reporting standard (UCR) to another (NIBRS). Current CompStat reports state on the first page,
+Spokane's reporting of crime data has undergone multiple transformations in the last decade. CompStat data is available on the SpokaneCity.org portal from 2019 all the way back to 2015. On October 4, 2016 the SPD moved from one crime reporting standard ([UCR](https://www.ucrdatatool.gov/)) to another ([NIBRS](https://www.fbi.gov/services/cjis/ucr/nibrs)). Current CompStat reports state on the first page about the switchover date,
 
 > Numbers on CompStat reports prior to this date should not be used as a comparison to those on this report.
 
-Unfortunately, we're not able to make true "apples-to-apples" comparisons across the full timespan of availalble crime data.
+Unfortunately, we're not able to make true "apples-to-apples" comparisons across the full timespan of availalble CompStat crime data.
 
 ## Overall Statistics
 
