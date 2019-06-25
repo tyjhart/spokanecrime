@@ -1,5 +1,5 @@
 # Figures directory (for now)
-/figures/
+# /figures/
 
 # CSV files in the project directory
 *.csv
