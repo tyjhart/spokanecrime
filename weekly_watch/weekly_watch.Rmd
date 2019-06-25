@@ -130,7 +130,7 @@ df.crimes %>%
   ggtitle("CompStat Theft of Motor Vehicles, September 12, 2017 Onward")
 ```
 
-```{r 2019_offenses_by_district, fig.cap = "Offenses by Police District, 2019 YTD"}
+```{r plot.2019_offenses_by_district, fig.cap = "Offenses by Police District, 2019 YTD"}
 df.crimes %>%
   filter(date >= "2019-01-01") %>%
   count(district) %>%
