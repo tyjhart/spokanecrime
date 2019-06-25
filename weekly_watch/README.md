@@ -40,86 +40,21 @@ Offenses tend to spike during the summer months, shown in dashed lines. The seas
 
 The city is divided among eight policing districts, with four (P1, P2, P3, P4) in the "North Police Service Area" and the other four (P5, P6, P7, P8) in the "South". Geographically, the north and south service areas are separated by the Spokane River. In CompStat reports some offenses are noted as occurring in an "OTH" district with no amplifying information given. Periodically an offense will also be listed with no district at all in the weekly reports, and those are shown here as "UNK". Districts designated "SPA", "SPB", "SPC", and "SPD" had been used at one point, but no information is given in the CompStat reports indicating what areas these designations represented.
 
-```{r 2019_offenses_by_police_district, fig.cap = "Offenses by Police District, 2019 YTD"}
-df.crimes %>%
-  filter(date >= "2019-01-01") %>%
-  count(district) %>%
-  ggplot(aes(reorder(district, -n), n, label = n)) +
-  geom_col() +
-  geom_text(vjust = -0.5) +
-  scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1)) +
-  xlab("Police Districts") +
-  ggtitle("Offenses by Police District, 2019 YTD")
-```
+![Offenses by Police District](./figures/plot.total_offenses_by_district-1.svg)
 
-So far in 2019 most crime occurred in districts P1, P2, P3, and P4 - all north of the Spokane River. Districts P4 and P3 are both located north of the river and east of Division, and have the highest overall counts.
+So far in 2019 most crime occurred in districts P1, P2, P3, and P4 - all north of the Spokane River. Districts P4 and P3 are both located north of the river and east of Division, and have the highest overall counts. Districts P1-P4 have the highest overall counts of reported crimes from September 2017 onward.
 
-```{r table.district_stats}
-# District statistics
-df.district_summary <- df.crimes %>%
-  filter(date >= "2019-01-01") %>%
-  group_by(district) %>%
-  summarize(dist_sum = n())
-
-df.district_summary$percentage <- round(df.district_summary$dist_sum / sum(df.district_summary$dist_sum), 3) * 100
-
-kable(df.district_summary[order(-df.district_summary$dist_sum),], col.names = c("Police District", "Offenses", "Percentage"), caption = "Statistics by District, 2019 YTD")
-```
-
-Districts P1-P4 have the highest overall counts of reported crimes from September 2017 onward.
-
-```{r offenses_by_police_district, fig.cap = "Offenses by Police District"}
-df.crimes %>%
-  count(district) %>%
-  ggplot(aes(reorder(district, -n), n, label = n)) +
-  geom_col() +
-  geom_text(vjust = -0.5) +
-  scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1)) +
-  xlab("Police Districts") +
-  ggtitle("Offenses by Police District, September 12, 2017 Onward")
-```
-
-```{r tab.district_summary}
-# District statistics
-df.district_summary <- df.crimes %>%
-  group_by(district) %>%
-  summarize(dist_sum = n())
-
-df.district_summary$percentage <- round(df.district_summary$dist_sum / sum(df.district_summary$dist_sum), 3) * 100
-
-kable(df.district_summary[order(-df.district_summary$dist_sum),], "latex", booktabs = T, col.names = c("Police District", "Offenses", "Percentage"), caption = "Statistics by District, September 12, 2017 Onward") 
-```
+![Offenses by Police District, 2019 YTD](./figures/plot.2019_offenses_by_district-1.svg)
 
 ## Types of Offenses
 
-General theft (or larceny), burglary, shoplifting, and theft of motor vehicles continue to be top reported crimes so far in 2019. This follows the trend that's been recorded since mid-2017.
+General theft (or larceny), burglary, shoplifting, and theft of motor vehicles continue to be top reported crimes so far in 2019:
 
-```{r offenses_by_type_ytd, fig.cap = "Types of Offenses, 2019 YTD"}
-df.crimes %>%
-  filter(date >= "2019-01-01") %>%
-  count(category) %>%
-  ggplot(aes(reorder(category, -n), n, label = n)) +
-  geom_col() +
-  geom_text(vjust = -0.5) +
-  scale_y_continuous(expand = c(.1, .1)) +
-  xlab("Category") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.25, hjust=1)) +
-  xlab("") +
-  ylab("Offenses") +
-  ggtitle("Types of Offenses, 2019 YTD")
-```
+![Offenses, 2019 YTD](./figures/plot.offenses_by_type_ytd-1.svg)
 
-```{r offenses_by_type, fig.cap = "Types of Offenses"}
-df.crimes %>%
-  count(category) %>%
-  ggplot(aes(reorder(category, -n), n, label = n)) +
-  geom_col() +
-  geom_text(angle = 90, vjust = 0.2, hjust = -0.2) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.25, hjust=1)) +
-  xlab("") +
-  scale_y_continuous("Offenses", limits = c(0, 8000)) +
-  ggtitle("Types of Offenses, September 12, 2017 Onward")
-```
+This follows the trend that's been recorded since mid-2017:
+
+![Offenses, September 12, 2017 Onward](./figures/plot.total_offenses_by_type-1.svg)
 
 ## Month-Over-Month Statistics
 
