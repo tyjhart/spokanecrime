@@ -24,66 +24,47 @@ Unfortunately, we're not able to make true "apples-to-apples" comparisons across
 
 Looking at overall statistics gives us a good starting point from which to explore crime over time and specific types of offenses. From September 12, 2017 onward we see an overall downward trend in reported crime:
 
-![CompStat Total Offenses](./figures/plot.offenses_over_time-1.svg)
+![CompStat Total Offenses](./figures/plot.offenses_over_time-1.png)
 
 Offenses tend to spike during the summer months, shown in dashed lines. The seasonality is demonstrated very clearly in the 2013-2016 data at the end of this report.
 
-![Thefts](./figures/plot.theft_over_time-1.svg)
+![Thefts](./figures/plot.theft_over_time-1.png)
 
-![Shoplifting](./figures/plot.shoplifting_over_time-1.svg)
+![Shoplifting](./figures/plot.shoplifting_over_time-1.png)
 
-![Burglaries](./figures/plot.burglaries_over_time-1.svg)
+![Burglaries](./figures/plot.burglaries_over_time-1.png)
 
-![Thefts of Motor Vehicles](./figures/plot.tomv_over_time-1.svg)
+![Thefts of Motor Vehicles](./figures/plot.tomv_over_time-1.png)
 
 ## Police District Statistics
 
 The city is divided among eight policing districts, with four (P1, P2, P3, P4) in the "North Police Service Area" and the other four (P5, P6, P7, P8) in the "South". Geographically, the north and south service areas are separated by the Spokane River. In CompStat reports some offenses are noted as occurring in an "OTH" district with no amplifying information given. Periodically an offense will also be listed with no district at all in the weekly reports, and those are shown here as "UNK". Districts designated "SPA", "SPB", "SPC", and "SPD" had been used at one point, but no information is given in the CompStat reports indicating what areas these designations represented.
 
-![Offenses by Police District](./figures/plot.total_offenses_by_district-1.svg)
+![Offenses by Police District](./figures/plot.total_offenses_by_district-1.png)
 
 So far in 2019 most crime occurred in districts P1, P2, P3, and P4 - all north of the Spokane River. Districts P4 and P3 are both located north of the river and east of Division, and have the highest overall counts. Districts P1-P4 have the highest overall counts of reported crimes from September 2017 onward.
 
-![Offenses by Police District, 2019 YTD](./figures/plot.2019_offenses_by_district-1.svg)
+![Offenses by Police District, 2019 YTD](./figures/plot.2019_offenses_by_district-1.png)
 
 ## Types of Offenses
 
 General theft (or larceny), burglary, shoplifting, and theft of motor vehicles continue to be top reported crimes so far in 2019:
 
-![Offenses, 2019 YTD](./figures/plot.offenses_by_type_ytd-1.svg)
+![Offenses, 2019 YTD](./figures/plot.offenses_by_type_ytd-1.png)
 
 This follows the trend that's been recorded since mid-2017:
 
-![Offenses, September 12, 2017 Onward](./figures/plot.total_offenses_by_type-1.svg)
+![Offenses, September 12, 2017 Onward](./figures/plot.total_offenses_by_type-1.png)
 
 ## Month-Over-Month Statistics
 
 While looking at data week-over-week is often not useful due to how "jumpy" crime statistics can be, month-over-month data can tell a story. Any field in the tables with "NA" value indicates that data either was not or is not yet available.
 
-```{r}
-# All Offenses
-df.monthly_summary <- df.crimes %>% 
-  group_by(year, num.month) %>%
-  summarize(total.offenses = n())
+![Offenses, September 12, 2017 Onward](./figures/table.offenses.png)
 
-kable(spread(df.monthly_summary, key = year, value = total.offenses), col.names = c("Month", 2017, 2018, 2019), caption = "Total Offenses")
+![Thefts, September 12, 2017 Onward](./figures/table.thefts.png)
 
-# Thefts
-df.monthly_summary <- df.crimes %>% 
-  filter(category %in% c("Shoplifting", "Theft")) %>%
-  group_by(year, num.month) %>%
-  summarize(total.thefts = n())
-
-kable(spread(df.monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Total Thefts")
-
-# All Burglaries
-df.monthly_summary <- df.crimes %>%
-  filter(category %in% c("Residential Burglary", "Commercial Burglary", "Garage Burglary", "Fenced Area Burglary")) %>%
-  group_by(year, num.month) %>%
-  summarize(total.thefts = n())
-
-kable(spread(df.monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "All Burglaries")
-```
+![Burglaries, September 12, 2017 Onward](./figures/table.burglaries.png)
 
 ### Theft
 
@@ -95,34 +76,11 @@ The highest-count crimes of a non-violent nature in Spokane include theft (or "l
 1. Theft of a motor vehicle
 1. Mail theft
 
-```{r}
-df.monthly_summary <- df.crimes %>% 
-  filter(category == "Shoplifting") %>%
-  group_by(year, num.month) %>%
-  summarize(total.thefts = n())
+![Shoplifting, September 12, 2017 Onward](./figures/table.shoplifting.png)
 
-kable(spread(df.monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Shoplifting")
-```
+![Mail Theft, September 12, 2017 Onward](./figures/table.mail_theft.png)
 
-```{r}
-# Mail Theft
-df.monthly_summary <- df.crimes %>% 
-  filter(category == "Mail Theft") %>%
-  group_by(year, num.month) %>%
-  summarize(total.thefts = n())
-
-kable(spread(df.monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Mail Theft")
-```
-
-```{r}
-# Motor Vehicle Theft
-df.monthly_summary <- df.crimes %>% 
-  filter(category == "Theft of Motor Vehicle") %>%
-  group_by(year, num.month) %>%
-  summarize(total.thefts = n())
-
-kable(spread(df.monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Motor Vehicle Thefts") 
-```
+![Motor Vehicle Thefts, September 12, 2017 Onward](./figures/table.motor_vehicle_theft.png)
 
 ### Burglary
 
@@ -133,78 +91,22 @@ Burglary also has special classifications as well:
 1. Garage burglary
 1. Fenced area burglary
 
-```{r}
-# Residential Burglaries
-df.monthly_summary <- df.crimes %>%
-  filter(category %in% c("Residential Burglary")) %>%
-  group_by(year, num.month) %>%
-  summarize(total.thefts = n())
+![Residential Burglary, September 12, 2017 Onward](./figures/table.residential_burglary.png)
 
-kable(spread(df.monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Residential Burglaries")
-```
+![Commercial Burglary, September 12, 2017 Onward](./figures/table.commercial_burglary.png)
 
-```{r}
-# Commercial Burglaries
-df.monthly_summary <- df.crimes %>%
-  filter(category %in% c("Commercial Burglary")) %>%
-  group_by(year, num.month) %>%
-  summarize(total.thefts = n())
-
-kable(spread(df.monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Commercial Burglaries")
-```
-
-```{r}
-# Fenced Area & Garage Burglaries
-df.monthly_summary <- df.crimes %>%
-  filter(category %in% c("Garage Burglary", "Fenced Area Burglary")) %>%
-  group_by(year, num.month) %>%
-  summarize(total.thefts = n())
-
-kable(spread(df.monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Fenced Area and Garage Burglaries")
-```
+![Other Burglary, September 12, 2017 Onward](./figures/table.other_burglary.png)
 
 ## Violent Crime
 Violent crime includes assault, sexual assault, robbery, intimidation with a weapon, and carjacking:
 
-```{r}
-# Robbery
-df.monthly_summary <- df.crimes %>% 
-  filter(category == "Robbery") %>%
-  group_by(year, num.month) %>%
-  summarize(total.thefts = n())
+![Robbery, September 12, 2017 Onward](./figures/table.robberies.png)
 
-kable(spread(df.monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Robberies") 
-```
+![Assault, September 12, 2017 Onward](./figures/table.assaults.png)
 
-```{r}
-# Assault
-df.burglary_monthly_summary <- df.crimes %>% 
-  filter(category == "Assault") %>%
-  group_by(year, num.month) %>%
-  summarize(total.thefts = n())
+![Rape, September 12, 2017 Onward](./figures/table.rapes.png)
 
-kable(spread(df.burglary_monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Assaults")
-```
-
-```{r}
-# Rape
-df.burglary_monthly_summary <- df.crimes %>% 
-  filter(category == "Rape") %>%
-  group_by(year, num.month) %>%
-  summarize(total.thefts = n())
-
-kable(spread(df.burglary_monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Sexual Assaults (Rape)") 
-```
-
-```{r}
-# Intimidate with Weapon
-df.burglary_monthly_summary <- df.crimes %>% 
-  filter(category == "Intimidate With Weapon") %>%
-  group_by(year, num.month) %>%
-  summarize(total.thefts = n())
-
-kable(spread(df.burglary_monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Intimidation with Weapon")
-```
+![Intimidation with Weapon, September 12, 2017 Onward](./figures/table.intimidation_weapon.png)
 
 ## Legacy Data
 

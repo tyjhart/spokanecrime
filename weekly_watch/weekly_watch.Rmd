@@ -27,6 +27,9 @@ library(stringi)
 library(data.table)
 library(doParallel)
 library(scales)
+library(kableExtra)
+library(magick)
+library(webshot)
 library(knitr)
 knitr::opts_chunk$set(
   echo = FALSE, 
@@ -41,6 +44,7 @@ knitr::opts_chunk$set(
   dev=c('svg','png'),
   out.width = '100%'
   )
+library(kableExtra)
 
 # Multi-core
 cl <- makePSOCKcluster(4)
@@ -162,18 +166,19 @@ df.district_summary <- df.crimes %>%
 
 df.district_summary$percentage <- round(df.district_summary$dist_sum / sum(df.district_summary$dist_sum), 3) * 100
 
-kable(df.district_summary[order(-df.district_summary$dist_sum),], col.names = c("Police District", "Offenses", "Percentage"), caption = "Statistics by District, 2019 YTD")
-```
+kable(df.district_summary[order(-df.district_summary$dist_sum),], col.names = c("Police District", "Offenses", "Percentage"), caption = "Statistics by District, 2019 YTD") %>% 
+  kable_styling(bootstrap_options = c("condensed", "striped"), full_width=FALSE, font_size=12) %>%
+  as_image(file = "figures/table.district_stats_ytd.png")
 
-```{r table.district_summary}
-# District statistics
 df.district_summary <- df.crimes %>%
   group_by(district) %>%
   summarize(dist_sum = n())
 
 df.district_summary$percentage <- round(df.district_summary$dist_sum / sum(df.district_summary$dist_sum), 3) * 100
 
-kable(df.district_summary[order(-df.district_summary$dist_sum),], "latex", booktabs = T, col.names = c("Police District", "Offenses", "Percentage"), caption = "Statistics by District, September 12, 2017 Onward") 
+kable(df.district_summary[order(-df.district_summary$dist_sum),], col.names = c("Police District", "Offenses", "Percentage"), caption = "Statistics by District, September 12, 2017 Onward") %>%
+  kable_styling(bootstrap_options = c("condensed", "striped"), full_width=FALSE, font_size=12) %>%
+  as_image(file = "figures/table.district_stats_total.png")
 ```
 
 ```{r plot.offenses_by_type_ytd, fig.cap = "Types of Offenses, 2019 YTD"}
@@ -209,7 +214,9 @@ df.monthly_summary <- df.crimes %>%
   group_by(year, num.month) %>%
   summarize(total.offenses = n())
 
-kable(spread(df.monthly_summary, key = year, value = total.offenses), col.names = c("Month", 2017, 2018, 2019), caption = "Total Offenses")
+kable(spread(df.monthly_summary, key = year, value = total.offenses), col.names = c("Month", 2017, 2018, 2019), caption = "Total Offenses") %>% 
+  kable_styling(bootstrap_options = c("condensed", "striped"), full_width=FALSE, font_size=12) %>%
+  as_image(file = "figures/table.offenses.png") 
 
 # Thefts
 df.monthly_summary <- df.crimes %>% 
@@ -217,7 +224,9 @@ df.monthly_summary <- df.crimes %>%
   group_by(year, num.month) %>%
   summarize(total.thefts = n())
 
-kable(spread(df.monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Total Thefts")
+kable(spread(df.monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Total Thefts") %>% 
+  kable_styling(bootstrap_options = c("condensed", "striped"), full_width=FALSE, font_size=12) %>%
+  as_image(file = "figures/table.thefts.png") 
 
 # All Burglaries
 df.monthly_summary <- df.crimes %>%
@@ -225,7 +234,9 @@ df.monthly_summary <- df.crimes %>%
   group_by(year, num.month) %>%
   summarize(total.thefts = n())
 
-kable(spread(df.monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "All Burglaries")
+kable(spread(df.monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "All Burglaries") %>% 
+  kable_styling(bootstrap_options = c("condensed", "striped"), full_width=FALSE, font_size=12) %>%
+  as_image(file = "figures/table.burglaries.png") 
 ```
 
 ```{r table.shoplifting}
@@ -234,7 +245,9 @@ df.monthly_summary <- df.crimes %>%
   group_by(year, num.month) %>%
   summarize(total.thefts = n())
 
-kable(spread(df.monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Shoplifting")
+kable(spread(df.monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Shoplifting") %>% 
+  kable_styling(bootstrap_options = c("condensed", "striped"), full_width=FALSE, font_size=12) %>%
+  as_image(file = "figures/table.shoplifting.png") 
 ```
 
 ```{r table.mail_theft}
@@ -244,7 +257,9 @@ df.monthly_summary <- df.crimes %>%
   group_by(year, num.month) %>%
   summarize(total.thefts = n())
 
-kable(spread(df.monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Mail Theft")
+kable(spread(df.monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Mail Theft") %>% 
+  kable_styling(bootstrap_options = c("condensed", "striped"), full_width=FALSE, font_size=12) %>%
+  as_image(file = "figures/table.mail_theft.png") 
 ```
 
 ```{r table.motor_veh_theft}
@@ -254,7 +269,9 @@ df.monthly_summary <- df.crimes %>%
   group_by(year, num.month) %>%
   summarize(total.thefts = n())
 
-kable(spread(df.monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Motor Vehicle Thefts") 
+kable(spread(df.monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Motor Vehicle Thefts") %>% 
+  kable_styling(bootstrap_options = c("condensed", "striped"), full_width=FALSE, font_size=12) %>%
+  as_image(file = "figures/table.motor_vehicle_theft.png") 
 ```
 
 ```{r table.residential_burglary}
@@ -264,7 +281,9 @@ df.monthly_summary <- df.crimes %>%
   group_by(year, num.month) %>%
   summarize(total.thefts = n())
 
-kable(spread(df.monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Residential Burglaries")
+kable(spread(df.monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Residential Burglaries") %>% 
+  kable_styling(bootstrap_options = c("condensed", "striped"), full_width=FALSE, font_size=12) %>%
+  as_image(file = "figures/table.residential_burglary.png") 
 ```
 
 ```{r table.commercial_burglary}
@@ -274,7 +293,9 @@ df.monthly_summary <- df.crimes %>%
   group_by(year, num.month) %>%
   summarize(total.thefts = n())
 
-kable(spread(df.monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Commercial Burglaries")
+kable(spread(df.monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Commercial Burglaries") %>% 
+  kable_styling(bootstrap_options = c("condensed", "striped"), full_width=FALSE, font_size=12) %>%
+  as_image(file = "figures/table.commercial_burglary.png") 
 ```
 
 ```{r table.other_burglary}
@@ -284,7 +305,9 @@ df.monthly_summary <- df.crimes %>%
   group_by(year, num.month) %>%
   summarize(total.thefts = n())
 
-kable(spread(df.monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Fenced Area and Garage Burglaries")
+kable(spread(df.monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Fenced Area and Garage Burglaries") %>% 
+  kable_styling(bootstrap_options = c("condensed", "striped"), full_width=FALSE, font_size=12) %>%
+  as_image(file = "figures/table.other_burglary.png") 
 ```
 
 ```{r table.robbery}
@@ -294,7 +317,9 @@ df.monthly_summary <- df.crimes %>%
   group_by(year, num.month) %>%
   summarize(total.thefts = n())
 
-kable(spread(df.monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Robberies") 
+kable(spread(df.monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Robberies") %>% 
+  kable_styling(bootstrap_options = c("condensed", "striped"), full_width=FALSE, font_size=12) %>%
+  as_image(file = "figures/table.robberies.png") 
 ```
 
 ```{r table.assault}
@@ -304,7 +329,9 @@ df.burglary_monthly_summary <- df.crimes %>%
   group_by(year, num.month) %>%
   summarize(total.thefts = n())
 
-kable(spread(df.burglary_monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Assaults")
+kable(spread(df.burglary_monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Assaults") %>% 
+  kable_styling(bootstrap_options = c("condensed", "striped"), full_width=FALSE, font_size=12) %>%
+  as_image(file = "figures/table.assaults.png") 
 ```
 
 ```{r table.rape}
@@ -314,7 +341,9 @@ df.burglary_monthly_summary <- df.crimes %>%
   group_by(year, num.month) %>%
   summarize(total.thefts = n())
 
-kable(spread(df.burglary_monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Sexual Assaults (Rape)") 
+kable(spread(df.burglary_monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Sexual Assaults (Rape)") %>% 
+  kable_styling(bootstrap_options = c("condensed", "striped"), full_width=FALSE, font_size=12) %>%
+  as_image(file = "figures/table.rapes.png") 
 ```
 
 ```{r table.intimidate_weapon}
@@ -324,7 +353,9 @@ df.burglary_monthly_summary <- df.crimes %>%
   group_by(year, num.month) %>%
   summarize(total.thefts = n())
 
-kable(spread(df.burglary_monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Intimidation with Weapon")
+kable(spread(df.burglary_monthly_summary, key = year, value = total.thefts), col.names = c("Month", 2017, 2018, 2019), caption = "Intimidation with Weapon") %>% 
+  kable_styling(bootstrap_options = c("condensed", "striped"), full_width=FALSE, font_size=12) %>%
+  as_image(file = "figures/table.intimidation_weapon.png") 
 ```
 
 ```{r plot.2013_2016_offenses, fig.cap = "Offenses Over Time, 2013-2016"}
