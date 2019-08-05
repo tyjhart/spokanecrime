@@ -62,54 +62,42 @@ While looking at data week-over-week is often not useful due to how "jumpy" crim
 
 ![Offenses, September 12, 2017 Onward](./figures/table.offenses.png)
 
-![Thefts, September 12, 2017 Onward](./figures/table.thefts.png)
+### Non-Violent Crime
 
-![Burglaries, September 12, 2017 Onward](./figures/table.burglaries.png)
+Most crime in Spokane is "non-violent", including theft and burglary.
 
-### Theft
+![Thefts, September 12, 2017 Onward](./figures/table.theft.png)
 
-The highest-count crimes of a non-violent nature in Spokane include theft (or "larceny") and burglary. There are special classifications of theft:
+![Burglaries, September 12, 2017 Onward](./figures/table.burglary.png)
 
-1. Retail theft
-1. Retail theft with special circumstances
-1. Shoplifting
-1. Theft of a motor vehicle
-1. Mail theft
+![Shoplifting, September 12, 2017 Onward](./figures/table.theft_shoplifting.png)
 
-![Shoplifting, September 12, 2017 Onward](./figures/table.shoplifting.png)
+![Motor Vehicle Thefts, September 12, 2017 Onward](./figures/table.theft%20of%20motor%20vehicle.png)
 
-![Mail Theft, September 12, 2017 Onward](./figures/table.mail_theft.png)
+### Violent Crime
 
-![Motor Vehicle Thefts, September 12, 2017 Onward](./figures/table.motor_vehicle_theft.png)
-
-### Burglary
-
-Burglary also has special classifications as well:
-
-1. Residential burglary
-1. Commercial burglary
-1. Garage burglary
-1. Fenced area burglary
-
-![Residential Burglary, September 12, 2017 Onward](./figures/table.residential_burglary.png)
-
-![Commercial Burglary, September 12, 2017 Onward](./figures/table.commercial_burglary.png)
-
-![Other Burglary, September 12, 2017 Onward](./figures/table.other_burglary.png)
-
-## Violent Crime
 Violent crime includes assault, sexual assault, robbery, intimidation with a weapon, and carjacking:
 
-![Robbery, September 12, 2017 Onward](./figures/table.robberies.png)
+![Robbery, September 12, 2017 Onward](./figures/table.robbery.png)
 
-![Assault, September 12, 2017 Onward](./figures/table.assaults.png)
+![Assault, September 12, 2017 Onward](./figures/table.assault.png)
 
-![Rape, September 12, 2017 Onward](./figures/table.rapes.png)
+![Rape, September 12, 2017 Onward](./figures/table.rape.png)
 
-![Intimidation with Weapon, September 12, 2017 Onward](./figures/table.intimidation_weapon.png)
+## Lunar Phases
+
+There is still much speculation about the moon's effect on people's behavior, despite numerous studies that point to the contrary. We've visualized the number of offenses per phase of the moon:
+
+![Offenses per Lunar Phase, September 12, 2017 Onward](./figures/plot.offenses_by_lunar_phase-1.png)
+
+There is no significant difference in the amount of offenses between lunar phases.
 
 ## Legacy Data
 
 Crime data for 2013-2016 is available on the City of Spokane's GIS portal. Unfortunately, it doesn't use the same reporting standard as recent CompStat reports. However, the data is consistent and we can observe a downward trend in overall crime. We also note seasonality in crimes, with offenses peaking during the summer periods denoted by hashed lines.
 
 ![Legacy Data, 2013-2016](./figures/plot.2013_2016_offenses-1.png)
+
+![Legacy Data, Lunar Cycles, 2013-2016](./figures/plot.legacy_offenses_by_lunar_phase-1.png)
+
+Again, there is no significant difference in the amount of offenses between lunar phases.

@@ -128,18 +128,18 @@ df.crimes$category[offense_cat_rows] <- "Vehicle Trespass"
 df.crimes$category <- as.factor(df.crimes$category)
 
 # Generate address list CSV
-df.crimes$city <- "Spokane"
-df.crimes$state <- "WA"
-df.crimes$zip <- ""
-
-df.crimes[1:10000,] %>%
-  filter(!is.na(address)) %>%
-  distinct() %>%
-  select(address, city, state, zip) %>%
-  write.csv(., 'addresses.csv')
-
-table(df.crimes$district)
-table(df.crimes$ac)
-table(df.crimes$offense)
-
-df.crimes %>% write.csv(., 'compstat.csv')
+# df.crimes$city <- "Spokane"
+# df.crimes$state <- "WA"
+# df.crimes$zip <- ""
+# 
+# df.crimes[1:10000,] %>%
+#   filter(!is.na(address)) %>%
+#   distinct() %>%
+#   select(address, city, state, zip) %>%
+#   write.csv(., 'addresses.csv')
+# 
+# table(df.crimes$district)
+# table(df.crimes$ac)
+# table(df.crimes$offense)
+# 
+# df.crimes %>% write.csv(., 'compstat.csv')
