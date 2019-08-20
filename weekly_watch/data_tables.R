@@ -88,7 +88,7 @@ for (table_category in table_category_vec) {
   kable(
     spread(df.monthly_summary, key = year, value = total_count), 
     col.names = c("Month", 2017, 2018, 2019), 
-    caption = table_category
+    caption = str_to_title(table_category, locale = "en")
   ) %>% 
     kable_styling(
       bootstrap_options = c("condensed", "striped"), 
@@ -116,7 +116,7 @@ for (table_subcategory in table_subcategory_vec) {
   kable(
     spread(df.monthly_summary, key = year, value = total_count), 
     col.names = c("Month", 2017, 2018, 2019), 
-    caption = paste0(table_subcategory, " Thefts")
+    caption = paste0(str_to_title(table_subcategory, locale = "en"), " Thefts")
   ) %>% 
     kable_styling(
       bootstrap_options = c("condensed", "striped"), 
