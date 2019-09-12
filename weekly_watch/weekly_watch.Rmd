@@ -24,7 +24,7 @@ header-includes:
 library(tidyverse)
 library(stringr)
 library(data.table)
-library(doParallel)
+# library(doParallel)
 library(scales)
 library(lunar)
 library(kableExtra)
@@ -47,8 +47,8 @@ knitr::opts_chunk$set(
 library(kableExtra)
 
 # Multi-core
-cl <- makePSOCKcluster(4)
-registerDoParallel(cl)
+# cl <- makePSOCKcluster(4)
+# registerDoParallel(cl)
 
 source("./summer_dates.R") # Dates for start / end of summer
 source("./text_import.R") # Build crime data frame
@@ -269,7 +269,7 @@ df.crimes %>%
     title = "Types of Offenses", 
     subtitle = "2019 YTD"
     ) +
-  scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1), limits = c(0,7000))
+  scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1), limits = c(0,7250))
 ```
 
 ```{r plot.total_offenses_by_type, fig.cap = "Types of Offenses"}
@@ -380,5 +380,5 @@ df.old_crime %>%
 ```
 
 ```{r stop_cluster}
-stopCluster(cl)
+# stopCluster(cl)
 ```
