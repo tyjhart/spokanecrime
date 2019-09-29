@@ -17,7 +17,7 @@ The Crime Analysis Project works to meet these goals for the local community:
 
 Crime never stops, unfortunately. To keep track of trends over time we have ongoing analysis sub-projects running on a weekly basis. These track fairly close with data published regularly by the City of Spokane and the County. Most people are interested in the overall trend of crime over time - the "big picture". Using the COMPSTAT reports made available by the city we put a plot together of daily offenses post-September 12, 2017:
 
-![Offenses by Day](./weekly_watch/figures/plot.total_offenses_over_time-1.png)
+![Offenses by Day](./weekly_watch/figures/plot.offenses_over_time-1.png)
 
 Dashed vertical lines show the beginning and end of summer, which appears to correspond with a rise in crime. Two additional lines (red and blue), show smoothed averages using linear and LOESS methods, respectively. As more weekly COMPSTAT reports are released and incorporated into the analysis our view over time will improve.
 
