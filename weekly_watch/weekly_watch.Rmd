@@ -1,7 +1,7 @@
 ---
 title: "Spokane Weekly Watch"
 author: "Tyler Hart"
-date: "9/3/2019"
+date: "10/19/2019"
 output:
   pdf_document:
     fig_caption: yes
@@ -24,7 +24,6 @@ header-includes:
 library(tidyverse)
 library(stringr)
 library(data.table)
-# library(doParallel)
 library(scales)
 library(lunar)
 library(kableExtra)
@@ -218,6 +217,44 @@ df.crimes %>%
     x = "", 
     y = "Motor Vehicle Thefts", 
     title = "Theft of Motor Vehicles", 
+    subtitle = "September 12, 2017 Onward"
+    ) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+```{r plot.assault_over_time, fig.cap = "Assaults"}
+df.crimes %>%
+  filter(category %in% c("ASSAULT")) %>%
+  group_by(date) %>%
+  summarize(offenses = n()) %>%
+  ggplot(aes(date, offenses)) + 
+  geom_point(size = 3, alpha = 0.5) +
+  geom_smooth(method = "auto", color = "blue") +
+  geom_smooth(method = "lm", color = "red") +
+  geom_vline(xintercept=c(summer_dates$summer_start, summer_dates$summer_end), linetype=4) +
+  labs(
+    x = "", 
+    y = "Assaults", 
+    title = "Assaults", 
+    subtitle = "September 12, 2017 Onward"
+    ) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+```{r plot.rape_over_time, fig.cap = "Sexual Assaults"}
+df.crimes %>%
+  filter(category %in% c("RAPE")) %>%
+  group_by(date) %>%
+  summarize(offenses = n()) %>%
+  ggplot(aes(date, offenses)) + 
+  geom_point(size = 3, alpha = 0.5) +
+  geom_smooth(method = "auto", color = "blue") +
+  geom_smooth(method = "lm", color = "red") +
+  geom_vline(xintercept=c(summer_dates$summer_start, summer_dates$summer_end), linetype=4) +
+  labs(
+    x = "", 
+    y = "Sexual Assaults", 
+    title = "Sexual Assaults", 
     subtitle = "September 12, 2017 Onward"
     ) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
