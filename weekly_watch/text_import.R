@@ -3,6 +3,7 @@ df.crimes = lapply(files, read.delim, header = FALSE, stringsAsFactors = FALSE) 
 
 ### Headers, badge numbers(?) ###
 df.crimes$V1 <- gsub("^SR.*:$", NA, df.crimes$V1)
+df.crimes$V1 <- gsub("^SP.*:$", NA, df.crimes$V1)
 df.crimes$V1 <- gsub("*IBR Purposes*", NA, df.crimes$V1, ignore.case = TRUE)
 
 # Remove newly-empty rows
@@ -118,6 +119,7 @@ offense_pattern_vec <- c(
   'THEFT [[:digit:]][N,R]?D ALL OTHER',
   'THEFT [[:digit:]][N,R]?D CITY ALL OTHER',
   'THEFT [[:digit:]][N,R]?D CITY FROM BUILDING',
+  'THEFT-[[:digit:]][N,R]?D \\(FROM BUILDING\\)',
   'THEFT [[:digit:]][N,R]?D CITY FROM MOTOR VEHICLE',
   'THEFT [[:digit:]][N,R]?D CITY SHOPLIFTING',
   'THEFT [[:digit:]][N,R]?D CITY VEHICLE PARTS AND ACCESSORIES',
