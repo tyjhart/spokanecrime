@@ -1,7 +1,7 @@
 ---
 title: "Spokane Weekly Watch"
 author: "Tyler Hart"
-date: "10/19/2019"
+date: "2019-11-25"
 output:
   pdf_document:
     fig_caption: yes
@@ -317,7 +317,7 @@ df.crimes %>%
     title = "Types of Offenses", 
     subtitle = "September 12, 2017 Onward"
     ) +
-  scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1), limits = c(0,24000))
+  scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
 
 ```{r plot.offenses_by_season, fig.cap = "Offenses by Season"}
