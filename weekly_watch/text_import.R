@@ -46,13 +46,19 @@ date_grep_patterns <- '[[:digit:]]+/+[[:digit:]]+/+[[:digit:]]+'
 date_parsing_index <- grep(date_grep_patterns, df.crimes$V1)
 date <- regexpr(date_grep_patterns, df.crimes$V1)
 date <- regmatches(df.crimes$V1, date)
-df.crimes[date_parsing_index,]$date <- date 
+df.crimes[date_parsing_index,]$date <- date
 
 # Format dates
 df.crimes$date <- as.Date(df.crimes$date, "%m/%d/%Y")
 df.crimes$year <- format(df.crimes$date, format = "%Y") # Year numbers for comparison
 df.crimes$num.month <- format(df.crimes$date, format = "%m") # Month numbers for comparison
-df.crimes$num.week <- format(df.crimes$date, format = "%U") # Week numbers for comparison
+df.crimes$num.week <- format(df.crimes$date, "%V") # Week numbers for comparison
+
+# Day of the week
+df.crimes$dow <- as.factor(weekdays(df.crimes$date))
+
+# Week of the year
+df.crimes$week <- as.factor(format(df.crimes$date, "%Y-%V"))
 
 # Factorize dates
 df.crimes$num.week <- as.factor(df.crimes$num.week)

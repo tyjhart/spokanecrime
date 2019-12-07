@@ -70,6 +70,22 @@ df.crimes %>%
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
+```{r }
+df.crimes %>%
+filter(date >= "2018-01-01" & date <= "2019-12-31") %>%
+group_by(year,num.week) %>%
+summarize(offenses = n()) %>%
+ggplot(aes(num.week, offenses, color = year)) +
+geom_point(size = 3, alpha = 0.5) +
+labs(
+  x = "Week",
+  y = "Offenses",
+  title = "Offenses by Week",
+  subtitle = "2018 - 2019"
+  ) +
+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
 ```{r plot.theft_over_time, fig.cap = "Thefts"}
 df.crimes %>%
   filter(category == "THEFT") %>%
@@ -88,6 +104,8 @@ df.crimes %>%
     ) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
+
+
 
 ```{r plot.shoplifting_over_time, fig.cap = "Shoplifting"}
 df.crimes %>%
@@ -320,10 +338,25 @@ df.crimes %>%
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
 
+```{r plot.2019_offenses_by_weekday, fig.cap = "Offenses by Day, 2019 YTD"}
+df.crimes %>%
+  filter(date >= "2019-01-01") %>%
+  count(dow) %>%
+  ggplot(aes(fct_relevel(dow,"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"), n, label = n)) +
+  geom_col() +
+  geom_text(vjust = -0.5) +
+  labs(
+    x = "Days", 
+    title = "Offenses by Day", 
+    subtitle = "2019 YTD"
+    ) +
+  scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
+```
+
 ```{r plot.offenses_by_season, fig.cap = "Offenses by Season"}
 df.crimes %>%
   count(season) %>%
-  ggplot(aes(reorder(season, -n), n, label = n)) +
+  ggplot(aes(fct_relevel(season,"Winter","Spring","Summer","Autumn"), n, label = n)) +
   geom_col() +
   geom_text(vjust = -0.5) +
   labs(
@@ -337,12 +370,12 @@ df.crimes %>%
 ```{r plot.offenses_by_lunar_phase, fig.cap = "Offenses by Lunar Phase"}
 df.crimes %>%
   count(lunar_phase) %>%
-  ggplot(aes(reorder(lunar_phase, -n), n, label = n)) +
+  ggplot(aes(fct_relevel(lunar_phase,"Full","Waning gibbous","Last quarter","Waning crescent","New","Waxing crescent","First quarter","Waxing gibbous"), n, label = n)) +
   geom_col() +
   geom_text(vjust = -0.5) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.25, hjust=1)) +
   labs(
-    x = "Lunar Phase", 
+    x = "Lunar Phases", 
     title = "Offenses by Lunar Phase", 
     subtitle = "September 12, 2017 Onward"
     ) +
@@ -353,7 +386,7 @@ df.crimes %>%
 df.crimes %>%
   filter(category %in% c("ASSAULT", "MURDER", "RAPE", "ROBBERY")) %>%
   count(lunar_phase) %>%
-  ggplot(aes(reorder(lunar_phase, -n), n, label = n)) +
+  ggplot(aes(fct_relevel(lunar_phase,"Full","Waning gibbous","Last quarter","Waning crescent","New","Waxing crescent","First quarter","Waxing gibbous"), n, label = n)) +
   geom_col() +
   geom_text(vjust = -0.5) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.25, hjust=1)) +
@@ -386,7 +419,7 @@ df.old_crime %>%
 ```{r plot.legacy_offenses_by_season, fig.cap = "Legacy Offenses by Season"}
 df.old_crime %>%
   count(season) %>%
-  ggplot(aes(reorder(season, -n), n, label = n)) +
+  ggplot(aes(fct_relevel(season,"Winter","Spring","Summer","Autumn"), n, label = n)) +
   geom_col() +
   geom_text(vjust = -0.5) +
   labs(
@@ -400,7 +433,7 @@ df.old_crime %>%
 ```{r plot.legacy_offenses_by_lunar_phase, fig.cap = "Legacy Offenses by Lunar Phase"}
 df.old_crime %>%
   count(lunar_phase) %>%
-  ggplot(aes(reorder(lunar_phase, -n), n, label = n)) +
+  ggplot(aes(fct_relevel(lunar_phase,"Full","Waning gibbous","Last quarter","Waning crescent","New","Waxing crescent","First quarter","Waxing gibbous"), n, label = n)) +
   geom_col() +
   geom_text(vjust = -0.5) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.25, hjust=1)) +
