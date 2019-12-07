@@ -81,7 +81,8 @@ labs(
   x = "Week",
   y = "Offenses",
   title = "Offenses by Week",
-  subtitle = "2018 - 2019"
+  subtitle = "2018 - 2019",
+  color = "Year"
   ) +
 theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
