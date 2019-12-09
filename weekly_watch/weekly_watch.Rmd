@@ -1,7 +1,7 @@
 ---
 title: "Spokane Weekly Watch"
 author: "Tyler Hart"
-date: "2019-11-25"
+date: "2019-12-09"
 output:
   pdf_document:
     fig_caption: yes
@@ -70,7 +70,7 @@ df.crimes %>%
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
-```{r }
+```{r plot.weekly_offense_comparisons, fig.cap = "Offenses by Week, 2018 Onward"}
 df.crimes %>%
 filter(date >= "2018-01-01" & date <= "2019-12-31") %>%
 group_by(year,num.week) %>%
