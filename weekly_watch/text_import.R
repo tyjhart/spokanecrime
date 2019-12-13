@@ -35,8 +35,11 @@ for (district_name in district_grep_vec) {
   try(df.crimes[district_parsing_index,]$district <- districts)
 }
 
+df.crimes <- df.crimes %>% mutate(district = replace(district, district %in% c("SPA","SPB","SPC","SPD"),'OTH'))
+
 # Factorize
 df.crimes$district <- as.factor(toupper(df.crimes$district))  
+
 
 ### Dates ###
 df.crimes$date <- NA

@@ -2,6 +2,44 @@
 # Functionality to export table images. Kable "as_image" takes forever to run,
 # so this functionality has been moved to a separate file.
 
+### Annual totals ###
+df.annual_totals <- df.crimes %>%
+  filter(year != 2017) %>%
+  group_by(year) %>%
+  summarize(annual_total = n())
+
+kable(
+  df.annual_totals,
+  col.names = c("Year", "Total"), 
+  caption = "Annual Totals"
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("bordered", "condensed", "striped"), 
+    full_width=FALSE, font_size=12
+  ) %>%
+  as_image(file = "./weekly_watch/figures/table.annual_totals.png")
+
+# Totals by category
+df.annual_category_totals <- df.crimes %>%
+  group_by(year,category) %>%
+  {table(.$year,.$category)}
+
+kable(
+  df.annual_category_totals,
+  caption = "Annual Totals"
+) %>%
+  kable_styling(
+    bootstrap_options = c("bordered", "condensed", "striped"), 
+    full_width=FALSE, font_size=12
+  ) %>%
+  as_image(file = "./weekly_watch/figures/table.annual_category_totals.png")
+
+
+
+
+
+
+
 ### Districts ###
 df.district_summary <- df.crimes %>%
   filter(date >= "2019-01-01") %>%
@@ -16,10 +54,10 @@ df.district_summary$percentage <- round(
 kable(
   df.district_summary[order(-df.district_summary$dist_sum),], 
   col.names = c("District", "Offenses", "Percentage"), 
-  caption = "Statistics by District, 2019 YTD"
+  caption = "Districts, 2019 YTD"
   ) %>% 
   kable_styling(
-    bootstrap_options = c("condensed", "striped"), 
+    bootstrap_options = c("bordered", "condensed", "striped"), 
     full_width=FALSE, font_size=12
     ) %>%
   as_image(file = "./weekly_watch/figures/table.district_stats_ytd.png")
@@ -36,14 +74,37 @@ df.district_summary$percentage <- round(
 kable(
   df.district_summary[order(-df.district_summary$dist_sum),], 
   col.names = c("District", "Offenses", "Percentage"), 
-  caption = "Statistics by District, September 12, 2017 Onward"
+  caption = "Districts, All Years"
   ) %>%
   kable_styling(
-    bootstrap_options = c("condensed", "striped"), 
+    bootstrap_options = c("bordered", "condensed", "striped"), 
     full_width=FALSE, 
     font_size=12
     ) %>%
   as_image(file = "./weekly_watch/figures/table.district_stats_total.png")
+
+# District, category proportion tables by year
+# See https://stackoverflow.com/questions/45385897/how-to-round-all-the-values-of-a-prop-table-in-r-in-one-line,
+# https://stackoverflow.com/questions/44528173/using-table-in-dplyr-chain
+
+table_year_vec <- c(2019,2018,2017)
+
+for (table_year in table_year_vec) {
+  
+  filename <- paste0("./weekly_watch/figures/table.",tolower(table_year),"_district_category_proportion.png")
+  
+  kable(
+    df.crimes %>% 
+      filter(year == table_year) %>% 
+      {table(.$district,.$category)} %>% 
+      prop.table(margin = 2) %>% `*` (100) %>% round(2)
+  ) %>% 
+    kable_styling(
+      bootstrap_options = c("bordered", "condensed", "striped"), 
+      full_width=FALSE, font_size=12
+    ) %>%
+    as_image(file = filename)
+}
 
 ### All Offenses ###
 df.monthly_summary <- df.crimes %>% 
@@ -56,7 +117,7 @@ kable(
   caption = "Total Offenses"
   ) %>% 
   kable_styling(
-    bootstrap_options = c("condensed", "striped"), 
+    bootstrap_options = c("bordered", "condensed", "striped"), 
     full_width=FALSE, 
     font_size=12
     ) %>%
@@ -91,7 +152,7 @@ for (table_category in table_category_vec) {
     caption = str_to_title(table_category, locale = "en")
   ) %>% 
     kable_styling(
-      bootstrap_options = c("condensed", "striped"), 
+      bootstrap_options = c("bordered", "condensed", "striped"), 
       full_width=FALSE, 
       font_size=12
     ) %>%
@@ -119,7 +180,7 @@ for (table_subcategory in table_subcategory_vec) {
     caption = paste0(str_to_title(table_subcategory, locale = "en"), " Thefts")
   ) %>% 
     kable_styling(
-      bootstrap_options = c("condensed", "striped"), 
+      bootstrap_options = c("bordered", "condensed", "striped"), 
       full_width=FALSE, 
       font_size=12
     ) %>%

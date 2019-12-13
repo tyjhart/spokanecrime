@@ -44,6 +44,7 @@ knitr::opts_chunk$set(
   out.width = '100%'
   )
 library(kableExtra)
+require(RColorBrewer)
 
 source("./summer_dates.R") # Dates for start / end of summer
 source("./text_import.R") # Build crime data frame
@@ -81,6 +82,23 @@ labs(
   x = "Week",
   y = "Offenses",
   title = "Offenses by Week",
+  subtitle = "2018 - 2019",
+  color = "Year"
+  ) +
+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+```{r plot.weekly_district_offense_comparisons, fig.cap = "Offenses by Month, District"}
+df.crimes %>%
+filter(date >= "2018-01-01" & date <= "2019-12-31") %>%
+group_by(num.month,district) %>%
+summarize(offenses = n()) %>%
+ggplot(aes(num.month, offenses, color = district)) +
+geom_point(size = 3) +
+labs(
+  x = "Month",
+  y = "Offenses",
+  title = "Offenses by Month, District",
   subtitle = "2018 - 2019",
   color = "Year"
   ) +
@@ -281,7 +299,7 @@ df.crimes %>%
 
 ```{r plot.2019_offenses_by_district, fig.cap = "Offenses by Police District, 2019 YTD"}
 df.crimes %>%
-  filter(date >= "2019-01-01") %>%
+  filter(year == 2019) %>%
   count(district) %>%
   ggplot(aes(reorder(district, -n), n, label = n)) +
   geom_col() +
@@ -296,6 +314,7 @@ df.crimes %>%
 
 ```{r plot.total_offenses_by_district, fig.cap = "Offenses by Police District"}
 df.crimes %>%
+  filter(!district %in% c("SPA","SPB","SPC","SPD")) %>%
   count(district) %>%
   ggplot(aes(reorder(district, -n), n, label = n)) +
   geom_col() +
@@ -310,7 +329,7 @@ df.crimes %>%
 
 ```{r plot.offenses_by_type_ytd, fig.cap = "Types of Offenses, 2019 YTD"}
 df.crimes %>%
-  filter(date >= "2019-01-01") %>%
+  filter(year == 2019) %>%
   count(category) %>%
   ggplot(aes(reorder(category, -n), n, label = n)) +
   geom_col() +
@@ -341,7 +360,7 @@ df.crimes %>%
 
 ```{r plot.2019_offenses_by_weekday, fig.cap = "Offenses by Day, 2019 YTD"}
 df.crimes %>%
-  filter(date >= "2019-01-01") %>%
+  filter(year == 2019) %>%
   count(dow) %>%
   ggplot(aes(fct_relevel(dow,"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"), n, label = n)) +
   geom_col() +
