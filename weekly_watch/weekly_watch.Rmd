@@ -3,17 +3,18 @@ title: "Spokane Weekly Watch"
 author: "Tyler Hart"
 date: "2019-12-09"
 output:
+  html_document:
+    df_print: paged
+  word_document:
+    toc: yes
+    toc_depth: '2'
   pdf_document:
     fig_caption: yes
     keep_tex: yes
     number_sections: yes
     toc: yes
     toc_depth: 2
-  word_document:
-    toc: yes
-    toc_depth: '2'
-  html_document:
-    df_print: paged
+classoption: landscape
 header-includes:
 - \usepackage{graphicx}
 - \usepackage{float}
@@ -71,7 +72,24 @@ df.crimes %>%
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
-```{r plot.weekly_offense_comparisons, fig.cap = "Offenses by Week, 2018 Onward"}
+```{r plot.monthly_offense_comparisons, fig.cap = "Monthly Offenses, 2018 Onward"}
+df.crimes %>%
+filter(date >= "2018-01-01" & date <= "2019-12-31") %>%
+group_by(year,num.month) %>%
+summarize(offenses = n()) %>%
+ggplot(aes(num.month, offenses, color = year)) +
+geom_point(size = 3, alpha = 0.5) +
+labs(
+  x = "Month",
+  y = "Offenses",
+  title = "Monthly Offenses",
+  subtitle = "2018 - 2019",
+  color = "Year"
+  ) +
+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+```{r plot.weekly_offense_comparisons, fig.cap = "Weekly Offenses, 2018 Onward"}
 df.crimes %>%
 filter(date >= "2018-01-01" & date <= "2019-12-31") %>%
 group_by(year,num.week) %>%
@@ -81,7 +99,7 @@ geom_point(size = 3, alpha = 0.5) +
 labs(
   x = "Week",
   y = "Offenses",
-  title = "Offenses by Week",
+  title = "Weekly Offenses",
   subtitle = "2018 - 2019",
   color = "Year"
   ) +
