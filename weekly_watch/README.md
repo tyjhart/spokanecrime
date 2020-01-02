@@ -4,6 +4,14 @@ Spokane Crime Analysis Project (CAP) is dedicated to discovering, analyzing, and
 
 Currently, the SPD makes weekly CompStat reports available each Monday. Reports cover reported crime for the prior week in PDF format, broken down by policing districts. We crawl the PDF files, extract data, and transform it into a format useful for analysis.
 
+1. [Data Limitation](#data-limitations)
+1. [Data Availability](#data-availability)
+1. [Overall Statistics](#overall-statistics)
+1. [Police District Statistics](#police-district-statistics)
+1. [Types of Offenses](#types-of-offenses)
+1. [Lunar Phases](#lunar-phases)
+1. [2013-2016 Legacy Data](#Legacy-Data)
+
 ## Data Limitations
 
 There are limitations to the analysis that's possible using data provided by the city. The location of sexual assault offenses is not included in CompStat reports in order to protect the victim's privacy. While we know how many sexual assaults are reported and the general policing district that they occurred, it's not possible to correlate that type of assault with specific locations.

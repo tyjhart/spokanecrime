@@ -2,13 +2,24 @@
 
 Spokane Crime Analysis Project (CAP) is dedicated to discovering, analyzing, and visualizing crime data in Spokane, WA. Informed residents can make better decisions about where to live, raise families, work, and play in our wonderful city with up-to-date information on crime. With data in-hand, residents can engage actively and factually with local leaders and law enforcement.
 
+1. [Goals](#goals)
 1. [Ongoing Analysis](#ongoing-analysis)
 1. [Static Analysis](#static-analysis)
-1. [Goals](#goals)
 1. [Data Sources](#data-sources)
 1. [Contact](#contact)
 
 Please take a moment to read through the sections below before diving into the data.
+
+## Goals
+
+The Crime Analysis Project works to meet these goals for the local community:
+
+1. Identify and visualize long-term crime trends
+1. Discover associations between crime and social, natural, and economic conditions
+1. Make meaningful comparisons with cities across the nation
+1. Leverage data from diverse, trusted sources
+1. Be honest and open in the use of statistics, models, estimates, and assumptions
+1. Publish objective, independent reports and analysis
 
 ## Ongoing Analysis
 
@@ -25,16 +36,7 @@ We periodically look backward in time with data that won't be updated again. Des
 1. [WA State NIBRS Trends](/wa_state_nibrs/)
 1. [FBI Crime and Population Data (UCR, 1985-2014)](/fbi_ucr/annual_report/)
 
-## Goals
 
-The Crime Analysis Project works to meet these goals for the local community:
-
-1. Identify and visualize long-term crime trends
-1. Discover associations between crime and social, natural, and economic conditions
-1. Make meaningful comparisons with cities across the nation
-1. Leverage data from diverse, trusted sources
-1. Be honest and open in the use of statistics, models, estimates, and assumptions
-1. Publish objective, independent reports and analysis
 
 ## Data Sources
 
