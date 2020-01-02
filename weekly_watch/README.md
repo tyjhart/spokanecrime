@@ -70,6 +70,9 @@ While looking at data week-over-week is often not useful due to how "jumpy" crim
 
 ![Offenses, September 12, 2017 Onward](./figures/table.offenses.png)
 
+1. [Non-Violent Crime](#non-violent-crime)
+1. [Violent Crime](#violent-crime)
+
 ### Non-Violent Crime
 
 Most crime in Spokane is "non-violent", including theft and burglary.
