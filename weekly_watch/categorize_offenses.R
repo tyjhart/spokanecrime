@@ -14,6 +14,7 @@ offense_category_pattern_vec <- c(
   'RAPE',
   'ROBBERY',
   'TAKING MOTOR VEHICLE',
+  'PET ANIMALS TAKING CONCEALING',
   'THEFT',
   'THEFT OF MOTOR VEHICLE',
   'TMVWOP',
@@ -27,6 +28,7 @@ for (offense_category in offense_category_pattern_vec) {
 }
 
 df.crimes$category[grep("TMVWOP", df.crimes$category)] <- "TAKING MOTOR VEHICLE"
+df.crimes$category[grep("PET ANIMALS TAKING CONCEALING", df.crimes$category)] <- "THEFT"
 
 # Factorize categories
 df.crimes$category <- as.factor(df.crimes$category)

@@ -111,6 +111,7 @@ offense_pattern_vec <- c(
   'MURDER\\s?[-]?[[:digit:]]D',
   'ORGANIZED RETAIL THEFT',
   'ORGANIZED RETAIL THEFT [[:digit:]]D',
+  'PET ANIMALS TAKING CONCEALING',
   'RAPE\\s?-?[[:digit:]][N,R,S]?D?T?',
   'RAPE OF A CHILD [[:digit:]]D',
   'RAPE [[:digit:]]D USING OBJECT',
