@@ -42,7 +42,7 @@ kable(
 
 ### Districts ###
 df.district_summary <- df.crimes %>%
-  filter(date >= "2019-01-01") %>%
+  filter(date >= "2020-01-01") %>%
   group_by(district) %>%
   summarize(dist_sum = n())
 
@@ -54,7 +54,7 @@ df.district_summary$percentage <- round(
 kable(
   df.district_summary[order(-df.district_summary$dist_sum),], 
   col.names = c("District", "Offenses", "Percentage"), 
-  caption = "Districts, 2019 YTD"
+  caption = "Districts, 2020 YTD"
   ) %>% 
   kable_styling(
     bootstrap_options = c("bordered", "condensed", "striped"), 
@@ -87,7 +87,7 @@ kable(
 # See https://stackoverflow.com/questions/45385897/how-to-round-all-the-values-of-a-prop-table-in-r-in-one-line,
 # https://stackoverflow.com/questions/44528173/using-table-in-dplyr-chain
 
-table_year_vec <- c(2019,2018,2017)
+table_year_vec <- c(2020,2019,2018,2017)
 
 for (table_year in table_year_vec) {
   
@@ -113,7 +113,7 @@ df.monthly_summary <- df.crimes %>%
 
 kable(
   spread(df.monthly_summary, key = year, value = total.offenses), 
-  col.names = c("Month", 2017, 2018, 2019), 
+  col.names = c("Month", 2017, 2018, 2019, 2020), 
   caption = "Total Offenses"
   ) %>% 
   kable_styling(
@@ -133,7 +133,7 @@ table_category_vec <- c(
   'ROBBERY',
   'TAKING MOTOR VEHICLE',
   'THEFT',
-  'THEFT OF MOTOR VEHICLE',
+  'VEHICLE THEFT',
   'VEHICLE PROWLING'
 )
 
@@ -148,7 +148,7 @@ for (table_category in table_category_vec) {
   
   kable(
     spread(df.monthly_summary, key = year, value = total_count), 
-    col.names = c("Month", 2017, 2018, 2019), 
+    col.names = c("Month", 2017, 2018, 2019, 2020), 
     caption = str_to_title(table_category, locale = "en")
   ) %>% 
     kable_styling(
@@ -176,7 +176,7 @@ for (table_subcategory in table_subcategory_vec) {
   
   kable(
     spread(df.monthly_summary, key = year, value = total_count), 
-    col.names = c("Month", 2017, 2018, 2019), 
+    col.names = c("Month", 2017, 2018, 2019, 2020), 
     caption = paste0(str_to_title(table_subcategory, locale = "en"), " Thefts")
   ) %>% 
     kable_styling(

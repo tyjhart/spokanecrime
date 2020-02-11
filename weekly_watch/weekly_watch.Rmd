@@ -3,17 +3,17 @@ title: "Spokane Weekly Watch"
 author: "Tyler Hart"
 date: "2019-12-30"
 output:
-  html_document:
-    df_print: paged
-  word_document:
-    toc: yes
-    toc_depth: '2'
   pdf_document:
     fig_caption: yes
     keep_tex: yes
     number_sections: yes
     toc: yes
     toc_depth: 2
+  word_document:
+    toc: yes
+    toc_depth: '2'
+  html_document:
+    df_print: paged
 classoption: landscape
 header-includes:
 - \usepackage{graphicx}
@@ -45,36 +45,71 @@ knitr::opts_chunk$set(
   out.width = '100%'
   )
 library(kableExtra)
-require(RColorBrewer)
 
 source("./summer_dates.R") # Dates for start / end of summer
 source("./text_import.R") # Build crime data frame
 source("./categorize_offenses.R") # Categorize offense names
 source("./lunar_seasons.R") # Lunar phase, seasons
-source("./old_crime_data.R") # Old data from 2013, 2014, and 2015
+
+# Plot data source note
+data_source_str <- "SOURCE: Spokane Police Department CompStat"
+
+# Alpha for geom_point plotting
+point_alpha = 0.25
+
+# Abbrev. offense names
+levels(df.crimes$category)[levels(df.crimes$category)=="THEFT OF MOTOR VEHICLE"] <- "VEH. THEFT"
+levels(df.crimes$category)[levels(df.crimes$category)=="TAKING MOTOR VEHICLE"] <- "TAKING VEH."
+levels(df.crimes$category)[levels(df.crimes$category)=="VEHICLE PROWLING"] <- "VEH. PROWL"
+levels(df.crimes$category)[levels(df.crimes$category)=="DRIVE BY SHOOTING"] <- "DRIVE-BY"
+levels(df.crimes$category)[levels(df.crimes$category)=="VEHICLE TRESPASS"] <- "VEH. TRESPASS"
+levels(df.crimes$category)[levels(df.crimes$category)=="HARASSMENT"] <- "HARASS."
+
+# Moon phase abbreviations
+levels(df.crimes$lunar_phase)[levels(df.crimes$lunar_phase)=="Waning gibbous"] <- "Waning Gibb."
+levels(df.crimes$lunar_phase)[levels(df.crimes$lunar_phase)=="Waning crescent"] <- "Waning Cres."
+levels(df.crimes$lunar_phase)[levels(df.crimes$lunar_phase)=="Waxing crescent"] <- "Waxing Cres."
+levels(df.crimes$lunar_phase)[levels(df.crimes$lunar_phase)=="Waxing gibbous"] <- "Waxing Gibb."
+
+# Summarized daily offenses
+daily_offenses <- df.crimes %>%
+  group_by(date) %>%
+  summarize(offenses = n())
 ```
 
 ```{r plot.offenses_over_time, fig.cap = "Offenses Over Time, September 12, 2017 Onward"}
-df.crimes %>%
-  group_by(date) %>%
-  summarize(offenses = n()) %>%
+daily_offenses %>%
   ggplot(aes(date, offenses)) + 
-  geom_point(size = 3, alpha = 0.5) +
+  geom_point(size = 3, alpha = point_alpha) +
   geom_smooth(method = "auto", color = "blue") +
   geom_smooth(method = "lm", color = "red") +
-  geom_vline(xintercept=c(summer_dates$summer_start, summer_dates$summer_end), linetype=4) +
+  geom_hline(yintercept=0, linetype=4) +
   labs(
     x = "", 
     y = "Offenses", 
     title = "Total Offenses", 
-    subtitle = "September 12, 2017 Onward"
-    ) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+    caption = data_source_str
+    )
+```
+
+```{r plot.offenses_over_time_pred, fig.cap = "Offenses Over Time, September 12, 2017 Onward"}
+daily_offenses %>%
+  ggplot(aes(date, offenses)) + 
+  geom_point(size = 3, alpha = point_alpha) +
+  geom_smooth(method = "auto", color = "blue") +
+  geom_smooth(method = "lm", color = "red", fullrange = TRUE) +
+  scale_x_date(limits = as.Date(c("2017-10-01","2021-01-01")), date_breaks = "1 year", date_labels = "%Y") +
+  labs(
+    x = "", 
+    y = "Offenses", 
+    title = "Total Offenses", 
+    subtitle = "Projection of Average Daily Offenses",
+    caption = paste(data_source_str, "Projection CI 0.95", sep = "\n")
+    )
 ```
 
 ```{r plot.monthly_offense_comparisons, fig.cap = "Monthly Offenses, 2018 Onward"}
 df.crimes %>%
-filter(date >= "2018-01-01" & date <= "2019-12-31") %>%
 group_by(year,num.month) %>%
 summarize(offenses = n()) %>%
 ggplot(aes(num.month, offenses, color = year)) +
@@ -83,15 +118,18 @@ labs(
   x = "Month",
   y = "Offenses",
   title = "Monthly Offenses",
-  subtitle = "2018 - 2019",
-  color = "Year"
+  color = "Year",
+  caption = "
+  NOTE: Current month's data may be incomplete
+  SOURCE: Spokane Police Department CompStat
+  "
   ) +
 theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
 ```{r plot.weekly_offense_comparisons, fig.cap = "Weekly Offenses, 2018 Onward"}
 df.crimes %>%
-filter(date >= "2018-01-01" & date <= "2019-12-31") %>%
+  filter(date >= "2017-09-12") %>%
 group_by(year,num.week) %>%
 summarize(offenses = n()) %>%
 ggplot(aes(num.week, offenses, color = year)) +
@@ -100,28 +138,12 @@ labs(
   x = "Week",
   y = "Offenses",
   title = "Weekly Offenses",
-  subtitle = "2018 - 2019",
-  color = "Year"
+  color = "Year",
+  caption = data_source_str
   ) +
 theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
-```{r plot.weekly_district_offense_comparisons, fig.cap = "Offenses by Month, District"}
-df.crimes %>%
-filter(date >= "2018-01-01" & date <= "2019-12-31") %>%
-group_by(num.month,district) %>%
-summarize(offenses = n()) %>%
-ggplot(aes(num.month, offenses, color = district)) +
-geom_point(size = 3) +
-labs(
-  x = "Month",
-  y = "Offenses",
-  title = "Offenses by Month, District",
-  subtitle = "2018 - 2019",
-  color = "Year"
-  ) +
-theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-```
 
 ```{r plot.theft_over_time, fig.cap = "Thefts"}
 df.crimes %>%
@@ -129,17 +151,17 @@ df.crimes %>%
   group_by(date) %>%
   summarize(offenses = n()) %>%
   ggplot(aes(date, offenses)) + 
-  geom_point(size = 3, alpha = 0.5) +
+  geom_point(size = 3, alpha = point_alpha) +
   geom_smooth(method = "auto", color = "blue") +
   geom_smooth(method = "lm", color = "red") +
   geom_vline(xintercept=c(summer_dates$summer_start, summer_dates$summer_end), linetype=4) +
+  scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
   labs(
     x = "", 
     y = "Thefts", 
     title = "Overall Thefts", 
-    subtitle = "September 12, 2017 Onward"
-    ) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+    caption = data_source_str
+    ) 
 ```
 
 
@@ -149,18 +171,18 @@ df.crimes %>%
   filter(subcategory == "Shoplifting") %>%
   group_by(date) %>%
   summarize(offenses = n()) %>%
-  ggplot(aes(date, offenses)) + 
-  geom_point(size = 3, alpha = 0.5) +
+  ggplot(aes(date, offenses)) +
+  geom_point(size = 3, alpha = point_alpha) +
   geom_smooth(method = "auto", color = "blue") +
   geom_smooth(method = "lm", color = "red") +
   geom_vline(xintercept=c(summer_dates$summer_start, summer_dates$summer_end), linetype=4) +
+  scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
   labs(
     x = "", 
     y = "Shoplifting Thefts", 
     title = "Shoplifting Thefts", 
-    subtitle = "September 12, 2017 Onward"
-    ) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+    caption = data_source_str
+    )
 ```
 
 ```{r plot.firearm_thefts, fig.cap = "Firearm Thefts"}
@@ -169,17 +191,17 @@ df.crimes %>%
   group_by(date) %>%
   summarize(offenses = n()) %>%
   ggplot(aes(date, offenses)) + 
-  geom_point(size = 3, alpha = 0.5) +
+  geom_point(size = 3, alpha = point_alpha) +
   geom_smooth(method = "auto", color = "blue") +
   geom_smooth(method = "lm", color = "red") +
   geom_vline(xintercept=c(summer_dates$summer_start, summer_dates$summer_end), linetype=4) +
+  scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
   labs(
     x = "", 
     y = "Firearm Thefts", 
     title = "Firearm Thefts", 
-    subtitle = "September 12, 2017 Onward"
-    ) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+    caption = data_source_str
+    )
 ```
 
 ```{r plot.burglaries_over_time, fig.cap = "Burglaries"}
@@ -188,17 +210,17 @@ df.crimes %>%
   group_by(date) %>%
   summarize(offenses = n()) %>%
   ggplot(aes(date, offenses)) + 
-  geom_point(size = 3, alpha = 0.5) +
+  geom_point(size = 3, alpha = point_alpha) +
   geom_smooth(method = "auto", color = "blue") +
   geom_smooth(method = "lm", color = "red") +
   geom_vline(xintercept=c(summer_dates$summer_start, summer_dates$summer_end), linetype=4) +
+  scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
   labs(
     x = "", 
     y = "Burglaries", 
     title = "Overall Burglaries", 
-    subtitle = "September 12, 2017 Onward"
-    ) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+    caption = data_source_str
+    ) 
 ```
 
 ```{r plot.residential_burglaries, fig.cap = "Residential Burglaries"}
@@ -207,17 +229,17 @@ df.crimes %>%
   group_by(date) %>%
   summarize(offenses = n()) %>%
   ggplot(aes(date, offenses)) + 
-  geom_point(size = 3, alpha = 0.5) +
+  geom_point(size = 3, alpha = point_alpha) +
   geom_smooth(method = "auto", color = "blue") +
   geom_smooth(method = "lm", color = "red") +
   geom_vline(xintercept=c(summer_dates$summer_start, summer_dates$summer_end), linetype=4) +
+  scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
   labs(
     x = "", 
     y = "Residential Burglaries", 
     title = "Residential Burglaries", 
-    subtitle = "September 12, 2017 Onward"
-    ) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+    caption = data_source_str
+    )
 ```
 
 ```{r plot.commercial_burglaries, fig.cap = "Commercial Burglaries"}
@@ -226,17 +248,17 @@ df.crimes %>%
   group_by(date) %>%
   summarize(offenses = n()) %>%
   ggplot(aes(date, offenses)) + 
-  geom_point(size = 3, alpha = 0.5) +
+  geom_point(size = 3, alpha = point_alpha) +
   geom_smooth(method = "auto", color = "blue") +
   geom_smooth(method = "lm", color = "red") +
   geom_vline(xintercept=c(summer_dates$summer_start, summer_dates$summer_end), linetype=4) +
+  scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
   labs(
     x = "", 
     y = "Commercial Burglaries", 
     title = "Commercial Burglaries", 
-    subtitle = "September 12, 2017 Onward"
-    ) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+    caption = data_source_str
+    )
 ```
 
 ```{r plot.shoplifting_thefts, fig.cap = "Shoplifting"}
@@ -245,36 +267,36 @@ df.crimes %>%
   group_by(date) %>%
   summarize(offenses = n()) %>%
   ggplot(aes(date, offenses)) + 
-  geom_point(size = 3, alpha = 0.5) +
+  geom_point(size = 3, alpha = point_alpha) +
   geom_smooth(method = "auto", color = "blue") +
   geom_smooth(method = "lm", color = "red") +
   geom_vline(xintercept=c(summer_dates$summer_start, summer_dates$summer_end), linetype=4) +
+  scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
   labs(
     x = "", 
     y = "Shoplifting", 
     title = "Shoplifting Thefts", 
-    subtitle = "September 12, 2017 Onward"
-    ) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+    caption = data_source_str
+    )
 ```
 
 ```{r plot.tomv_over_time, fig.cap = "Theft of Motor Vehicles"}
 df.crimes %>%
-  filter(category %in% c("THEFT OF MOTOR VEHICLE")) %>%
+  filter(category %in% c("VEH. THEFT")) %>%
   group_by(date) %>%
   summarize(offenses = n()) %>%
   ggplot(aes(date, offenses)) + 
-  geom_point(size = 3, alpha = 0.5) +
+  geom_point(size = 3, alpha = point_alpha) +
   geom_smooth(method = "auto", color = "blue") +
   geom_smooth(method = "lm", color = "red") +
   geom_vline(xintercept=c(summer_dates$summer_start, summer_dates$summer_end), linetype=4) +
+  scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
   labs(
     x = "", 
-    y = "Motor Vehicle Thefts", 
-    title = "Theft of Motor Vehicles", 
-    subtitle = "September 12, 2017 Onward"
-    ) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+    y = "Vehicle Thefts", 
+    title = "Vehicle Thefts", 
+    caption = data_source_str
+    )
 ```
 
 ```{r plot.assault_over_time, fig.cap = "Assaults"}
@@ -283,17 +305,17 @@ df.crimes %>%
   group_by(date) %>%
   summarize(offenses = n()) %>%
   ggplot(aes(date, offenses)) + 
-  geom_point(size = 3, alpha = 0.5) +
+  geom_point(size = 3, alpha = point_alpha) +
   geom_smooth(method = "auto", color = "blue") +
   geom_smooth(method = "lm", color = "red") +
   geom_vline(xintercept=c(summer_dates$summer_start, summer_dates$summer_end), linetype=4) +
+  scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
   labs(
     x = "", 
     y = "Assaults", 
     title = "Assaults", 
-    subtitle = "September 12, 2017 Onward"
-    ) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+    caption = data_source_str
+    )
 ```
 
 ```{r plot.rape_over_time, fig.cap = "Sexual Assaults"}
@@ -302,22 +324,22 @@ df.crimes %>%
   group_by(date) %>%
   summarize(offenses = n()) %>%
   ggplot(aes(date, offenses)) + 
-  geom_point(size = 3, alpha = 0.5) +
+  geom_point(size = 3, alpha = point_alpha) +
   geom_smooth(method = "auto", color = "blue") +
   geom_smooth(method = "lm", color = "red") +
   geom_vline(xintercept=c(summer_dates$summer_start, summer_dates$summer_end), linetype=4) +
+  scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
   labs(
     x = "", 
     y = "Sexual Assaults", 
     title = "Sexual Assaults", 
-    subtitle = "September 12, 2017 Onward"
-    ) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+    caption = data_source_str
+    ) 
 ```
 
-```{r plot.2019_offenses_by_district, fig.cap = "Offenses by Police District, 2019 YTD"}
+```{r plot.ytd_offenses_by_district, fig.cap = "Offenses by Police District, YTD"}
 df.crimes %>%
-  filter(year == 2019) %>%
+  filter(year == 2020) %>%
   count(district) %>%
   ggplot(aes(reorder(district, -n), n, label = n)) +
   geom_col() +
@@ -325,7 +347,8 @@ df.crimes %>%
   labs(
     x = "Police Districts", 
     title = "Offenses by Police District", 
-    subtitle = "2019 YTD"
+    subtitle = "2020 YTD",
+    caption = data_source_str
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
@@ -339,15 +362,19 @@ df.crimes %>%
   geom_text(vjust = -0.5) +
   labs(
     x = "Police Districts", 
-    title = "Offenses by Police District", 
-    subtitle = "September 12, 2017 Onward"
+    title = "Offenses by Police District",
+    subtitle = "2017 - 2020",
+    caption = "
+    NOTE: Excluding districts SPA, SPB, SPC, SPD
+    SOURCE: Spokane Police Department CompStat
+    "
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
 
-```{r plot.offenses_by_type_ytd, fig.cap = "Types of Offenses, 2019 YTD"}
+```{r plot.ytd_offenses_by_type, fig.cap = "Types of Offenses, 2019 YTD"}
 df.crimes %>%
-  filter(year == 2019) %>%
+  filter(year == 2020) %>%
   count(category) %>%
   ggplot(aes(reorder(category, -n), n, label = n)) +
   geom_col() +
@@ -356,7 +383,8 @@ df.crimes %>%
   labs(
     x = "Police Districts", 
     title = "Types of Offenses", 
-    subtitle = "2019 YTD"
+    subtitle = "2020 YTD",
+    caption = data_source_str
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
@@ -371,7 +399,8 @@ df.crimes %>%
   labs(
     x = "Police Districts", 
     title = "Types of Offenses", 
-    subtitle = "September 12, 2017 Onward"
+    subtitle = "2017 - 2020",
+    caption = data_source_str
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
@@ -386,21 +415,24 @@ df.crimes %>%
   labs(
     x = "Days", 
     title = "Offenses by Day", 
-    subtitle = "2019 YTD"
+    subtitle = "2019",
+    caption = data_source_str
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
 
-```{r plot.offenses_by_season, fig.cap = "Offenses by Season"}
+```{r plot.ytd_offenses_by_weekday, fig.cap = "Offenses by Day, 2019 YTD"}
 df.crimes %>%
-  count(season) %>%
-  ggplot(aes(fct_relevel(season,"Winter","Spring","Summer","Autumn"), n, label = n)) +
+  filter(year == 2020) %>%
+  count(dow) %>%
+  ggplot(aes(fct_relevel(dow,"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"), n, label = n)) +
   geom_col() +
   geom_text(vjust = -0.5) +
   labs(
-    x = "Season", 
-    title = "Offenses by Season", 
-    subtitle = "September 12, 2017 Onward"
+    x = "Days", 
+    title = "Offenses by Day", 
+    subtitle = "2020 YTD",
+    caption = data_source_str
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
@@ -408,14 +440,14 @@ df.crimes %>%
 ```{r plot.offenses_by_lunar_phase, fig.cap = "Offenses by Lunar Phase"}
 df.crimes %>%
   count(lunar_phase) %>%
-  ggplot(aes(fct_relevel(lunar_phase,"Full","Waning gibbous","Last quarter","Waning crescent","New","Waxing crescent","First quarter","Waxing gibbous"), n, label = n)) +
+  ggplot(aes(fct_relevel(lunar_phase,"Full","Waning Gibb.","Last quarter","Waning Cres.","New","Waxing Cres.","First quarter","Waxing Gibb."), n, label = n)) +
   geom_col() +
   geom_text(vjust = -0.5) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.25, hjust=1)) +
   labs(
     x = "Lunar Phases", 
     title = "Offenses by Lunar Phase", 
-    subtitle = "September 12, 2017 Onward"
+    caption = data_source_str
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
@@ -424,61 +456,14 @@ df.crimes %>%
 df.crimes %>%
   filter(category %in% c("ASSAULT", "MURDER", "RAPE", "ROBBERY")) %>%
   count(lunar_phase) %>%
-  ggplot(aes(fct_relevel(lunar_phase,"Full","Waning gibbous","Last quarter","Waning crescent","New","Waxing crescent","First quarter","Waxing gibbous"), n, label = n)) +
+  ggplot(aes(fct_relevel(lunar_phase,"Full","Waning Gibb.","Last quarter","Waning Cres.","New","Waxing Cres.","First quarter","Waxing Gibb."), n, label = n)) +
   geom_col() +
   geom_text(vjust = -0.5) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.25, hjust=1)) +
   labs(
     x = "Lunar Phase", 
     title = "Violent Offenses by Lunar Phase", 
-    subtitle = "September 12, 2017 Onward"
-    ) +
-  scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
-```
-
-```{r plot.2013_2016_offenses, fig.cap = "Offenses Over Time, 2013-2016"}
-df.old_crime %>%
-  group_by(date) %>%
-  summarize(offenses = n()) %>%
-  ggplot(aes(date, offenses)) + 
-  geom_point(size = 3, alpha = 0.5) +
-  geom_smooth(method = "auto", color = "blue") +
-  geom_smooth(method = "lm", color = "red") +
-  geom_vline(xintercept=c(summer_dates$summer_start, summer_dates$summer_end), linetype=4) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
-  labs(
-    x = "", 
-    title = "Legacy Offense Data", 
-    subtitle = "2013 to 2016"
-    ) +
-  scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
-```
-
-```{r plot.legacy_offenses_by_season, fig.cap = "Legacy Offenses by Season"}
-df.old_crime %>%
-  count(season) %>%
-  ggplot(aes(fct_relevel(season,"Winter","Spring","Summer","Autumn"), n, label = n)) +
-  geom_col() +
-  geom_text(vjust = -0.5) +
-  labs(
-    x = "Season", 
-    title = "Offenses by Season", 
-    subtitle = "2013 to 2016"
-    ) +
-  scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
-```
-
-```{r plot.legacy_offenses_by_lunar_phase, fig.cap = "Legacy Offenses by Lunar Phase"}
-df.old_crime %>%
-  count(lunar_phase) %>%
-  ggplot(aes(fct_relevel(lunar_phase,"Full","Waning gibbous","Last quarter","Waning crescent","New","Waxing crescent","First quarter","Waxing gibbous"), n, label = n)) +
-  geom_col() +
-  geom_text(vjust = -0.5) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.25, hjust=1)) +
-  labs(
-    x = "Lunar Phase", 
-    title = "Offenses by Lunar Phase", 
-    subtitle = "2013 to 2016"
+    caption = data_source_str
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
