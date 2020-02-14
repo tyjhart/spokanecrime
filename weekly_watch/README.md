@@ -82,7 +82,7 @@ Most crime in Spokane is "non-violent", including theft and burglary.
 
 ![Shoplifting, September 12, 2017 Onward](./figures/table.theft_shoplifting.png)
 
-![Motor Vehicle Thefts, September 12, 2017 Onward](./figures/table.theft%20of%20motor%20vehicle.png)
+![Motor Vehicle Thefts, September 12, 2017 Onward](./figures/table.veh.%20theft.png)
 
 ### Violent Crime
 
