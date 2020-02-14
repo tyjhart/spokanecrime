@@ -10,7 +10,6 @@ Currently, the SPD makes weekly CompStat reports available each Monday. Reports 
 1. [Police District Statistics](#police-district-statistics)
 1. [Types of Offenses](#types-of-offenses)
 1. [Lunar Phases](#lunar-phases)
-1. [2013-2016 Legacy Data](#Legacy-Data)
 
 ## Data Limitations
 
@@ -52,13 +51,13 @@ The city is divided among eight policing districts, with four (P1, P2, P3, P4) i
 
 So far in 2019 most crime occurred in districts P1, P2, P3, and P4 - all north of the Spokane River. Districts P4 and P3 are both located north of the river and east of Division, and have the highest overall counts. Districts P1-P4 have the highest overall counts of reported crimes from September 2017 onward.
 
-![Offenses by Police District, 2019 YTD](./figures/plot.2019_offenses_by_district-1.png)
+![Offenses by Police District, 2020 YTD](./figures/plot.ytd_offenses_by_district-1.png)
 
 ## Types of Offenses
 
-General theft (or larceny), burglary, shoplifting, and theft of motor vehicles continue to be top reported crimes so far in 2019:
+General theft (or larceny), burglary, shoplifting, and theft of motor vehicles continue to be top reported crimes so far in 2020:
 
-![Offenses, 2019 YTD](./figures/plot.offenses_by_type_ytd-1.png)
+![Offenses, 2020 YTD](./figures/plot.ytd_offenses_by_type-1.png)
 
 This follows the trend that's been recorded since mid-2017:
 
@@ -68,10 +67,10 @@ This follows the trend that's been recorded since mid-2017:
 
 While looking at data week-over-week is often not useful due to how "jumpy" crime statistics can be, month-over-month data can tell a story. Any field in the tables with "NA" value indicates that data either was not or is not yet available.
 
-![Offenses, September 12, 2017 Onward](./figures/table.offenses.png)
-
 1. [Non-Violent Crime](#non-violent-crime)
 1. [Violent Crime](#violent-crime)
+
+![Offenses, September 12, 2017 Onward](./figures/table.offenses.png)
 
 ### Non-Violent Crime
 
@@ -102,13 +101,3 @@ There is still much speculation about the moon's effect on people's behavior, de
 ![Offenses per Lunar Phase, September 12, 2017 Onward](./figures/plot.offenses_by_lunar_phase-1.png)
 
 There is no significant difference in the amount of offenses between lunar phases.
-
-## Legacy Data
-
-Crime data for 2013-2016 is available on the City of Spokane's GIS portal. Unfortunately, it doesn't use the same reporting standard as recent CompStat reports. However, the data is consistent and we can observe a downward trend in overall crime. We also note seasonality in crimes, with offenses peaking during the summer periods denoted by hashed lines.
-
-![Legacy Data, 2013-2016](./figures/plot.2013_2016_offenses-1.png)
-
-![Legacy Data, Lunar Cycles, 2013-2016](./figures/plot.legacy_offenses_by_lunar_phase-1.png)
-
-Again, there is no significant difference in the amount of offenses between lunar phases.
