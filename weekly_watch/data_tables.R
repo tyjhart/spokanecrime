@@ -131,10 +131,10 @@ table_category_vec <- c(
   'MURDER',
   'RAPE',
   'ROBBERY',
-  'TAKING MOTOR VEHICLE',
+  'TAKING VEH.',
   'THEFT',
-  'VEHICLE THEFT',
-  'VEHICLE PROWLING'
+  'VEH. THEFT',
+  'VEH. PROWLING'
 )
 
 for (table_category in table_category_vec) {
@@ -146,17 +146,38 @@ for (table_category in table_category_vec) {
     group_by(year, num.month) %>%
     summarize(total_count = n())
   
-  kable(
-    spread(df.monthly_summary, key = year, value = total_count), 
-    col.names = c("Month", 2017, 2018, 2019, 2020), 
-    caption = str_to_title(table_category, locale = "en")
-  ) %>% 
+  tryCatch(
+    kable(
+      spread(df.monthly_summary, key = year, value = total_count), 
+      col.names = c("Month", 2017, 2018, 2019, 2020), 
+      caption = str_to_title(table_category, locale = "en")
+    ),
+    error = function(e) kable(
+      spread(df.monthly_summary, key = year, value = total_count), 
+      col.names = c("Month", 2017, 2018, 2019), 
+      caption = str_to_title(table_category, locale = "en")
+    ) 
+  ) %>%
     kable_styling(
       bootstrap_options = c("bordered", "condensed", "striped"), 
       full_width=FALSE, 
       font_size=12
     ) %>%
     as_image(file = filename)
+  
+  # tryCatch(lm(formula1, data), error = function(e) lm(formula2, data))
+  # 
+  # kable(
+  #   spread(df.monthly_summary, key = year, value = total_count), 
+  #   col.names = c("Month", 2017, 2018, 2019, 2020), 
+  #   caption = str_to_title(table_category, locale = "en")
+  # ) %>% 
+  #   kable_styling(
+  #     bootstrap_options = c("bordered", "condensed", "striped"), 
+  #     full_width=FALSE, 
+  #     font_size=12
+  #   ) %>%
+  #   as_image(file = filename)
 }
 
 ### By Theft Subcategory ###
