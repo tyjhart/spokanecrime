@@ -2,6 +2,9 @@
 # Functionality to export table images. Kable "as_image" takes forever to run,
 # so this functionality has been moved to a separate file.
 
+# Data table source note
+data_source_str <- c("SOURCE: Spokane Police Department CompStat")
+
 ### Annual totals ###
 df.annual_totals <- df.crimes %>%
   filter(year != 2017) %>%
@@ -17,10 +20,12 @@ kable(
     bootstrap_options = c("bordered", "condensed", "striped"), 
     full_width=FALSE, font_size=12
   ) %>%
+  add_footnote(data_source_str, notation = "none") %>%
   as_image(file = "./weekly_watch/figures/table.annual_totals.png")
 
 # Totals by category
 df.annual_category_totals <- df.crimes %>%
+  filter(date > "2017-12-31") %>%
   group_by(year,category) %>%
   {table(.$year,.$category)}
 
@@ -32,6 +37,7 @@ kable(
     bootstrap_options = c("bordered", "condensed", "striped"), 
     full_width=FALSE, font_size=12
   ) %>%
+  add_footnote(data_source_str, notation = "none") %>%
   as_image(file = "./weekly_watch/figures/table.annual_category_totals.png")
 
 
@@ -60,6 +66,7 @@ kable(
     bootstrap_options = c("bordered", "condensed", "striped"), 
     full_width=FALSE, font_size=12
     ) %>%
+  add_footnote(data_source_str, notation = "none") %>%
   as_image(file = "./weekly_watch/figures/table.district_stats_ytd.png")
 
 df.district_summary <- df.crimes %>%
@@ -81,6 +88,7 @@ kable(
     full_width=FALSE, 
     font_size=12
     ) %>%
+  add_footnote(data_source_str, notation = "none") %>%
   as_image(file = "./weekly_watch/figures/table.district_stats_total.png")
 
 # District, category proportion tables by year
@@ -103,6 +111,7 @@ for (table_year in table_year_vec) {
       bootstrap_options = c("bordered", "condensed", "striped"), 
       full_width=FALSE, font_size=12
     ) %>%
+    add_footnote(data_source_str, notation = "none") %>%
     as_image(file = filename)
 }
 
@@ -121,6 +130,7 @@ kable(
     full_width=FALSE, 
     font_size=12
     ) %>%
+  add_footnote(data_source_str, notation = "none") %>%
   as_image(file = "./weekly_watch/figures/table.offenses.png") 
 
 ### By Category ###
@@ -163,6 +173,7 @@ for (table_category in table_category_vec) {
       full_width=FALSE, 
       font_size=12
     ) %>%
+    add_footnote(data_source_str, notation = "none") %>%
     as_image(file = filename)
   
   # tryCatch(lm(formula1, data), error = function(e) lm(formula2, data))
@@ -205,5 +216,6 @@ for (table_subcategory in table_subcategory_vec) {
       full_width=FALSE, 
       font_size=12
     ) %>%
+    add_footnote(data_source_str, notation = "none") %>%
     as_image(file = filename)
 }
