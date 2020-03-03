@@ -92,6 +92,7 @@ df.crimes$offense <- NA
 offense_pattern_vec <- c(
   'ARSON\\s?-?[[:digit:]]D',
   'ASSAULT [[:digit:]]D',
+  'ASSAULT-[[:digit:]]D',
   'ASSAULT [[:digit:]]D WEAPON OR NEGLIGENT INJURY',
   'ASSAULT OF A CHILD [[:digit:]]D [WEAPON OR NEGLIGENT INJURY]?',
   'BURGLARY [[:digit:]][N,R]?D COMMERCIAL',
@@ -112,6 +113,7 @@ offense_pattern_vec <- c(
   'ORGANIZED RETAIL THEFT',
   'ORGANIZED RETAIL THEFT [[:digit:]]D',
   'PET ANIMALS TAKING CONCEALING',
+  'POISON/HARMFUL OBJECT FOOD DRINK OR MED',
   'RAPE\\s?-?[[:digit:]][N,R,S]?D?T?',
   'RAPE OF A CHILD [[:digit:]]D',
   'RAPE [[:digit:]]D USING OBJECT',

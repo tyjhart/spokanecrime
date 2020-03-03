@@ -11,6 +11,7 @@ offense_category_pattern_vec <- c(
   'INTIMIDATE',
   'MANSLAUGHTER',
   'MURDER',
+  'POISON',
   'RAPE',
   'ROBBERY',
   'TAKING MOTOR VEHICLE',
