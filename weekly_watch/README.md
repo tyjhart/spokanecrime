@@ -5,7 +5,6 @@ Spokane Crime Analysis Project (CAP) is dedicated to discovering, analyzing, and
 Currently, the SPD makes weekly CompStat reports available each Monday. Reports cover reported crime for the prior week in PDF format, broken down by policing districts. We crawl the PDF files, extract data, and transform it into a format useful for analysis.
 
 1. [Data Limitation](#data-limitations)
-1. [Data Availability](#data-availability)
 1. [Overall Statistics](#overall-statistics)
 1. [Police District Statistics](#police-district-statistics)
 1. [Types of Offenses](#types-of-offenses)
@@ -13,19 +12,17 @@ Currently, the SPD makes weekly CompStat reports available each Monday. Reports 
 
 ## Data Limitations
 
-There are limitations to the analysis that's possible using data provided by the city. The location of sexual assault offenses is not included in CompStat reports in order to protect the victim's privacy. While we know how many sexual assaults are reported and the general policing district that they occurred, it's not possible to correlate that type of assault with specific locations.
+There are limitations to the analysis that's possible using CompStat data provided by the city. While detailed information about Spokane crime does eventually get reported in the [FBI's NBIRS program](https://crime-data-explorer.fr.cloud.gov/downloads-and-docs), there is often a year's lag or more before the public can download it. For example, 2018's data was made available in September 2019. As of February 2020, only data from 2018 is available. It will likely be summer of 2020 before 2019's data can be downloaded and analyzed. In the meantime, we only have the less-detailed CompStat data to work with. More in-depth analysis of the detailed FBI data will become a separate project.
 
-When locations are included in weekly CompStat reports, they are sometimes documented only as an intersection of two roads, with no street numbers or direction. If an address is included in CompStat data, the street number is rounded - a robbery at "1215 E. Main Street" may become "1200 E. Main Street". Sometimes low-numbered locations are documented as "0 E. Main Street". This makes density or "heat" mapping difficult, and the resulting graphics somewhat unreliable.
+In the SPD's CompStat data, locations of sexual assault offenses are not included in order to protect the victim's privacy. While we know how many sexual assaults are reported and the general policing district that they occurred, it's not possible to correlate that type of assault with specific locations. When locations are included in weekly CompStat reports, they are sometimes documented only as an intersection of two roads, with no street numbers or direction. If an address is included in CompStat data, the street number is rounded - a robbery at "1215 E. Main Street" may become "1200 E. Main Street". Sometimes low-numbered locations are documented as "0 E. Main Street". This makes density or "heat" mapping difficult, and the resulting graphics unreliable.
 
-It is well-known that many crimes are not reported to the authorities. This phenomena occurs for a number of reasons depending on the community - social pressures, negative law enforcement encounters in the past, prior criminal history of potential reporters, etc. It would be naive to think that all crime committed in Spokane is documented in the CompStat reports. Assumptions about the percentage of crimes that go unreported depend on complex, interconnected variables that change over time. For that reason, we'll only do analysis and reporting on the data at-hand, without making additional assumptions about unreported crime.
+It is also well-known that many crimes are not reported to the authorities. This phenomena occurs for a number of reasons depending on the community - social pressures, negative law enforcement encounters in the past, prior criminal history of potential reporters, etc. It would be naive to think that all crime committed in Spokane is reported and subsequently documented in the CompStat reports. Assumptions about the percentage of crimes that go unreported depend on complex, interconnected variables that change over time. For that reason, this project only focuses on analysis and reporting with the data at-hand, without making assumptions about unreported crime.
 
-## Data Availability
-
-Spokane's reporting of crime data has undergone multiple transformations in the last decade. CompStat data is available on the SpokaneCity.org portal from 2019 all the way back to 2015. On October 4, 2016 the SPD moved from one crime reporting standard ([UCR](https://www.ucrdatatool.gov/)) to another ([NIBRS](https://www.fbi.gov/services/cjis/ucr/nibrs)). Current CompStat reports state on the first page about the switchover date,
+Spokane's reporting of crime data has also undergone multiple transformations in the last decade. CompStat data is available on the SpokaneCity.org portal from 2019 all the way back to 2015. On October 4, 2016 the SPD moved from one crime reporting standard ([UCR](https://www.ucrdatatool.gov/)) to another ([NIBRS](https://www.fbi.gov/services/cjis/ucr/nibrs)). Current CompStat reports state on the first page about the switchover date,
 
 > Numbers on CompStat reports prior to this date should not be used as a comparison to those on this report.
 
-Unfortunately, we're not able to make true "apples-to-apples" comparisons across the full timespan of availalble CompStat crime data.
+Unfortunately, we're not able to make true "apples-to-apples" comparisons across the full timespan of availalble CompStat crime data. Some years also have missing weeks of reports, and it's unclear if that data will ever be available.
 
 ## Overall Statistics
 
