@@ -338,34 +338,43 @@ df.crimes %>%
 ```
 
 ```{r plot.ytd_offenses_by_district, fig.cap = "Offenses by Police District, YTD"}
-df.crimes %>%
-  filter(year == 2020) %>%
-  count(district) %>%
-  ggplot(aes(reorder(district, -n), n, label = n)) +
+a <- df.crimes %>%
+  filter(year == 2020 & !district %in% c("OTH", NA)) %>%
+  group_by(district) %>%
+  summarize(count = n())
+
+ggplot(data = a, aes(reorder(district, -count), count, label = count)) +
   geom_col() +
   geom_text(vjust = -0.5) +
+  geom_hline(yintercept = mean(a$count), linetype = "dotted") +
+  geom_label(aes(x = "P5", y = mean(a$count), label = round(mean(a$count), 2))) +
   labs(
     x = "Police Districts", 
-    title = "Offenses by Police District", 
-    subtitle = "2020 YTD",
-    caption = data_source_str
+    title = "Offenses by Police District, 2020 YTD", 
+    caption = "
+    NOTE: Excluding districts OTH, NA
+    SOURCE: Spokane Police Department CompStat
+    "
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
 
 ```{r plot.total_offenses_by_district, fig.cap = "Offenses by Police District"}
-df.crimes %>%
-  filter(!district %in% c("SPA","SPB","SPC","SPD")) %>%
-  count(district) %>%
-  ggplot(aes(reorder(district, -n), n, label = n)) +
+a <- df.crimes %>%
+  filter(!district %in% c("OTH", NA, "SPA","SPB","SPC","SPD")) %>%
+  group_by(district) %>%
+  summarize(count = n())
+
+ggplot(data = a, aes(reorder(district, -count), count, label = count)) +
   geom_col() +
   geom_text(vjust = -0.5) +
+  geom_hline(yintercept = mean(a$count), linetype = "dotted") +
+  geom_label(aes(x = "P5", y = mean(a$count), label = round(mean(a$count), 2))) +
   labs(
     x = "Police Districts", 
-    title = "Offenses by Police District",
-    subtitle = "2017 - 2020",
+    title = "Offenses by Police District, 2017 - 2020",
     caption = "
-    NOTE: Excluding districts SPA, SPB, SPC, SPD
+    NOTE: Excluding districts OTH, NA, SPA, SPB, SPC, SPD
     SOURCE: Spokane Police Department CompStat
     "
     ) +
@@ -382,8 +391,7 @@ df.crimes %>%
   theme(axis.text.x = element_text(angle = 90, vjust = 0.25, hjust=1)) +
   labs(
     x = "Police Districts", 
-    title = "Types of Offenses", 
-    subtitle = "2020 YTD",
+    title = "Types of Offenses, 2020 YTD", 
     caption = data_source_str
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
@@ -398,8 +406,7 @@ df.crimes %>%
   theme(axis.text.x = element_text(angle = 90, vjust = 0.25, hjust=1)) +
   labs(
     x = "Police Districts", 
-    title = "Types of Offenses", 
-    subtitle = "2017 - 2020",
+    title = "Types of Offenses, 2017 - 2020", 
     caption = data_source_str
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
@@ -414,8 +421,7 @@ df.crimes %>%
   geom_text(vjust = -0.5) +
   labs(
     x = "Days", 
-    title = "Offenses by Day", 
-    subtitle = "2019",
+    title = "Offenses by Day, 2019", 
     caption = data_source_str
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
@@ -430,8 +436,7 @@ df.crimes %>%
   geom_text(vjust = -0.5) +
   labs(
     x = "Days", 
-    title = "Offenses by Day", 
-    subtitle = "2020 YTD",
+    title = "Offenses by Day, 2020 YTD", 
     caption = data_source_str
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
