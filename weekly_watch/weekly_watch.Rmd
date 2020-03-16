@@ -75,6 +75,19 @@ levels(df.crimes$lunar_phase)[levels(df.crimes$lunar_phase)=="Waxing gibbous"] <
 daily_offenses <- df.crimes %>%
   group_by(date) %>%
   summarize(offenses = n())
+
+# Summarized daily offenses by month
+summarized_crimes <- df.crimes %>%
+  group_by(year, num.month, num.day) %>%
+  summarize(daily_offenses = n()) %>%
+  group_by(year, num.month) %>%
+  summarize(
+    avg.daily_offenses = mean(daily_offenses), 
+    sum.monthly_offenses = sum(daily_offenses)
+    )
+
+summarized_crimes$date <- with(summarized_crimes, paste(year, num.month ,sep="-"))
+summarized_crimes <- subset(summarized_crimes, select = c(date, avg.daily_offenses, sum.monthly_offenses))
 ```
 
 ```{r plot.offenses_over_time, fig.cap = "Offenses Over Time, September 12, 2017 Onward"}
@@ -106,6 +119,40 @@ daily_offenses %>%
     subtitle = "Projection of Average Daily Offenses",
     caption = paste(data_source_str, "Projection CI 0.95", sep = "\n")
     )
+```
+
+```{r plot.monthly_offense_totals, fig.cap = "Monthly Offense Totals"}
+summarized_crimes %>%
+  ggplot(aes(date, sum.monthly_offenses)) +
+  geom_point() +
+  labs(
+  x = "Month",
+  y = "Offenses",
+  title = "Total Monthly Offenses",
+  caption = "
+  NOTE: Current month's data may be incomplete
+  SOURCE: Spokane Police Department CompStat
+  "
+  ) +
+  expand_limits(y = 0) +
+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+```{r plot.avg_daily_offenses_by_month, fig.cap = "Average Daily Offenses by Month"}
+summarized_crimes %>%
+  ggplot(aes(date, avg.daily_offenses)) +
+  geom_point() +
+  labs(
+  x = "Month",
+  y = "Avg. Daily Offenses",
+  title = "Average Daily Offenses by Month",
+  caption = "
+  NOTE: Current month's data may be incomplete
+  SOURCE: Spokane Police Department CompStat
+  "
+  ) +
+  expand_limits(y = 0) +
+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
 ```{r plot.monthly_offense_comparisons, fig.cap = "Monthly Offenses, 2018 Onward"}
@@ -154,7 +201,6 @@ df.crimes %>%
   geom_point(size = 3, alpha = point_alpha) +
   geom_smooth(method = "auto", color = "blue") +
   geom_smooth(method = "lm", color = "red") +
-  geom_vline(xintercept=c(summer_dates$summer_start, summer_dates$summer_end), linetype=4) +
   scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
   labs(
     x = "", 
@@ -175,7 +221,6 @@ df.crimes %>%
   geom_point(size = 3, alpha = point_alpha) +
   geom_smooth(method = "auto", color = "blue") +
   geom_smooth(method = "lm", color = "red") +
-  geom_vline(xintercept=c(summer_dates$summer_start, summer_dates$summer_end), linetype=4) +
   scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
   labs(
     x = "", 
@@ -194,7 +239,6 @@ df.crimes %>%
   geom_point(size = 3, alpha = point_alpha) +
   geom_smooth(method = "auto", color = "blue") +
   geom_smooth(method = "lm", color = "red") +
-  geom_vline(xintercept=c(summer_dates$summer_start, summer_dates$summer_end), linetype=4) +
   scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
   labs(
     x = "", 
@@ -213,7 +257,6 @@ df.crimes %>%
   geom_point(size = 3, alpha = point_alpha) +
   geom_smooth(method = "auto", color = "blue") +
   geom_smooth(method = "lm", color = "red") +
-  geom_vline(xintercept=c(summer_dates$summer_start, summer_dates$summer_end), linetype=4) +
   scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
   labs(
     x = "", 
@@ -232,7 +275,6 @@ df.crimes %>%
   geom_point(size = 3, alpha = point_alpha) +
   geom_smooth(method = "auto", color = "blue") +
   geom_smooth(method = "lm", color = "red") +
-  geom_vline(xintercept=c(summer_dates$summer_start, summer_dates$summer_end), linetype=4) +
   scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
   labs(
     x = "", 
@@ -251,7 +293,6 @@ df.crimes %>%
   geom_point(size = 3, alpha = point_alpha) +
   geom_smooth(method = "auto", color = "blue") +
   geom_smooth(method = "lm", color = "red") +
-  geom_vline(xintercept=c(summer_dates$summer_start, summer_dates$summer_end), linetype=4) +
   scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
   labs(
     x = "", 
@@ -270,7 +311,6 @@ df.crimes %>%
   geom_point(size = 3, alpha = point_alpha) +
   geom_smooth(method = "auto", color = "blue") +
   geom_smooth(method = "lm", color = "red") +
-  geom_vline(xintercept=c(summer_dates$summer_start, summer_dates$summer_end), linetype=4) +
   scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
   labs(
     x = "", 
@@ -289,7 +329,6 @@ df.crimes %>%
   geom_point(size = 3, alpha = point_alpha) +
   geom_smooth(method = "auto", color = "blue") +
   geom_smooth(method = "lm", color = "red") +
-  geom_vline(xintercept=c(summer_dates$summer_start, summer_dates$summer_end), linetype=4) +
   scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
   labs(
     x = "", 
@@ -308,7 +347,6 @@ df.crimes %>%
   geom_point(size = 3, alpha = point_alpha) +
   geom_smooth(method = "auto", color = "blue") +
   geom_smooth(method = "lm", color = "red") +
-  geom_vline(xintercept=c(summer_dates$summer_start, summer_dates$summer_end), linetype=4) +
   scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
   labs(
     x = "", 
@@ -327,7 +365,6 @@ df.crimes %>%
   geom_point(size = 3, alpha = point_alpha) +
   geom_smooth(method = "auto", color = "blue") +
   geom_smooth(method = "lm", color = "red") +
-  geom_vline(xintercept=c(summer_dates$summer_start, summer_dates$summer_end), linetype=4) +
   scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
   labs(
     x = "", 
