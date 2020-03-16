@@ -46,7 +46,6 @@ knitr::opts_chunk$set(
   )
 library(kableExtra)
 
-source("./summer_dates.R") # Dates for start / end of summer
 source("./text_import.R") # Build crime data frame
 source("./categorize_offenses.R") # Categorize offense names
 source("./lunar_seasons.R") # Lunar phase, seasons
