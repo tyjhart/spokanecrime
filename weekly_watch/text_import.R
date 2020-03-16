@@ -56,6 +56,7 @@ df.crimes$date <- as.Date(df.crimes$date, "%m/%d/%Y")
 df.crimes$year <- format(df.crimes$date, format = "%Y") # Year numbers for comparison
 df.crimes$num.month <- format(df.crimes$date, format = "%m") # Month numbers for comparison
 df.crimes$num.week <- format(df.crimes$date, "%V") # Week numbers for comparison
+df.crimes$num.day <- format(df.crimes$date, "%d") # Day numbers for comparison
 
 # Day of the week
 df.crimes$dow <- as.factor(weekdays(df.crimes$date))
