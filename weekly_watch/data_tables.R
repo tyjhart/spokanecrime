@@ -144,7 +144,7 @@ table_category_vec <- c(
   'TAKING VEH.',
   'THEFT',
   'VEH. THEFT',
-  'VEH. PROWLING'
+  'VEH. PROWL'
 )
 
 for (table_category in table_category_vec) {
