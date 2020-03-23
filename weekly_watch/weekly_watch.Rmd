@@ -448,7 +448,22 @@ df.crimes %>%
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
 
-```{r plot.2019_offenses_by_weekday, fig.cap = "Offenses by Day, 2019 YTD"}
+```{r plot.ytd_offenses_by_weekday, fig.cap = "Offenses by Day, 2019 YTD"}
+df.crimes %>%
+  filter(year == 2020) %>%
+  count(dow) %>%
+  ggplot(aes(fct_relevel(dow,"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"), n, label = n)) +
+  geom_col() +
+  geom_text(vjust = -0.5) +
+  labs(
+    x = "Days", 
+    title = "Offenses by Day, 2020 YTD", 
+    caption = data_source_str
+    ) +
+  scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
+```
+
+```{r plot.2019_offenses_by_weekday, fig.cap = "Offenses by Day, 2019"}
 df.crimes %>%
   filter(year == 2019) %>%
   count(dow) %>%
@@ -463,16 +478,16 @@ df.crimes %>%
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
 
-```{r plot.ytd_offenses_by_weekday, fig.cap = "Offenses by Day, 2019 YTD"}
+```{r plot.2018_offenses_by_weekday, fig.cap = "Offenses by Day, 2018"}
 df.crimes %>%
-  filter(year == 2020) %>%
+  filter(year == 2018) %>%
   count(dow) %>%
   ggplot(aes(fct_relevel(dow,"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"), n, label = n)) +
   geom_col() +
   geom_text(vjust = -0.5) +
   labs(
     x = "Days", 
-    title = "Offenses by Day, 2020 YTD", 
+    title = "Offenses by Day, 2018", 
     caption = data_source_str
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
