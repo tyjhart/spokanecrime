@@ -30,7 +30,15 @@ Looking at overall statistics gives us a good starting point from which to explo
 
 ![CompStat Total Offenses](./figures/plot.offenses_over_time-1.png)
 
-Offenses tend to spike during the summer months, shown in dashed lines. The seasonality is demonstrated very clearly in the 2013-2016 data at the end of this report.
+The trend is projected to continue downward overall through 2020:
+
+![CompStat Projected Total Offenses](./figures/plot.offenses_over_time_pred-1.png)
+
+The majority of crime in Spokane is non-violent, though assaults, robbery, and murder do occur with some regularity:
+
+![Non-Violent & Violent Crime](./figures/plot.offenses_over_time_violence-1.png)
+
+Of the non-violent crimes, thefts are the most common. This includes shoplifting, burglary (residential and commercial), and motor vehicle thefts:
 
 ![Thefts](./figures/plot.theft_over_time-1.png)
 
