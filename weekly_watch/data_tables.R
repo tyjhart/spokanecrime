@@ -3,7 +3,9 @@
 # so this functionality has been moved to a separate file.
 
 # Data table source note
-data_source_str <- c("SOURCE: Spokane Police Department CompStat")
+boilerplate_caption <- "SOURCE: Spokane Police Department CompStat"
+cc_by_sa <- "Licensed CC-BY-SA 4.0, Tyler Hart"
+boilerplate_caption <- paste(boilerplate_caption, cc_by_sa, sep = "\n")
 
 ### Annual totals ###
 df.annual_totals <- df.crimes %>%
@@ -20,14 +22,17 @@ kable(
     bootstrap_options = c("bordered", "condensed", "striped"), 
     full_width=FALSE, font_size=12
   ) %>%
-  add_footnote(data_source_str, notation = "none") %>%
-  as_image(file = "./weekly_watch/figures/table.annual_totals.png")
+  add_footnote(boilerplate_caption, notation = "none") %>%
+  as_image(file = "./weekly_watch/figures/table.annual_totals.png", img_dpi = 400)
 
-# Totals by category
+
+
+### Totals by category ###
 df.annual_category_totals <- df.crimes %>%
-  filter(date > "2017-12-31") %>%
   group_by(year,category) %>%
   {table(.$year,.$category)}
+
+df.annual_category_totals <- df.annual_category_totals[-1,]
 
 kable(
   df.annual_category_totals,
@@ -37,12 +42,28 @@ kable(
     bootstrap_options = c("bordered", "condensed", "striped"), 
     full_width=FALSE, font_size=12
   ) %>%
-  add_footnote(data_source_str, notation = "none") %>%
+  add_footnote(boilerplate_caption, notation = "none") %>%
   as_image(file = "./weekly_watch/figures/table.annual_category_totals.png")
 
 
 
+### Totals by violence ###
+df.annual_violence_totals <- df.crimes %>%
+  group_by(year,violence) %>%
+  {table(.$year,.$violence)}
 
+df.annual_violence_totals <- df.annual_violence_totals[-1,]
+
+kable(
+  df.annual_violence_totals,
+  caption = "Annual Non-Violent, Violent Totals"
+) %>%
+  kable_styling(
+    bootstrap_options = c("bordered", "condensed", "striped"), 
+    full_width=FALSE, font_size=12
+  ) %>%
+  add_footnote(boilerplate_caption, notation = "none") %>%
+  as_image(file = "./weekly_watch/figures/table.annual_violence_totals.png")
 
 
 
@@ -66,7 +87,7 @@ kable(
     bootstrap_options = c("bordered", "condensed", "striped"), 
     full_width=FALSE, font_size=12
     ) %>%
-  add_footnote(data_source_str, notation = "none") %>%
+  add_footnote(boilerplate_caption, notation = "none") %>%
   as_image(file = "./weekly_watch/figures/table.district_stats_ytd.png")
 
 df.district_summary <- df.crimes %>%
@@ -88,7 +109,7 @@ kable(
     full_width=FALSE, 
     font_size=12
     ) %>%
-  add_footnote(data_source_str, notation = "none") %>%
+  add_footnote(boilerplate_caption, notation = "none") %>%
   as_image(file = "./weekly_watch/figures/table.district_stats_total.png")
 
 # District, category proportion tables by year
@@ -111,9 +132,11 @@ for (table_year in table_year_vec) {
       bootstrap_options = c("bordered", "condensed", "striped"), 
       full_width=FALSE, font_size=12
     ) %>%
-    add_footnote(data_source_str, notation = "none") %>%
+    add_footnote(boilerplate_caption, notation = "none") %>%
     as_image(file = filename)
 }
+
+
 
 ### All Offenses ###
 df.monthly_summary <- df.crimes %>% 
@@ -130,8 +153,10 @@ kable(
     full_width=FALSE, 
     font_size=12
     ) %>%
-  add_footnote(data_source_str, notation = "none") %>%
+  add_footnote(boilerplate_caption, notation = "none") %>%
   as_image(file = "./weekly_watch/figures/table.offenses.png") 
+
+
 
 ### By Category ###
 table_category_vec <- c(
@@ -173,7 +198,7 @@ for (table_category in table_category_vec) {
       full_width=FALSE, 
       font_size=12
     ) %>%
-    add_footnote(data_source_str, notation = "none") %>%
+    add_footnote(boilerplate_caption, notation = "none") %>%
     as_image(file = filename)
   
   # tryCatch(lm(formula1, data), error = function(e) lm(formula2, data))
@@ -190,6 +215,8 @@ for (table_category in table_category_vec) {
   #   ) %>%
   #   as_image(file = filename)
 }
+
+
 
 ### By Theft Subcategory ###
 table_subcategory_vec <- c(
@@ -216,6 +243,6 @@ for (table_subcategory in table_subcategory_vec) {
       full_width=FALSE, 
       font_size=12
     ) %>%
-    add_footnote(data_source_str, notation = "none") %>%
+    add_footnote(boilerplate_caption, notation = "none") %>%
     as_image(file = filename)
 }
