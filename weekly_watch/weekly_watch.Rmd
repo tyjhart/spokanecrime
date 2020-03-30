@@ -48,15 +48,20 @@ library(kableExtra)
 
 source("./text_import.R") # Build crime data frame
 source("./categorize_offenses.R") # Categorize offense names
+source("./categorize_violence.R") # Categorize violent / non-violent
 source("./lunar_seasons.R") # Lunar phase, seasons
-
-# Plot data source note
-data_source_str <- "SOURCE: Spokane Police Department CompStat"
 
 # Alpha for geom_point plotting
 point_alpha = 0.25
 
-# Abbrev. offense names
+### Figure captions ###
+data_source_str <- "SOURCE: Spokane Police Department CompStat"
+cc_by_sa <- "Licensed CC-BY-SA 4.0, Tyler Hart"
+excluded_districts_note <- "NOTE: Excluding districts OTH, NA, SPA-D"
+boilerplate_caption <- paste(data_source_str, cc_by_sa, sep = "\n")
+boilerplate_caption_exclude_dist <- paste(paste(data_source_str, excluded_districts_note, sep = "; "), cc_by_sa, sep = "\n")
+
+### Abbrev. offense names ###
 levels(df.crimes$category)[levels(df.crimes$category)=="THEFT OF MOTOR VEHICLE"] <- "VEH. THEFT"
 levels(df.crimes$category)[levels(df.crimes$category)=="TAKING MOTOR VEHICLE"] <- "TAKING VEH."
 levels(df.crimes$category)[levels(df.crimes$category)=="VEHICLE PROWLING"] <- "VEH. PROWL"
@@ -64,15 +69,19 @@ levels(df.crimes$category)[levels(df.crimes$category)=="DRIVE BY SHOOTING"] <- "
 levels(df.crimes$category)[levels(df.crimes$category)=="VEHICLE TRESPASS"] <- "VEH. TRESPASS"
 levels(df.crimes$category)[levels(df.crimes$category)=="HARASSMENT"] <- "HARASS."
 
-# Moon phase abbreviations
+### Moon phase abbreviations ###
 levels(df.crimes$lunar_phase)[levels(df.crimes$lunar_phase)=="Waning gibbous"] <- "Waning Gibb."
 levels(df.crimes$lunar_phase)[levels(df.crimes$lunar_phase)=="Waning crescent"] <- "Waning Cres."
 levels(df.crimes$lunar_phase)[levels(df.crimes$lunar_phase)=="Waxing crescent"] <- "Waxing Cres."
 levels(df.crimes$lunar_phase)[levels(df.crimes$lunar_phase)=="Waxing gibbous"] <- "Waxing Gibb."
 
-# Summarized daily offenses
+### Summarized daily offenses ###
 daily_offenses <- df.crimes %>%
   group_by(date) %>%
+  summarize(offenses = n())
+
+daily_offenses_violence <- df.crimes %>%
+  group_by(date, violence) %>%
   summarize(offenses = n())
 
 # Summarized daily offenses by month
@@ -85,7 +94,8 @@ summarized_crimes <- df.crimes %>%
     sum.monthly_offenses = sum(daily_offenses)
     )
 
-summarized_crimes$date <- with(summarized_crimes, paste(year, num.month ,sep="-"))
+summarized_crimes$date <- with(summarized_crimes, paste(year, num.month, "01" ,sep="-"))
+summarized_crimes$date <- as.Date(summarized_crimes$date, format = "%Y-%m-%d")
 summarized_crimes <- subset(summarized_crimes, select = c(date, avg.daily_offenses, sum.monthly_offenses))
 ```
 
@@ -100,7 +110,67 @@ daily_offenses %>%
     x = "", 
     y = "Offenses", 
     title = "Total Offenses", 
-    caption = data_source_str
+    caption = paste(data_source_str, cc_by_sa, sep = "\n")
+    )
+```
+
+```{r plot.offenses_over_time_violence, fig.cap = "Offenses Over Time, September 12, 2017 Onward"}
+daily_offenses_violence %>%
+  ggplot(aes(date, offenses)) + 
+  geom_point(aes(color = violence), size = 3, alpha = point_alpha) +
+  scale_color_manual(values = c("purple","red")) +
+  labs(
+    x = "", 
+    y = "Offenses", 
+    color = "Violence",
+    title = "Daily Non-Violent & Violent Offenses", 
+    caption = paste(data_source_str, cc_by_sa, sep = "\n")
+    )
+```
+
+```{r plot.offenses_over_time_violence_wrap, fig.cap = "Offenses Over Time, September 12, 2017 Onward"}
+daily_offenses_violence %>%
+  ggplot(aes(date, offenses)) + 
+  geom_point(size = 3, alpha = point_alpha) +
+  facet_wrap( ~ violence, ncol = 1, scales = "free") +
+  labs(
+    x = "", 
+    y = "Offenses", 
+    color = "Violence",
+    title = "Daily Non-Violent & Violent Offenses", 
+    caption = paste(data_source_str, cc_by_sa, sep = "\n")
+    )
+```
+
+```{r plot.violent_offenses_over_time, fig.cap = "Offenses Over Time, September 12, 2017 Onward"}
+daily_offenses_violence %>%
+  filter(violence == "Violent")  %>%
+  ggplot(aes(date, offenses)) + 
+  geom_point(size = 3, alpha = point_alpha) +
+  geom_smooth(method = "auto", color = "blue") +
+  geom_smooth(method = "lm", color = "red") +
+  geom_hline(yintercept=0, linetype=4) +
+  labs(
+    x = "", 
+    y = "Offenses", 
+    title = "Daily Violent Offenses", 
+    caption = paste(data_source_str, cc_by_sa, sep = "\n")
+    )
+```
+
+```{r plot.non_violent_offenses_over_time, fig.cap = "Offenses Over Time, September 12, 2017 Onward"}
+daily_offenses_violence %>%
+  filter(violence == "Non-Violent")  %>%
+  ggplot(aes(date, offenses)) + 
+  geom_point(size = 3, alpha = point_alpha) +
+  geom_smooth(method = "auto", color = "blue") +
+  geom_smooth(method = "lm", color = "red") +
+  geom_hline(yintercept=0, linetype=4) +
+  labs(
+    x = "", 
+    y = "Offenses", 
+    title = "Daily Non-Violent Offenses", 
+    caption = paste(data_source_str, cc_by_sa, sep = "\n")
     )
 ```
 
@@ -108,15 +178,14 @@ daily_offenses %>%
 daily_offenses %>%
   ggplot(aes(date, offenses)) + 
   geom_point(size = 3, alpha = point_alpha) +
-  geom_smooth(method = "auto", color = "blue") +
+  geom_smooth(method = "loess", color = "blue") +
   geom_smooth(method = "lm", color = "red", fullrange = TRUE) +
-  scale_x_date(limits = as.Date(c("2017-10-01","2021-01-01")), date_breaks = "1 year", date_labels = "%Y") +
+  scale_x_date(limits = as.Date(c("2017-09-03","2021-01-01")), date_breaks = "1 year", date_labels = "%Y") +
   labs(
     x = "", 
     y = "Offenses", 
-    title = "Total Offenses", 
-    subtitle = "Projection of Average Daily Offenses",
-    caption = paste(data_source_str, "Projection CI 0.95", sep = "\n")
+    title = "Average Daily Offenses Projection, CI 0.95",
+    caption = paste(data_source_str, cc_by_sa, sep = "\n")
     )
 ```
 
@@ -124,14 +193,12 @@ daily_offenses %>%
 summarized_crimes %>%
   ggplot(aes(date, sum.monthly_offenses)) +
   geom_point() +
+  geom_smooth() +
   labs(
   x = "Month",
   y = "Offenses",
   title = "Total Monthly Offenses",
-  caption = "
-  NOTE: Current month's data may be incomplete
-  SOURCE: Spokane Police Department CompStat
-  "
+  caption = boilerplate_caption
   ) +
   expand_limits(y = 0) +
 theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
@@ -141,14 +208,12 @@ theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 summarized_crimes %>%
   ggplot(aes(date, avg.daily_offenses)) +
   geom_point() +
+  geom_smooth() +
   labs(
   x = "Month",
   y = "Avg. Daily Offenses",
   title = "Average Daily Offenses by Month",
-  caption = "
-  NOTE: Current month's data may be incomplete
-  SOURCE: Spokane Police Department CompStat
-  "
+  caption = boilerplate_caption
   ) +
   expand_limits(y = 0) +
 theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
@@ -165,10 +230,7 @@ labs(
   y = "Offenses",
   title = "Monthly Offenses",
   color = "Year",
-  caption = "
-  NOTE: Current month's data may be incomplete
-  SOURCE: Spokane Police Department CompStat
-  "
+  caption = boilerplate_caption
   ) +
 theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
@@ -185,7 +247,7 @@ labs(
   y = "Offenses",
   title = "Weekly Offenses",
   color = "Year",
-  caption = data_source_str
+  caption = boilerplate_caption
   ) +
 theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
@@ -205,7 +267,7 @@ df.crimes %>%
     x = "", 
     y = "Thefts", 
     title = "Overall Thefts", 
-    caption = data_source_str
+    caption = boilerplate_caption
     ) 
 ```
 
@@ -225,7 +287,7 @@ df.crimes %>%
     x = "", 
     y = "Shoplifting Thefts", 
     title = "Shoplifting Thefts", 
-    caption = data_source_str
+    caption = boilerplate_caption
     )
 ```
 
@@ -243,7 +305,7 @@ df.crimes %>%
     x = "", 
     y = "Firearm Thefts", 
     title = "Firearm Thefts", 
-    caption = data_source_str
+    caption = boilerplate_caption
     )
 ```
 
@@ -261,7 +323,7 @@ df.crimes %>%
     x = "", 
     y = "Burglaries", 
     title = "Overall Burglaries", 
-    caption = data_source_str
+    caption = boilerplate_caption
     ) 
 ```
 
@@ -279,7 +341,7 @@ df.crimes %>%
     x = "", 
     y = "Residential Burglaries", 
     title = "Residential Burglaries", 
-    caption = data_source_str
+    caption = boilerplate_caption
     )
 ```
 
@@ -297,7 +359,7 @@ df.crimes %>%
     x = "", 
     y = "Commercial Burglaries", 
     title = "Commercial Burglaries", 
-    caption = data_source_str
+    caption = boilerplate_caption
     )
 ```
 
@@ -315,7 +377,7 @@ df.crimes %>%
     x = "", 
     y = "Shoplifting", 
     title = "Shoplifting Thefts", 
-    caption = data_source_str
+    caption = boilerplate_caption
     )
 ```
 
@@ -333,7 +395,7 @@ df.crimes %>%
     x = "", 
     y = "Vehicle Thefts", 
     title = "Vehicle Thefts", 
-    caption = data_source_str
+    caption = boilerplate_caption
     )
 ```
 
@@ -351,7 +413,7 @@ df.crimes %>%
     x = "", 
     y = "Assaults", 
     title = "Assaults", 
-    caption = data_source_str
+    caption = boilerplate_caption
     )
 ```
 
@@ -369,7 +431,7 @@ df.crimes %>%
     x = "", 
     y = "Sexual Assaults", 
     title = "Sexual Assaults", 
-    caption = data_source_str
+    caption = boilerplate_caption
     ) 
 ```
 
@@ -387,10 +449,7 @@ ggplot(data = a, aes(reorder(district, -count), count, label = count)) +
   labs(
     x = "Police Districts", 
     title = "Offenses by Police District, 2020 YTD", 
-    caption = "
-    NOTE: Excluding districts OTH, NA
-    SOURCE: Spokane Police Department CompStat
-    "
+    caption = boilerplate_caption_exclude_dist
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
@@ -409,10 +468,7 @@ ggplot(data = a, aes(reorder(district, -count), count, label = count)) +
   labs(
     x = "Police Districts", 
     title = "Offenses by Police District, 2017 - 2020",
-    caption = "
-    NOTE: Excluding districts OTH, NA, SPA, SPB, SPC, SPD
-    SOURCE: Spokane Police Department CompStat
-    "
+    caption = boilerplate_caption_exclude_dist
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
@@ -428,7 +484,7 @@ df.crimes %>%
   labs(
     x = "Police Districts", 
     title = "Types of Offenses, 2020 YTD", 
-    caption = data_source_str
+    caption = boilerplate_caption
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
@@ -443,7 +499,7 @@ df.crimes %>%
   labs(
     x = "Police Districts", 
     title = "Types of Offenses, 2017 - 2020", 
-    caption = data_source_str
+    caption = boilerplate_caption
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
@@ -458,7 +514,7 @@ df.crimes %>%
   labs(
     x = "Days", 
     title = "Offenses by Day, 2020 YTD", 
-    caption = data_source_str
+    caption = boilerplate_caption
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
@@ -473,7 +529,7 @@ df.crimes %>%
   labs(
     x = "Days", 
     title = "Offenses by Day, 2019", 
-    caption = data_source_str
+    caption = boilerplate_caption
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
@@ -488,7 +544,7 @@ df.crimes %>%
   labs(
     x = "Days", 
     title = "Offenses by Day, 2018", 
-    caption = data_source_str
+    caption = boilerplate_caption
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
@@ -503,7 +559,7 @@ df.crimes %>%
   labs(
     x = "Lunar Phases", 
     title = "Offenses by Lunar Phase", 
-    caption = data_source_str
+    caption = boilerplate_caption
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
@@ -519,7 +575,7 @@ df.crimes %>%
   labs(
     x = "Lunar Phase", 
     title = "Violent Offenses by Lunar Phase", 
-    caption = data_source_str
+    caption = boilerplate_caption
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
