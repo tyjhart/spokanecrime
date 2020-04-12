@@ -52,11 +52,17 @@ Of the non-violent crimes, thefts are the most common. This includes shoplifting
 
 The city is divided among eight policing districts, with four (P1, P2, P3, P4) in the "North Police Service Area" and the other four (P5, P6, P7, P8) in the "South". Geographically, the north and south service areas are separated by the Spokane River. In CompStat reports some offenses are noted as occurring in an "OTH" district with no amplifying information given. Periodically an offense will also be listed with no district at all in the weekly reports, and those are shown here as "UNK". Districts designated "SPA", "SPB", "SPC", and "SPD" had been used at one point, but no information is given in the CompStat reports indicating what areas these designations represented.
 
-![Offenses by Police District](./figures/plot.total_offenses_by_district-1.png)
-
-So far in 2019 most crime occurred in districts P1, P2, P3, and P4 - all north of the Spokane River. Districts P4 and P3 are both located north of the river and east of Division, and have the highest overall counts. Districts P1-P4 have the highest overall counts of reported crimes from September 2017 onward.
+So far in 2020, most crime occurred in districts P1, P2, P3, and P4 - all north of the Spokane River. Districts P4 and P3 are both located north of the river and east of Division, and have the highest overall counts. Districts P1-P4 have the highest overall counts of reported crimes from September 2017 onward.
 
 ![Offenses by Police District, 2020 YTD](./figures/plot.ytd_offenses_by_district-1.png)
+
+Here's the same district breakdown from 2017 to 2020:
+
+![Offenses by Police District](./figures/plot.total_offenses_by_district-1.png)
+
+We can also look at the same information, but split up between violent and non-violent crime:
+
+![Offenses by Police District & Violence](./figures/plot.total_offenses_by_violence_district-1.png)
 
 ## Types of Offenses
 
