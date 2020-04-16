@@ -23,7 +23,7 @@ kable(
     full_width=FALSE, font_size=12
   ) %>%
   add_footnote(boilerplate_caption, notation = "none") %>%
-  as_image(file = "./weekly_watch/figures/table.annual_totals.png", img_dpi = 400)
+  as_image(file = "./weekly_watch/figures/table.annual_totals.png")
 
 
 
@@ -56,7 +56,7 @@ df.annual_violence_totals <- df.annual_violence_totals[-1,]
 
 kable(
   df.annual_violence_totals,
-  caption = "Annual Non-Violent, Violent Totals"
+  caption = "Annual Non-Violent, Violent Offense Totals"
 ) %>%
   kable_styling(
     bootstrap_options = c("bordered", "condensed", "striped"), 
@@ -77,11 +77,11 @@ df.district_summary$percentage <- round(
   df.district_summary$dist_sum / sum(df.district_summary$dist_sum), 3
   ) * 100
 
-# Districts 2019 YTD
+# Districts 2020 YTD
 kable(
   df.district_summary[order(-df.district_summary$dist_sum),], 
   col.names = c("District", "Offenses", "Percentage"), 
-  caption = "Districts, 2020 YTD"
+  caption = "Police District Offenses, 2020 YTD"
   ) %>% 
   kable_styling(
     bootstrap_options = c("bordered", "condensed", "striped"), 
@@ -102,7 +102,7 @@ df.district_summary$percentage <- round(
 kable(
   df.district_summary[order(-df.district_summary$dist_sum),], 
   col.names = c("District", "Offenses", "Percentage"), 
-  caption = "Districts, All Years"
+  caption = "Police Districts, All Years"
   ) %>%
   kable_styling(
     bootstrap_options = c("bordered", "condensed", "striped"), 
@@ -111,6 +111,19 @@ kable(
     ) %>%
   add_footnote(boilerplate_caption, notation = "none") %>%
   as_image(file = "./weekly_watch/figures/table.district_stats_total.png")
+
+# District non-violent, violent proportions
+kable(
+  df.crimes %>% 
+    {table(.$district,.$violence)} %>% 
+    prop.table(margin = 2) %>% `*` (100) %>% round(2)
+) %>% 
+  kable_styling(
+    bootstrap_options = c("bordered", "condensed", "striped"), 
+    full_width=FALSE, font_size=12
+  ) %>%
+  add_footnote(boilerplate_caption, notation = "none") %>%
+  as_image(file = "./weekly_watch/figures/table.district_violence_proportion.png")
 
 # District, category proportion tables by year
 # See https://stackoverflow.com/questions/45385897/how-to-round-all-the-values-of-a-prop-table-in-r-in-one-line,
@@ -126,6 +139,24 @@ for (table_year in table_year_vec) {
     df.crimes %>% 
       filter(year == table_year) %>% 
       {table(.$district,.$category)} %>% 
+      prop.table(margin = 2) %>% `*` (100) %>% round(2)
+  ) %>% 
+    kable_styling(
+      bootstrap_options = c("bordered", "condensed", "striped"), 
+      full_width=FALSE, font_size=12
+    ) %>%
+    add_footnote(boilerplate_caption, notation = "none") %>%
+    as_image(file = filename)
+}
+
+for (table_year in table_year_vec) {
+  
+  filename <- paste0("./weekly_watch/figures/table.",tolower(table_year),"_district_violence_proportion.png")
+  
+  kable(
+    df.crimes %>% 
+      filter(year == table_year) %>% 
+      {table(.$district,.$violence)} %>% 
       prop.table(margin = 2) %>% `*` (100) %>% round(2)
   ) %>% 
     kable_styling(
