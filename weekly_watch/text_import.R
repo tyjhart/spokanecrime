@@ -71,8 +71,8 @@ df.crimes$year <- as.factor(df.crimes$year)
 
 ### Addresses ###
 df.crimes$address <- NA
-street_addr_grep_pattern <- '[[:digit:]]{1,5} [N|S|E|W] \\w+ \\w+'
-intersection_grep_pattern <- '(?:[A-Za-z0-9]+\\s){2}[A-Za-z]+ / (?:[A-Za-z0-9]+\\s){2}[A-Za-z]+'
+street_addr_grep_pattern <- '[[:digit:]]{1,5} [N|S|E|W] \\w+ \\w+ ?[[:upper:]]{,4}'
+intersection_grep_pattern <- '(?:[A-Za-z0-9]+\\s){2}[A-Za-z]+ / (?:[A-Za-z0-9]+\\s){2}[A-Za-z]+ ?[[:upper:]]{,4}'
 
 # Typical street addresses
 address_parsing_index <- grep(street_addr_grep_pattern, df.crimes$V1, ignore.case = TRUE)
