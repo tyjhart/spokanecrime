@@ -62,9 +62,17 @@ When we're looking at events as they happen over time we must consider **seasona
 
 ![Overall Decomposition](./figures/plot.crime_time_series_decomposition-1.png)
 
-Once we've identified seasonal trends it's possible to adjust how we visualize crime data:
+The "seasonal" section of the plot above shows an obvious, repeating cycle that occurs each year. There's also a downward trend (in the "trend" section) that started to plateau mid-2019. Once we've identified seasonal cycles it's possible to idependently visualize what crime is doing:
 
 ![Overall Offenses, Seasonally Adjusted](./figures/plot.crime_seasonally_adjusted-1.png)
+
+We can do the same thing for offense categories - in this case Burglary:
+
+![Burglary Decomposition](./figures/plot.burglary_time_series_decomposition-1.png)
+
+Here's a visualization of seasonally-adjusted burglaries:
+
+![Burglaries, Seasonally Adjusted](./figures/plot.burglaries_seasonally_adjusted-1.png)
 
 ## Police District Statistics
 
