@@ -7,6 +7,7 @@ Currently, the SPD makes weekly CompStat reports available each Monday. Reports 
 1. [Data Limitations](#data-limitations)
 1. [Violence Classifications](#violence-and-crime-classifications)
 1. [Overall Statistics](#overall-statistics)
+1. [Seasonality](#seasonality)
 1. [Police District Statistics](#police-district-statistics)
 1. [Types of Offenses](#types-of-offenses)
 1. [Lunar Phases](#lunar-phases)
@@ -54,6 +55,16 @@ Of the non-violent crimes, thefts are the most common. This includes shoplifting
 ![Burglaries](./figures/plot.burglaries_over_time-1.png)
 
 ![Thefts of Motor Vehicles](./figures/plot.tomv_over_time-1.png)
+
+## Seasonality
+
+When we're looking at events as they happen over time we must consider **seasonality**. Crime in Spokane definitely follows seasonal trends throughout the year. We can use this seasonality to make predictions and give context to increases or decreases in crime. Here's a decomposition of overall crime data:
+
+![Overall Decomposition](./figures/plot.crime_time_series_decomposition-1.png)
+
+Once we've identified seasonal trends it's possible to adjust how we visualize crime data:
+
+![Overall Offenses, Seasonally Adjusted](./figures/plot.crime_seasonally_adjusted-1.png)
 
 ## Police District Statistics
 
