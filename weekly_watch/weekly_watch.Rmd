@@ -24,6 +24,8 @@ header-includes:
 
 ```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
 library(tidyverse)
+library(forecast)
+library(tseries)
 library(stringr)
 library(data.table)
 library(scales)
@@ -111,13 +113,51 @@ daily_offenses %>%
   geom_point(size = point_size, alpha = point_alpha) +
   geom_smooth(method = "auto", color = "blue", size = geom_line_size) +
   geom_smooth(method = "lm", color = "red", size = geom_line_size) +
-  geom_hline(yintercept=0, linetype=4) +
   labs(
     x = "", 
     y = "Offenses", 
     title = "Total Offenses", 
     caption = paste(data_source_str, cc_by_sa, sep = "\n")
     )
+```
+
+```{r plot.crime_time_series_decomposition, fig.pos="H", fig.width=9.5, fig.height=6.5}
+# Total Offenses by date
+model_data <- df.crimes %>%
+  group_by(date) %>%
+  summarize(offenses = n())
+
+# Calculate start, end numerical dates
+start_date <- as.numeric(as.Date("2017-09-03") - as.Date("2017-01-01")) # First 2017 observed date
+end_date <- as.numeric(as.Date("2020-04-18") - as.Date("2020-01-01")) # Last 2020 observed date
+freq <- 365 # Time series frequency
+
+### All data time series ###
+ts.crimes <- ts(model_data, start = c(2017,start_date), end = c(2020,end_date), frequency = freq)
+
+# Decompose time series
+ts.crime_stl <- stl(ts.crimes[,2],"periodic") # Decompose time series
+plot(ts.crime_stl, main = "Crime Seasonal Decomposition")
+```
+
+```{r plot.crime_seasonally_adjusted, fig.pos="H", fig.width=9.5, fig.height=6.5}
+# Total Offenses by date
+model_data <- df.crimes %>%
+  group_by(date) %>%
+  summarize(offenses = n())
+
+# Calculate start, end numerical dates
+start_date <- as.numeric(as.Date("2017-09-03") - as.Date("2017-01-01")) # First 2017 observed date
+end_date <- as.numeric(as.Date("2020-04-18") - as.Date("2020-01-01")) # Last 2020 observed date
+freq <- 365 # Time series frequency
+
+### All data time series ###
+ts.crimes <- ts(model_data, start = c(2017,start_date), end = c(2020,end_date), frequency = freq)
+
+# Decompose time series
+ts.crime_stl <- stl(ts.crimes[,2],"periodic") # Decompose time series
+ts.crime_sa <- seasadj(ts.crime_stl) # Adjust for seasonality
+plot(ts.crime_sa, main = "Offenses, Seasonally Adjusted", xlab = "", ylab = "Offenses")
 ```
 
 ```{r plot.offenses_over_time_violence, fig.cap = "Offenses Over Time, September 12, 2017 Onward", fig.pos="H", fig.width=9.5, fig.height=6.5}
@@ -347,6 +387,47 @@ df.crimes %>%
     title = "Overall Burglaries", 
     caption = boilerplate_caption
     ) 
+```
+
+```{r plot.burglary_time_series_decomposition, fig.pos="H", fig.width=9.5, fig.height=6.5}
+# Total Offenses by date
+model_data <- df.crimes %>%
+  filter(category == "BURGLARY") %>%
+  group_by(date) %>%
+  summarize(offenses = n())
+
+# Calculate start, end numerical dates
+start_date <- as.numeric(as.Date("2017-09-03") - as.Date("2017-01-01")) # First 2017 observed date
+end_date <- as.numeric(as.Date("2020-04-18") - as.Date("2020-01-01")) # Last 2020 observed date
+freq <- 365 # Time series frequency
+
+### All data time series ###
+ts.crimes <- ts(model_data, start = c(2017,start_date), end = c(2020,end_date), frequency = freq)
+
+# Decompose time series
+ts.crime_stl <- stl(ts.crimes[,2],"periodic") # Decompose time series
+plot(ts.crime_stl, main = "Burglary Seasonal Decomposition")
+```
+
+```{r plot.burglaries_seasonally_adjusted, fig.pos="H", fig.width=9.5, fig.height=6.5}
+# Total Offenses by date
+model_data <- df.crimes %>%
+  filter(category == "BURGLARY") %>%
+  group_by(date) %>%
+  summarize(offenses = n())
+
+# Calculate start, end numerical dates
+start_date <- as.numeric(as.Date("2017-09-03") - as.Date("2017-01-01")) # First 2017 observed date
+end_date <- as.numeric(as.Date("2020-04-18") - as.Date("2020-01-01")) # Last 2020 observed date
+freq <- 365 # Time series frequency
+
+### All data time series ###
+ts.crimes <- ts(model_data, start = c(2017,start_date), end = c(2020,end_date), frequency = freq)
+
+# Decompose time series
+ts.crime_stl <- stl(ts.crimes[,2],"periodic") # Decompose time series
+ts.crime_sa <- seasadj(ts.crime_stl) # Adjust for seasonality
+plot(ts.crime_sa, main = "Burglaries, Seasonally Adjusted", xlab = "", ylab = "Burglaries")
 ```
 
 ```{r plot.residential_burglaries, fig.cap = "Residential Burglaries", fig.pos="H", fig.width=9.5, fig.height=6.5}
