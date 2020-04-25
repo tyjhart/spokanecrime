@@ -112,11 +112,13 @@ kable(
   add_footnote(boilerplate_caption, notation = "none") %>%
   as_image(file = "./weekly_watch/figures/table.district_stats_total.png")
 
-# District non-violent, violent proportions
+# District non-violent, violent percentages
 kable(
   df.crimes %>% 
     {table(.$district,.$violence)} %>% 
-    prop.table(margin = 2) %>% `*` (100) %>% round(2)
+    prop.table(margin = 2) %>% `*` (100) %>% round(2),
+  col.names = c("Non-Violent (%)", "Violent (%)"),
+  caption = "Police District Violence Percentages"
 ) %>% 
   kable_styling(
     bootstrap_options = c("bordered", "condensed", "striped"), 
