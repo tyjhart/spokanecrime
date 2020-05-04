@@ -117,6 +117,7 @@ offense_pattern_vec <- c(
   'POISON/HARMFUL OBJECT FOOD DRINK OR MED',
   'RAPE\\s?-?[[:digit:]][N,R,S]?D?T?',
   'RAPE OF A CHILD [[:digit:]]D',
+  'RAPE OF A CHILD-[[:digit:]]D \\(SODOMY\\)',
   'RAPE [[:digit:]]D USING OBJECT',
   'RESIDENTIAL BURGLARY',
   'RETAIL THEFT WITH SPECIAL CIRCUMSTANCES',
