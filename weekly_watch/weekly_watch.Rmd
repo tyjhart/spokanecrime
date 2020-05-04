@@ -389,26 +389,6 @@ df.crimes %>%
     ) 
 ```
 
-```{r plot.burglary_time_series_decomposition, fig.pos="H", fig.width=9.5, fig.height=6.5}
-# Total Offenses by date
-model_data <- df.crimes %>%
-  filter(category == "BURGLARY") %>%
-  group_by(date) %>%
-  summarize(offenses = n())
-
-# Calculate start, end numerical dates
-start_date <- as.numeric(as.Date("2017-09-03") - as.Date("2017-01-01")) # First 2017 observed date
-end_date <- as.numeric(as.Date("2020-04-18") - as.Date("2020-01-01")) # Last 2020 observed date
-freq <- 365 # Time series frequency
-
-### All data time series ###
-ts.crimes <- ts(model_data, start = c(2017,start_date), end = c(2020,end_date), frequency = freq)
-
-# Decompose time series
-ts.crime_stl <- stl(ts.crimes[,2],"periodic") # Decompose time series
-plot(ts.crime_stl, main = "Burglary Seasonal Decomposition")
-```
-
 ```{r plot.burglaries_seasonally_adjusted, fig.pos="H", fig.width=9.5, fig.height=6.5}
 # Total Offenses by date
 model_data <- df.crimes %>%
@@ -700,4 +680,187 @@ df.crimes %>%
     caption = boilerplate_caption
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
+```
+
+# Seasonal
+
+## Assault
+
+```{r plot.assault_time_series_decomposition, fig.pos="H", fig.width=9.5, fig.height=6.5}
+# Total Offenses by date
+model_data <- df.crimes %>%
+  filter(category == "ASSAULT") %>%
+  group_by(date) %>%
+  summarize(offenses = n())
+
+# Calculate start, end numerical dates
+start_date <- as.numeric(as.Date("2017-09-03") - as.Date("2017-01-01")) # First 2017 observed date
+end_date <- as.numeric(as.Date("2020-04-18") - as.Date("2020-01-01")) # Last 2020 observed date
+freq <- 365 # Time series frequency
+
+### All data time series ###
+ts.crimes <- ts(model_data, start = c(2017,start_date), end = c(2020,end_date), frequency = freq)
+
+# Decompose time series
+ts.crime_stl <- stl(ts.crimes[,2],"periodic") # Decompose time series
+plot(ts.crime_stl, main = "Assault Time Series Decomposition")
+```
+
+## Burglary
+
+```{r plot.boxplot_avg_daily_burglaries_by_month, fig.cap = "Daily Offenses by Month", fig.pos="H", fig.width=9.5, fig.height=6.5}
+a <- df.crimes %>% 
+  filter(category == "BURGLARY") %>%
+  group_by(day=floor_date(date, "day")) %>%
+  mutate(day.count = n()) %>%
+  group_by(month=floor_date(date, "month"))
+
+a %>% ggplot(aes(x = month)) +
+  geom_boxplot(aes(y = day.count, group = month)) +
+  labs(
+    x = "", 
+    y = "Burglaries", 
+    title = "Daily Burglaries by Month", 
+    caption = paste(data_source_str, cc_by_sa, sep = "\n")
+  )
+```
+
+```{r plot.burglary_time_series_decomposition, fig.pos="H", fig.width=9.5, fig.height=6.5}
+# Total Offenses by date
+model_data <- df.crimes %>%
+  filter(category == "BURGLARY") %>%
+  group_by(date) %>%
+  summarize(offenses = n())
+
+# Calculate start, end numerical dates
+start_date <- as.numeric(as.Date("2017-09-03") - as.Date("2017-01-01")) # First 2017 observed date
+end_date <- as.numeric(as.Date("2020-04-18") - as.Date("2020-01-01")) # Last 2020 observed date
+freq <- 365 # Time series frequency
+
+### All data time series ###
+ts.crimes <- ts(model_data, start = c(2017,start_date), end = c(2020,end_date), frequency = freq)
+
+# Decompose time series
+ts.crime_stl <- stl(ts.crimes[,2],"periodic") # Decompose time series
+plot(ts.crime_stl, main = "Burglary Time Series Decomposition")
+```
+
+## Theft
+
+```{r plot.boxplot_avg_daily_thefts_by_month, fig.cap = "Daily Offenses by Month", fig.pos="H", fig.width=9.5, fig.height=6.5}
+a <- df.crimes %>% 
+  filter(category == "THEFT") %>%
+  group_by(day=floor_date(date, "day")) %>%
+  mutate(day.count = n()) %>%
+  group_by(month=floor_date(date, "month"))
+
+a %>% ggplot(aes(x = month)) +
+  geom_boxplot(aes(y = day.count, group = month)) +
+  labs(
+    x = "", 
+    y = "Thefts", 
+    title = "Daily Thefts by Month", 
+    caption = paste(data_source_str, cc_by_sa, sep = "\n")
+  )
+```
+
+```{r plot.theft_time_series_decomposition, fig.pos="H", fig.width=9.5, fig.height=6.5}
+# Total Offenses by date
+model_data <- df.crimes %>%
+  filter(category == "THEFT") %>%
+  group_by(date) %>%
+  summarize(offenses = n())
+
+# Calculate start, end numerical dates
+start_date <- as.numeric(as.Date("2017-09-03") - as.Date("2017-01-01")) # First 2017 observed date
+end_date <- as.numeric(as.Date("2020-04-18") - as.Date("2020-01-01")) # Last 2020 observed date
+freq <- 365 # Time series frequency
+
+### All data time series ###
+ts.crimes <- ts(model_data, start = c(2017,start_date), end = c(2020,end_date), frequency = freq)
+
+# Decompose, plot time series
+ts.crime_stl <- stl(ts.crimes[,2], s.window = "periodic", robust = TRUE)
+plot(ts.crime_stl, main = "Theft Time Series Decomposition")
+```
+
+```{r plot.theft_time_series_seasonal_adj, fig.pos="H", fig.width=9.5, fig.height=6.5}
+ts.seasonal   <- ts.crime_stl$time.series[,1]
+ts.trend	   <- ts.crime_stl$time.series[,2]
+ts.remainder  <- ts.crime_stl$time.series[,3]
+ 
+plot(ts.trend + ts.remainder,
+main="Thefts over Time, Seasonally Adjusted",
+ylab="Thefts")
+```
+
+## Robbery
+
+```{r plot.robbery_time_series_decomposition, fig.pos="H", fig.width=9.5, fig.height=6.5}
+# Total Offenses by date
+model_data <- df.crimes %>%
+  filter(category == "ROBBERY") %>%
+  group_by(date) %>%
+  summarize(offenses = n())
+
+# Calculate start, end numerical dates
+start_date <- as.numeric(as.Date("2017-09-03") - as.Date("2017-01-01")) # First 2017 observed date
+end_date <- as.numeric(as.Date("2020-04-18") - as.Date("2020-01-01")) # Last 2020 observed date
+freq <- 365 # Time series frequency
+
+### All data time series ###
+ts.crimes <- ts(model_data, start = c(2017,start_date), end = c(2020,end_date), frequency = freq)
+
+# Decompose time series
+ts.crime_stl <- stl(ts.crimes[,2],"periodic") # Decompose time series
+plot(ts.crime_stl, main = "Robbery Time Series Decomposition")
+```
+
+## Motor Vehicle Theft
+
+```{r plot.boxplot_avg_daily_vehtheft_by_month, fig.cap = "Daily Offenses by Month", fig.pos="H", fig.width=9.5, fig.height=6.5}
+a <- df.crimes %>% 
+  filter(category == "VEH. THEFT") %>%
+  group_by(day=floor_date(date, "day")) %>%
+  mutate(day.count = n()) %>%
+  group_by(month=floor_date(date, "month"))
+
+a %>% ggplot(aes(x = month)) +
+  geom_boxplot(aes(y = day.count, group = month)) +
+  labs(
+    x = "", 
+    y = "Vehicle Thefts", 
+    title = "Daily Vehicle Thefts by Month", 
+    caption = paste(data_source_str, cc_by_sa, sep = "\n")
+  )
+```
+
+```{r plot.veh_theft_time_series_decomposition, fig.pos="H", fig.width=9.5, fig.height=6.5}
+# Total Offenses by date
+model_data <- df.crimes %>%
+  filter(category == "VEH. THEFT") %>%
+  group_by(date) %>%
+  summarize(offenses = n())
+
+# Calculate start, end numerical dates
+start_date <- as.numeric(as.Date("2017-09-03") - as.Date("2017-01-01")) # First 2017 observed date
+end_date <- as.numeric(as.Date("2020-04-18") - as.Date("2020-01-01")) # Last 2020 observed date
+freq <- 365 # Time series frequency
+
+### All data time series ###
+ts.crimes <- ts(model_data, start = c(2017,start_date), end = c(2020,end_date), frequency = freq)
+
+# Decompose, plot time series
+ts.crime_stl <- stl(ts.crimes[,2], s.window = "periodic", robust = TRUE)
+plot(ts.crime_stl, main = "Motor Vehicle Theft Time Series Decomposition")
+```
+
+```{r plot.veh_theft_time_series_seasonal_adj, fig.pos="H", fig.width=9.5, fig.height=6.5}
+ts.seasonal   <- ts.crime_stl$time.series[,1]
+ts.trend	   <- ts.crime_stl$time.series[,2]
+ts.remainder  <- ts.crime_stl$time.series[,3]
+ 
+plot(ts.trend + ts.remainder,
+main="Vehicle Thefts over Time, Seasonally Adjusted",
+ylab="Thefts")
 ```
