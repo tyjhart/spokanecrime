@@ -136,7 +136,7 @@ freq <- 365 # Time series frequency
 ts.crimes <- ts(model_data, start = c(2017,start_date), end = c(2020,end_date), frequency = freq)
 
 # Decompose time series
-ts.crime_stl <- stl(ts.crimes[,2],"periodic") # Decompose time series
+ts.crime_stl <- stl(ts.crimes[,2],"periodic", robust = TRUE) # Decompose time series
 plot(ts.crime_stl, main = "Crime Seasonal Decomposition")
 ```
 
@@ -155,7 +155,7 @@ freq <- 365 # Time series frequency
 ts.crimes <- ts(model_data, start = c(2017,start_date), end = c(2020,end_date), frequency = freq)
 
 # Decompose time series
-ts.crime_stl <- stl(ts.crimes[,2],"periodic") # Decompose time series
+ts.crime_stl <- stl(ts.crimes[,2],"periodic", robust = TRUE) # Decompose time series
 ts.crime_sa <- seasadj(ts.crime_stl) # Adjust for seasonality
 plot(ts.crime_sa, main = "Offenses, Seasonally Adjusted", xlab = "", ylab = "Offenses")
 ```
