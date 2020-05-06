@@ -1,5 +1,8 @@
-# Google Maps API file
-weekly_watch/google_maps_api_dev.R
+# Figures directory (for now)
+# /figures/
+
+# CSV files in the project directory
+*.csv
 
 # HTML files
 .html

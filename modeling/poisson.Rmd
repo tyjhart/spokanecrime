@@ -1,0 +1,41 @@
+---
+title: "Offense Probability Using Poisson Distribution"
+output: pdf_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r setup}
+library(tidyverse)
+```
+
+```{r daily_theft_summaries}
+# Monthly theft counts
+df.monthly_thefts <- df.crimes %>%
+  filter(category == "THEFT") %>%
+  group_by(year,num.month) %>%
+  summarise(count = n())
+
+# Mean monthly thefts
+daily_theft_mean <- round(mean(df.monthly_thefts$count))
+```
+
+```{r}
+pois_dist <- data.frame(
+  offenses = integer(),
+  pois = double()
+)
+
+for (i in 400:1000) {
+  a <- c(i, dpois(i, 578))
+  pois_dist <- rbind(pois_dist, a)
+}
+
+plot(pois_dist)
+```
+
+```{r}
+ppois(580, lambda = 580)
+```
