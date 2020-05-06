@@ -20,23 +20,15 @@ Looking at overall statistics gives us a good starting point from which to explo
 
 ![CompStat Total Offenses](./figures/plot.offenses_over_time-1.png)
 
-The trend is projected to continue downward overall through 2020:
-
-![CompStat Projected Total Offenses](./figures/plot.offenses_over_time_pred-1.png)
-
-The majority of crime in Spokane is non-violent, though assaults, robbery, and murder do occur with some regularity:
+The majority of crime in Spokane is non-violent, though assaults, robbery, and other violent crimes do occur with some regularity:
 
 ![Non-Violent & Violent Crime](./figures/plot.offenses_over_time_violence-1.png)
 
-Of the non-violent crimes, thefts are the most common. This includes shoplifting, burglary (residential and commercial), and motor vehicle thefts:
+We can also look at the same information, but split up by policing districts:
 
-![Thefts](./figures/plot.theft_over_time-1.png)
+![Offenses by Police District & Violence](./figures/plot.total_offenses_by_violence_district-1.png)
 
-![Shoplifting](./figures/plot.shoplifting_over_time-1.png)
-
-![Burglaries](./figures/plot.burglaries_over_time-1.png)
-
-![Thefts of Motor Vehicles](./figures/plot.tomv_over_time-1.png)
+Of non-violent crimes, theft is the most common. This includes shoplifting, burglary (residential and commercial), and motor vehicle thefts.
 
 ## Seasonality
 
@@ -67,10 +59,6 @@ So far in 2020, most crime occurred in districts P1, P2, P3, and P4 - all north 
 Here's the same district breakdown from 2017 to 2020:
 
 ![Offenses by Police District](./figures/plot.total_offenses_by_district-1.png)
-
-We can also look at the same information, but split up between violent and non-violent crime:
-
-![Offenses by Police District & Violence](./figures/plot.total_offenses_by_violence_district-1.png)
 
 ## Types of Offenses
 
