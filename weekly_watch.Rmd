@@ -570,14 +570,14 @@ ggplot(a, aes(x = reorder(district, -n, sum), y = n, fill = violence, label = n)
   labs(
     x = "Police Districts", 
     y = "Offenses", 
-    title = "Non-Violent, Violent Offenses by District", 
+    title = "Offense Types by District, 2017-2020", 
     caption = paste(data_source_str, cc_by_sa, sep = "\n")
     )
 ```
 
 ## North, South Districts
 
-```{r plot.boxplot_p1_p4_avg_daily_by_month, fig.cap = "Daily Offenses by Month", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.boxplot_p1_p4_avg_daily_by_month, fig.cap = "North Policing Districts, Daily Offenses by Month", fig.pos="H", fig.width=9.5, fig.height=6.5}
 a <- df.crimes %>%
   filter(!district %in% c(NA, "OTH", "P5", "P6", "P7", "P8")) %>%
   group_by(day=floor_date(date, "day")) %>%
@@ -595,7 +595,7 @@ a %>% ggplot(aes(x = month)) +
   facet_grid(rows = vars(district))
 ```
 
-```{r plot.boxplot_p5_p8_avg_daily_by_month, fig.cap = "Daily Offenses by Month", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.boxplot_p5_p8_avg_daily_by_month, fig.cap = "South Policing Districts, Daily Offenses by Month", fig.pos="H", fig.width=9.5, fig.height=6.5}
 a <- df.crimes %>%
   filter(!district %in% c(NA, "OTH", "P1", "P2", "P3", "P4")) %>%
   group_by(day=floor_date(date, "day")) %>%
