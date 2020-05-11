@@ -107,7 +107,7 @@ summarized_crimes <- subset(summarized_crimes, select = c(date, avg.daily_offens
 
 # Total Offenses
 
-```{r plot.offenses_over_time, fig.cap = "Offenses Over Time, September 12, 2017 Onward", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.offenses_over_time, fig.pos="H", fig.width=10, fig.height=7.5}
 daily_offenses %>%
   ggplot(aes(date, offenses)) + 
   geom_point(size = point_size, alpha = point_alpha) +
@@ -121,7 +121,7 @@ daily_offenses %>%
     )
 ```
 
-```{r plot.crime_time_series_decomposition, fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.crime_time_series_decomposition, fig.pos="H", fig.width=10, fig.height=7.5}
 # Total Offenses by date
 model_data <- df.crimes %>%
   group_by(date) %>%
@@ -140,7 +140,7 @@ ts.crime_stl <- stl(ts.crimes[,2],"periodic", robust = TRUE) # Decompose time se
 plot(ts.crime_stl, main = "Crime Seasonal Decomposition")
 ```
 
-```{r plot.crime_seasonally_adjusted, fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.crime_seasonally_adjusted, fig.pos="H", fig.width=10, fig.height=7.5}
 # Total Offenses by date
 model_data <- df.crimes %>%
   group_by(date) %>%
@@ -160,7 +160,7 @@ ts.crime_sa <- seasadj(ts.crime_stl) # Adjust for seasonality
 plot(ts.crime_sa, main = "Offenses, Seasonally Adjusted", xlab = "", ylab = "Offenses")
 ```
 
-```{r plot.offenses_over_time_violence, fig.cap = "Offenses Over Time, September 12, 2017 Onward", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.offenses_over_time_violence, fig.pos="H", fig.width=10, fig.height=7.5}
 daily_offenses_violence %>%
   ggplot(aes(date, offenses)) + 
   geom_point(aes(color = violence), size = point_size, alpha = point_alpha) +
@@ -174,7 +174,7 @@ daily_offenses_violence %>%
     )
 ```
 
-```{r plot.offenses_over_time_violence_wrap, fig.cap = "Offenses Over Time, September 12, 2017 Onward", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.offenses_over_time_violence_wrap, fig.pos="H", fig.width=10, fig.height=7.5}
 daily_offenses_violence %>%
   ggplot(aes(date, offenses)) + 
   geom_point(size = point_size, alpha = point_alpha) +
@@ -188,7 +188,7 @@ daily_offenses_violence %>%
     )
 ```
 
-```{r plot.violent_offenses_over_time, fig.cap = "Offenses Over Time, September 12, 2017 Onward", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.violent_offenses_over_time, fig.pos="H", fig.width=10, fig.height=7.5}
 daily_offenses_violence %>%
   filter(violence == "Violent")  %>%
   ggplot(aes(date, offenses)) + 
@@ -204,7 +204,7 @@ daily_offenses_violence %>%
     )
 ```
 
-```{r plot.non_violent_offenses_over_time, fig.cap = "Offenses Over Time, September 12, 2017 Onward", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.non_violent_offenses_over_time, fig.pos="H", fig.width=10, fig.height=7.5}
 daily_offenses_violence %>%
   filter(violence == "Non-Violent")  %>%
   ggplot(aes(date, offenses)) + 
@@ -220,7 +220,7 @@ daily_offenses_violence %>%
     )
 ```
 
-```{r plot.offenses_over_time_pred, fig.cap = "Offenses Over Time, September 12, 2017 Onward", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.offenses_over_time_pred, fig.pos="H", fig.width=10, fig.height=7.5}
 daily_offenses %>%
   ggplot(aes(date, offenses)) + 
   geom_point(size = point_size, alpha = point_alpha) +
@@ -235,7 +235,7 @@ daily_offenses %>%
     )
 ```
 
-```{r plot.monthly_offense_totals, fig.cap = "Monthly Offense Totals", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.monthly_offense_totals, fig.width=10, fig.height=7.5}
 summarized_crimes %>%
   ggplot(aes(date, sum.monthly_offenses)) +
   geom_point(size = point_size, alpha = point_alpha) +
@@ -250,7 +250,7 @@ summarized_crimes %>%
 theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
-```{r plot.avg_daily_offenses_by_month, fig.cap = "Average Daily Offenses by Month", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.avg_daily_offenses_by_month, fig.pos="H", fig.width=10, fig.height=7.5}
 summarized_crimes %>%
   ggplot(aes(date, avg.daily_offenses)) +
   geom_point(size = point_size, alpha = point_alpha) +
@@ -265,7 +265,7 @@ summarized_crimes %>%
 theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
-```{r plot.boxplot_avg_daily_by_month, fig.cap = "Daily Offenses by Month", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.boxplot_avg_daily_by_month, fig.width=10, fig.height=7.5}
 a <- df.crimes %>% 
   group_by(day=floor_date(date, "day")) %>%
   mutate(day.count = n()) %>%
@@ -281,7 +281,7 @@ a %>% ggplot(aes(x = month)) +
   )
 ```
 
-```{r plot.monthly_offense_comparisons, fig.cap = "Monthly Offenses, 2018 Onward", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.monthly_offense_comparisons, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
 group_by(year,num.month) %>%
 summarize(offenses = n()) %>%
@@ -297,7 +297,7 @@ labs(
 theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
-```{r plot.weekly_offense_comparisons, fig.cap = "Weekly Offenses, 2018 Onward", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.weekly_offense_comparisons, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
   filter(date >= "2017-09-12") %>%
 group_by(year,num.week) %>%
@@ -315,7 +315,7 @@ theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
 
-```{r plot.theft_over_time, fig.cap = "Thefts", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.theft_over_time, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
   filter(category == "THEFT") %>%
   group_by(date) %>%
@@ -335,7 +335,7 @@ df.crimes %>%
 
 
 
-```{r plot.shoplifting_over_time, fig.cap = "Shoplifting", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.shoplifting_over_time, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
   filter(subcategory == "Shoplifting") %>%
   group_by(date) %>%
@@ -353,7 +353,7 @@ df.crimes %>%
     )
 ```
 
-```{r plot.firearm_thefts, fig.cap = "Firearm Thefts", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.firearm_thefts, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
   filter(category %in% c("THEFT") & subcategory %in% c("Firearm")) %>%
   group_by(date) %>%
@@ -371,7 +371,7 @@ df.crimes %>%
     )
 ```
 
-```{r plot.burglaries_over_time, fig.cap = "Burglaries", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.burglaries_over_time, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
   filter(category %in% c("BURGLARY")) %>%
   group_by(date) %>%
@@ -389,7 +389,7 @@ df.crimes %>%
     ) 
 ```
 
-```{r plot.burglaries_seasonally_adjusted, fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.burglaries_seasonally_adjusted, fig.pos="H", fig.width=10, fig.height=7.5}
 # Total Offenses by date
 model_data <- df.crimes %>%
   filter(category == "BURGLARY") %>%
@@ -410,7 +410,7 @@ ts.crime_sa <- seasadj(ts.crime_stl) # Adjust for seasonality
 plot(ts.crime_sa, main = "Burglaries, Seasonally Adjusted", xlab = "", ylab = "Burglaries")
 ```
 
-```{r plot.residential_burglaries, fig.cap = "Residential Burglaries", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.residential_burglaries, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
   filter(category %in% c("BURGLARY") & subcategory %in% c("Residential")) %>%
   group_by(date) %>%
@@ -428,7 +428,7 @@ df.crimes %>%
     )
 ```
 
-```{r plot.commercial_burglaries, fig.cap = "Commercial Burglaries", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.commercial_burglaries, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
   filter(category %in% c("BURGLARY") & subcategory %in% c("Commercial")) %>%
   group_by(date) %>%
@@ -446,7 +446,7 @@ df.crimes %>%
     )
 ```
 
-```{r plot.shoplifting_thefts, fig.cap = "Shoplifting", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.shoplifting_thefts, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
   filter(category %in% c("THEFT") & subcategory %in% c("Shoplifting")) %>%
   group_by(date) %>%
@@ -464,7 +464,7 @@ df.crimes %>%
     )
 ```
 
-```{r plot.tomv_over_time, fig.cap = "Theft of Motor Vehicles", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.tomv_over_time, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
   filter(category %in% c("VEH. THEFT")) %>%
   group_by(date) %>%
@@ -482,7 +482,7 @@ df.crimes %>%
     )
 ```
 
-```{r plot.assault_over_time, fig.cap = "Assaults", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.assault_over_time, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
   filter(category %in% c("ASSAULT")) %>%
   group_by(date) %>%
@@ -500,7 +500,7 @@ df.crimes %>%
     )
 ```
 
-```{r plot.rape_over_time, fig.cap = "Sexual Assaults", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.rape_over_time, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
   filter(category %in% c("RAPE")) %>%
   group_by(date) %>%
@@ -520,7 +520,22 @@ df.crimes %>%
 
 # Police Districts
 
-```{r plot.ytd_offenses_by_district, fig.cap = "Offenses by Police District, 2020 YTD", fig.pos="H", fig.width=9.5, fig.height=6.5}
+Spokane has a total of eight police districts. Those eight are divided evenly between two main groups, the North and South Police Service Areas. The Spokane River separates the two service areas, with Division St. and other major thoroughfares serving as boundaries. Districts P1 - P4 are north of the Spokane River. Districts P5 - P8 are south of the river. Some offenses in the CompStat reports are listed as "OTH", meaning "Other".
+
+* P1: Northwest District
+* P2: Central District
+* P3: Neva-Wood District
+* P4: Northeast District
+* P5: South Central District
+* P6: Southeast District
+* P7: Southwest District
+* P8: Downtown District
+* OTH: Other District
+
+![District YTD Totals](./figures/table.district_stats_ytd.png)
+
+
+```{r plot.ytd_offenses_by_district, fig.pos="H", fig.width=10, fig.height=7.5}
 a <- df.crimes %>%
   filter(year == 2020 & !district %in% c("OTH", NA)) %>%
   group_by(district) %>%
@@ -539,7 +554,7 @@ ggplot(data = a, aes(reorder(district, -count), count, label = count)) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
 
-```{r plot.total_offenses_by_district, fig.cap = "Offenses by Police District, 2017 - 2020", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.total_offenses_by_district, fig.pos="H", fig.width=10, fig.height=7.5}
 a <- df.crimes %>%
   filter(!district %in% c("OTH", NA, "SPA","SPB","SPC","SPD")) %>%
   group_by(district) %>%
@@ -558,7 +573,7 @@ ggplot(data = a, aes(reorder(district, -count), count, label = count)) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
 
-```{r plot.total_offenses_by_violence_district, fig.cap = "Non-Violent, Violent Offenses by District", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.total_offenses_by_violence_district, fig.pos="H", fig.width=10, fig.height=7.5}
 a <- df.crimes %>%
   filter(!district %in% c("OTH", NA, "SPA","SPB","SPC","SPD")) %>%
   count(district, violence)
@@ -577,7 +592,7 @@ ggplot(a, aes(x = reorder(district, -n, sum), y = n, fill = violence, label = n)
 
 ## North, South Districts
 
-```{r plot.boxplot_p1_p4_avg_daily_by_month, fig.cap = "North Policing Districts, Daily Offenses by Month", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.boxplot_p1_p4_avg_daily_by_month, fig.pos="H", fig.width=10, fig.height=7.5}
 a <- df.crimes %>%
   filter(!district %in% c(NA, "OTH", "P5", "P6", "P7", "P8")) %>%
   group_by(day=floor_date(date, "day")) %>%
@@ -595,7 +610,7 @@ a %>% ggplot(aes(x = month)) +
   facet_grid(rows = vars(district))
 ```
 
-```{r plot.boxplot_p5_p8_avg_daily_by_month, fig.cap = "South Policing Districts, Daily Offenses by Month", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.boxplot_p5_p8_avg_daily_by_month, fig.pos="H", fig.width=10, fig.height=7.5}
 a <- df.crimes %>%
   filter(!district %in% c(NA, "OTH", "P1", "P2", "P3", "P4")) %>%
   group_by(day=floor_date(date, "day")) %>%
@@ -628,7 +643,7 @@ a %>% ggplot(aes(x = month)) +
 
 
 
-```{r plot.ytd_offenses_by_type, fig.cap = "Types of Offenses, 2019 YTD", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.ytd_offenses_by_type, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
   filter(year == 2020) %>%
   count(category) %>%
@@ -644,7 +659,7 @@ df.crimes %>%
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
 
-```{r plot.total_offenses_by_type, fig.cap = "Types of Offenses", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.total_offenses_by_type, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
   count(category) %>%
   ggplot(aes(reorder(category, -n), n, label = n)) +
@@ -659,7 +674,7 @@ df.crimes %>%
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
 
-```{r plot.ytd_offenses_by_weekday, fig.cap = "Offenses by Day, 2019 YTD", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.ytd_offenses_by_weekday, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
   filter(year == 2020) %>%
   count(dow) %>%
@@ -674,7 +689,7 @@ df.crimes %>%
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
 
-```{r plot.2019_offenses_by_weekday, fig.cap = "Offenses by Day, 2019", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.2019_offenses_by_weekday, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
   filter(year == 2019) %>%
   count(dow) %>%
@@ -689,7 +704,7 @@ df.crimes %>%
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
 
-```{r plot.2018_offenses_by_weekday, fig.cap = "Offenses by Day, 2018", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.2018_offenses_by_weekday, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
   filter(year == 2018) %>%
   count(dow) %>%
@@ -704,7 +719,7 @@ df.crimes %>%
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
 
-```{r plot.offenses_by_lunar_phase, fig.cap = "Offenses by Lunar Phase", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.offenses_by_lunar_phase, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
   count(lunar_phase) %>%
   ggplot(aes(fct_relevel(lunar_phase,"Full","Waning Gibb.","Last quarter","Waning Cres.","New","Waxing Cres.","First quarter","Waxing Gibb."), n, label = n)) +
@@ -719,7 +734,7 @@ df.crimes %>%
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
 
-```{r plot.violent_offenses_by_lunar_phase, fig.cap = "Violent Offenses by Lunar Phase", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.violent_offenses_by_lunar_phase, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
   filter(violence == "Violent") %>%
   count(lunar_phase) %>%
@@ -739,7 +754,7 @@ df.crimes %>%
 
 ## Assault
 
-```{r plot.assault_time_series_decomposition, fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.assault_time_series_decomposition, fig.pos="H", fig.width=10, fig.height=7.5}
 # Total Offenses by date
 model_data <- df.crimes %>%
   filter(category == "ASSAULT") %>%
@@ -761,7 +776,7 @@ plot(ts.crime_stl, main = "Assault Time Series Decomposition")
 
 ## Burglary
 
-```{r plot.boxplot_avg_daily_burglaries_by_month, fig.cap = "Daily Offenses by Month", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.boxplot_avg_daily_burglaries_by_month, fig.pos="H", fig.width=10, fig.height=7.5}
 a <- df.crimes %>% 
   filter(category == "BURGLARY") %>%
   group_by(day=floor_date(date, "day")) %>%
@@ -778,7 +793,7 @@ a %>% ggplot(aes(x = month)) +
   )
 ```
 
-```{r plot.burglary_time_series_decomposition, fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.burglary_time_series_decomposition, fig.pos="H", fig.width=10, fig.height=7.5}
 # Total Offenses by date
 model_data <- df.crimes %>%
   filter(category == "BURGLARY") %>%
@@ -800,7 +815,7 @@ plot(ts.crime_stl, main = "Burglary Time Series Decomposition")
 
 ## Theft
 
-```{r plot.boxplot_avg_daily_thefts_by_month, fig.cap = "Daily Offenses by Month", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.boxplot_avg_daily_thefts_by_month, fig.pos="H", fig.width=10, fig.height=7.5}
 a <- df.crimes %>% 
   filter(category == "THEFT") %>%
   group_by(day=floor_date(date, "day")) %>%
@@ -817,7 +832,7 @@ a %>% ggplot(aes(x = month)) +
   )
 ```
 
-```{r plot.theft_time_series_decomposition, fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.theft_time_series_decomposition, fig.pos="H", fig.width=10, fig.height=7.5}
 # Total Offenses by date
 model_data <- df.crimes %>%
   filter(category == "THEFT") %>%
@@ -837,7 +852,7 @@ ts.crime_stl <- stl(ts.crimes[,2], s.window = "periodic", robust = TRUE)
 plot(ts.crime_stl, main = "Theft Time Series Decomposition")
 ```
 
-```{r plot.theft_time_series_seasonal_adj, fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.theft_time_series_seasonal_adj, fig.pos="H", fig.width=10, fig.height=7.5}
 ts.seasonal   <- ts.crime_stl$time.series[,1]
 ts.trend	   <- ts.crime_stl$time.series[,2]
 ts.remainder  <- ts.crime_stl$time.series[,3]
@@ -849,7 +864,7 @@ ylab="Thefts")
 
 ## Robbery
 
-```{r plot.robbery_time_series_decomposition, fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.robbery_time_series_decomposition, fig.pos="H", fig.width=10, fig.height=7.5}
 # Total Offenses by date
 model_data <- df.crimes %>%
   filter(category == "ROBBERY") %>%
@@ -871,7 +886,7 @@ plot(ts.crime_stl, main = "Robbery Time Series Decomposition")
 
 ## Motor Vehicle Theft
 
-```{r plot.boxplot_avg_daily_vehtheft_by_month, fig.cap = "Daily Offenses by Month", fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.boxplot_avg_daily_vehtheft_by_month, fig.pos="H", fig.width=10, fig.height=7.5}
 a <- df.crimes %>% 
   filter(category == "VEH. THEFT") %>%
   group_by(day=floor_date(date, "day")) %>%
@@ -888,7 +903,7 @@ a %>% ggplot(aes(x = month)) +
   )
 ```
 
-```{r plot.veh_theft_time_series_decomposition, fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.veh_theft_time_series_decomposition, fig.pos="H", fig.width=10, fig.height=7.5}
 # Total Offenses by date
 model_data <- df.crimes %>%
   filter(category == "VEH. THEFT") %>%
@@ -908,7 +923,7 @@ ts.crime_stl <- stl(ts.crimes[,2], s.window = "periodic", robust = TRUE)
 plot(ts.crime_stl, main = "Motor Vehicle Theft Time Series Decomposition")
 ```
 
-```{r plot.veh_theft_time_series_seasonal_adj, fig.pos="H", fig.width=9.5, fig.height=6.5}
+```{r plot.veh_theft_time_series_seasonal_adj, fig.pos="H", fig.width=10, fig.height=7.5}
 ts.seasonal   <- ts.crime_stl$time.series[,1]
 ts.trend	   <- ts.crime_stl$time.series[,2]
 ts.remainder  <- ts.crime_stl$time.series[,3]
