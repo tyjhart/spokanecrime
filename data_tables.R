@@ -117,7 +117,7 @@ kable(
   df.crimes %>% 
     {table(.$district,.$violence)} %>% 
     prop.table(margin = 2) %>% `*` (100) %>% round(2),
-  col.names = c("Non-Violent (%)", "Violent (%)"),
+  col.names = c("Non-Violent %", "Violent %"),
   caption = "Police District Violence Percentages"
 ) %>% 
   kable_styling(
@@ -141,7 +141,8 @@ for (table_year in table_year_vec) {
     df.crimes %>% 
       filter(year == table_year) %>% 
       {table(.$district,.$category)} %>% 
-      prop.table(margin = 2) %>% `*` (100) %>% round(2)
+      prop.table(margin = 2) %>% `*` (100) %>% round(2),
+    caption = paste(table_year,"Police District Violence Percentages",sep = " ")
   ) %>% 
     kable_styling(
       bootstrap_options = c("bordered", "condensed", "striped"), 
