@@ -81,6 +81,10 @@ levels(df.crimes$lunar_phase)[levels(df.crimes$lunar_phase)=="Waning crescent"] 
 levels(df.crimes$lunar_phase)[levels(df.crimes$lunar_phase)=="Waxing crescent"] <- "Waxing Cres."
 levels(df.crimes$lunar_phase)[levels(df.crimes$lunar_phase)=="Waxing gibbous"] <- "Waxing Gibb."
 
+### Prune old / incomplete data ###
+df.crimes <- df.crimes %>%
+  filter(date >= "2017-08-01")
+
 ### Summarized daily offenses ###
 daily_offenses <- df.crimes %>%
   group_by(date) %>%
@@ -128,8 +132,8 @@ model_data <- df.crimes %>%
   summarize(offenses = n())
 
 # Calculate start, end numerical dates
-start_date <- as.numeric(as.Date("2017-09-03") - as.Date("2017-01-01")) # First 2017 observed date
-end_date <- as.numeric(as.Date("2020-04-18") - as.Date("2020-01-01")) # Last 2020 observed date
+start_date <- as.numeric(as.Date("2017-08-01") - as.Date("2017-01-01")) # First 2017 observed date
+end_date <- as.numeric(as.Date("2020-05-16") - as.Date("2020-01-01")) # Last 2020 observed date
 freq <- 365 # Time series frequency
 
 ### All data time series ###
@@ -147,8 +151,8 @@ model_data <- df.crimes %>%
   summarize(offenses = n())
 
 # Calculate start, end numerical dates
-start_date <- as.numeric(as.Date("2017-09-03") - as.Date("2017-01-01")) # First 2017 observed date
-end_date <- as.numeric(as.Date("2020-04-18") - as.Date("2020-01-01")) # Last 2020 observed date
+start_date <- as.numeric(as.Date("2017-08-01") - as.Date("2017-01-01")) # First 2017 observed date
+end_date <- as.numeric(as.Date("2020-05-16") - as.Date("2020-01-01")) # Last 2020 observed date
 freq <- 365 # Time series frequency
 
 ### All data time series ###
@@ -195,7 +199,6 @@ daily_offenses_violence %>%
   geom_point(size = point_size, alpha = point_alpha) +
   geom_smooth(method = "auto", color = "blue", size = geom_line_size) +
   geom_smooth(method = "lm", color = "red", size = geom_line_size) +
-  geom_hline(yintercept=0, linetype=4) +
   labs(
     x = "", 
     y = "Offenses", 
@@ -211,7 +214,6 @@ daily_offenses_violence %>%
   geom_point(size = point_size, alpha = point_alpha) +
   geom_smooth(method = "auto", color = "blue", size = geom_line_size) +
   geom_smooth(method = "lm", color = "red", size = geom_line_size) +
-  geom_hline(yintercept=0, linetype=4) +
   labs(
     x = "", 
     y = "Offenses", 
@@ -397,8 +399,8 @@ model_data <- df.crimes %>%
   summarize(offenses = n())
 
 # Calculate start, end numerical dates
-start_date <- as.numeric(as.Date("2017-09-03") - as.Date("2017-01-01")) # First 2017 observed date
-end_date <- as.numeric(as.Date("2020-04-18") - as.Date("2020-01-01")) # Last 2020 observed date
+start_date <- as.numeric(as.Date("2017-08-01") - as.Date("2017-01-01")) # First 2017 observed date
+end_date <- as.numeric(as.Date("2020-05-16") - as.Date("2020-01-01")) # Last 2020 observed date
 freq <- 365 # Time series frequency
 
 ### All data time series ###
@@ -762,8 +764,8 @@ model_data <- df.crimes %>%
   summarize(offenses = n())
 
 # Calculate start, end numerical dates
-start_date <- as.numeric(as.Date("2017-09-03") - as.Date("2017-01-01")) # First 2017 observed date
-end_date <- as.numeric(as.Date("2020-04-18") - as.Date("2020-01-01")) # Last 2020 observed date
+start_date <- as.numeric(as.Date("2017-08-01") - as.Date("2017-01-01")) # First 2017 observed date
+end_date <- as.numeric(as.Date("2020-05-16") - as.Date("2020-01-01")) # Last 2020 observed date
 freq <- 365 # Time series frequency
 
 ### All data time series ###
@@ -801,8 +803,8 @@ model_data <- df.crimes %>%
   summarize(offenses = n())
 
 # Calculate start, end numerical dates
-start_date <- as.numeric(as.Date("2017-09-03") - as.Date("2017-01-01")) # First 2017 observed date
-end_date <- as.numeric(as.Date("2020-04-18") - as.Date("2020-01-01")) # Last 2020 observed date
+start_date <- as.numeric(as.Date("2017-08-01") - as.Date("2017-01-01")) # First 2017 observed date
+end_date <- as.numeric(as.Date("2020-05-16") - as.Date("2020-01-01")) # Last 2020 observed date
 freq <- 365 # Time series frequency
 
 ### All data time series ###
@@ -840,8 +842,8 @@ model_data <- df.crimes %>%
   summarize(offenses = n())
 
 # Calculate start, end numerical dates
-start_date <- as.numeric(as.Date("2017-09-03") - as.Date("2017-01-01")) # First 2017 observed date
-end_date <- as.numeric(as.Date("2020-04-18") - as.Date("2020-01-01")) # Last 2020 observed date
+start_date <- as.numeric(as.Date("2017-08-01") - as.Date("2017-01-01")) # First 2017 observed date
+end_date <- as.numeric(as.Date("2020-05-16") - as.Date("2020-01-01")) # Last 2020 observed date
 freq <- 365 # Time series frequency
 
 ### All data time series ###
@@ -872,8 +874,8 @@ model_data <- df.crimes %>%
   summarize(offenses = n())
 
 # Calculate start, end numerical dates
-start_date <- as.numeric(as.Date("2017-09-03") - as.Date("2017-01-01")) # First 2017 observed date
-end_date <- as.numeric(as.Date("2020-04-18") - as.Date("2020-01-01")) # Last 2020 observed date
+start_date <- as.numeric(as.Date("2017-08-01") - as.Date("2017-01-01")) # First 2017 observed date
+end_date <- as.numeric(as.Date("2020-05-16") - as.Date("2020-01-01")) # Last 2020 observed date
 freq <- 365 # Time series frequency
 
 ### All data time series ###
@@ -911,8 +913,8 @@ model_data <- df.crimes %>%
   summarize(offenses = n())
 
 # Calculate start, end numerical dates
-start_date <- as.numeric(as.Date("2017-09-03") - as.Date("2017-01-01")) # First 2017 observed date
-end_date <- as.numeric(as.Date("2020-04-18") - as.Date("2020-01-01")) # Last 2020 observed date
+start_date <- as.numeric(as.Date("2017-08-01") - as.Date("2017-01-01")) # First 2017 observed date
+end_date <- as.numeric(as.Date("2020-05-16") - as.Date("2020-01-01")) # Last 2020 observed date
 freq <- 365 # Time series frequency
 
 ### All data time series ###
