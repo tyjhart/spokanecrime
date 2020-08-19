@@ -133,7 +133,7 @@ model_data <- df.crimes %>%
 
 # Calculate start, end numerical dates
 start_date <- as.numeric(as.Date("2017-08-01") - as.Date("2017-01-01")) # First 2017 observed date
-end_date <- as.numeric(as.Date("2020-05-16") - as.Date("2020-01-01")) # Last 2020 observed date
+end_date <- as.numeric(as.Date("2020-08-15") - as.Date("2020-01-01")) # Last 2020 observed date
 freq <- 365 # Time series frequency
 
 ### All data time series ###
@@ -152,7 +152,7 @@ model_data <- df.crimes %>%
 
 # Calculate start, end numerical dates
 start_date <- as.numeric(as.Date("2017-08-01") - as.Date("2017-01-01")) # First 2017 observed date
-end_date <- as.numeric(as.Date("2020-05-16") - as.Date("2020-01-01")) # Last 2020 observed date
+end_date <- as.numeric(as.Date("2020-08-15") - as.Date("2020-01-01")) # Last 2020 observed date
 freq <- 365 # Time series frequency
 
 ### All data time series ###
