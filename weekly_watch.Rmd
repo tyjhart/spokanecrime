@@ -61,7 +61,7 @@ point_size = 3
 geom_line_size = 2
 
 ### Figure captions ###
-data_source_str <- "SOURCE: Spokane Police Department CompStat"
+data_source_str <- "DATA SOURCE: Spokane Police Department CompStat"
 cc_by_sa <- "Licensed CC-BY-SA 4.0, Tyler Hart"
 excluded_districts_note <- "NOTE: Excluding districts OTH, NA, SPA-D"
 boilerplate_caption <- paste(data_source_str, cc_by_sa, sep = "\n")
@@ -775,6 +775,28 @@ ts.crimes <- ts(model_data, start = c(2017,start_date), end = c(2020,end_date), 
 ts.crime_stl <- stl(ts.crimes[,2],"periodic") # Decompose time series
 plot(ts.crime_stl, main = "Assault Time Series Decomposition")
 ```
+
+## Arson
+
+```{r plot.arson_by_district, fig.pos="H", fig.width=10, fig.height=7.5}
+a <- df.crimes %>%
+  filter(category == "ARSON") %>%
+  group_by(district) %>%
+  summarize(count = n())
+
+ggplot(data = a, aes(reorder(district, -count), count, label = count)) +
+  geom_col() +
+  geom_text(vjust = -0.5) +
+  geom_hline(yintercept = mean(a$count), linetype = "dotted", size = 1) +
+  geom_label(aes(x = "P5", y = mean(a$count), label = round(mean(a$count), 2))) +
+  labs(
+    x = "Police Districts", 
+    title = "Arson by Police District", 
+    caption = boilerplate_caption_exclude_dist
+    ) +
+  scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
+```
+
 
 ## Burglary
 
