@@ -1,7 +1,7 @@
 ---
 title: "Spokane Weekly Watch"
 author: "Tyler Hart"
-date: "2020-09-22"
+date: "2020-10-21"
 output:
   pdf_document:
     fig_caption: yes
@@ -51,7 +51,7 @@ library(kableExtra)
 library(lubridate)
 
 source("./text_import.R") # Build crime data frame
-source("./categorize_offenses.R") # Categorize offense names
+#source("./categorize_offenses.R") # Categorize offense names
 source("./categorize_violence.R") # Categorize violent / non-violent
 source("./lunar_seasons.R") # Lunar phase, seasons
 
@@ -68,12 +68,11 @@ boilerplate_caption <- paste(data_source_str, cc_by_sa, sep = "\n")
 boilerplate_caption_exclude_dist <- paste(paste(data_source_str, excluded_districts_note, sep = "; "), cc_by_sa, sep = "\n")
 
 ### Abbrev. offense names ###
-levels(df.crimes$category)[levels(df.crimes$category)=="THEFT OF MOTOR VEHICLE"] <- "VEH. THEFT"
-levels(df.crimes$category)[levels(df.crimes$category)=="TAKING MOTOR VEHICLE"] <- "TAKING VEH."
-levels(df.crimes$category)[levels(df.crimes$category)=="VEHICLE PROWLING"] <- "VEH. PROWL"
-levels(df.crimes$category)[levels(df.crimes$category)=="DRIVE BY SHOOTING"] <- "DRIVE-BY"
-levels(df.crimes$category)[levels(df.crimes$category)=="VEHICLE TRESPASS"] <- "VEH. TRESPASS"
-#levels(df.crimes$category)[levels(df.crimes$category)=="HARASSMENT"] <- "HARASS."
+levels(df.crimes$offense)[levels(df.crimes$offense)=="THEFT OF MOTOR VEHICLE"] <- "VEH. THEFT"
+levels(df.crimes$offense)[levels(df.crimes$offense)=="TAKING MOTOR VEHICLE"] <- "TAKING VEH."
+levels(df.crimes$offense)[levels(df.crimes$offense)=="VEHICLE PROWLING"] <- "VEH. PROWL"
+levels(df.crimes$offense)[levels(df.crimes$offense)=="DRIVE BY SHOOTING"] <- "DRIVE-BY"
+levels(df.crimes$offense)[levels(df.crimes$offense)=="VEHICLE TRESPASS"] <- "VEH. TRESPASS"
 
 ### Moon phase abbreviations ###
 levels(df.crimes$lunar_phase)[levels(df.crimes$lunar_phase)=="Waning gibbous"] <- "Waning Gibb."
@@ -107,6 +106,19 @@ summarized_crimes <- df.crimes %>%
 summarized_crimes$date <- with(summarized_crimes, paste(year, num.month, "01" ,sep="-"))
 summarized_crimes$date <- as.Date(summarized_crimes$date, format = "%Y-%m-%d")
 summarized_crimes <- subset(summarized_crimes, select = c(date, avg.daily_offenses, sum.monthly_offenses))
+
+### Data for Modeling ###
+model_data <- df.crimes %>%
+  group_by(date) %>%
+  summarize(offenses = n())
+
+# Modeling start, end numerical dates
+start_date <- as.numeric(as.Date("2017-08-01") - as.Date("2017-01-01")) # First 2017 observed date
+end_date <- as.numeric(max(model_data$date) - as.Date("2020-01-01")) # Last 2020 observed date
+freq <- 365 # Time series frequency
+
+# Time series data
+ts.crimes <- ts(model_data, start = c(2017,start_date), end = c(2020,end_date), frequency = freq)
 ```
 
 # Total Offenses
@@ -126,38 +138,12 @@ daily_offenses %>%
 ```
 
 ```{r plot.crime_time_series_decomposition, fig.pos="H", fig.width=10, fig.height=7.5}
-# Total Offenses by date
-model_data <- df.crimes %>%
-  group_by(date) %>%
-  summarize(offenses = n())
-
-# Calculate start, end numerical dates
-start_date <- as.numeric(as.Date("2017-08-01") - as.Date("2017-01-01")) # First 2017 observed date
-end_date <- as.numeric(as.Date("2020-08-15") - as.Date("2020-01-01")) # Last 2020 observed date
-freq <- 365 # Time series frequency
-
-### All data time series ###
-ts.crimes <- ts(model_data, start = c(2017,start_date), end = c(2020,end_date), frequency = freq)
-
-# Decompose time series
-ts.crime_stl <- stl(ts.crimes[,2],"periodic", robust = TRUE) # Decompose time series
+# Decompose, plot time series
+ts.crime_stl <- stl(ts.crimes[,2],"periodic", robust = TRUE)
 plot(ts.crime_stl, main = "Crime Seasonal Decomposition")
 ```
 
 ```{r plot.crime_seasonally_adjusted, fig.pos="H", fig.width=10, fig.height=7.5}
-# Total Offenses by date
-model_data <- df.crimes %>%
-  group_by(date) %>%
-  summarize(offenses = n())
-
-# Calculate start, end numerical dates
-start_date <- as.numeric(as.Date("2017-08-01") - as.Date("2017-01-01")) # First 2017 observed date
-end_date <- as.numeric(as.Date("2020-08-15") - as.Date("2020-01-01")) # Last 2020 observed date
-freq <- 365 # Time series frequency
-
-### All data time series ###
-ts.crimes <- ts(model_data, start = c(2017,start_date), end = c(2020,end_date), frequency = freq)
-
 # Decompose time series
 ts.crime_stl <- stl(ts.crimes[,2],"periodic", robust = TRUE) # Decompose time series
 ts.crime_sa <- seasadj(ts.crime_stl) # Adjust for seasonality
@@ -182,6 +168,8 @@ daily_offenses_violence %>%
 daily_offenses_violence %>%
   ggplot(aes(date, offenses)) + 
   geom_point(size = point_size, alpha = point_alpha) +
+  geom_smooth(method = "auto", color = "blue", size = geom_line_size) +
+  geom_smooth(method = "lm", color = "red", size = geom_line_size) +
   facet_wrap( ~ violence, ncol = 1, scales = "free") +
   labs(
     x = "", 
@@ -319,7 +307,7 @@ theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
 ```{r plot.theft_over_time, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
-  filter(category == "THEFT") %>%
+  filter(offense == "THEFT") %>%
   group_by(date) %>%
   summarize(offenses = n()) %>%
   ggplot(aes(date, offenses)) + 
@@ -338,63 +326,63 @@ df.crimes %>%
 
 
 ```{r plot.shoplifting_over_time, fig.pos="H", fig.width=10, fig.height=7.5}
-df.crimes %>%
-  filter(subcategory == "Shoplifting") %>%
-  group_by(date) %>%
-  summarize(offenses = n()) %>%
-  ggplot(aes(date, offenses)) +
-  geom_point(size = point_size, alpha = point_alpha) +
-  geom_smooth(method = "auto", color = "blue", size = geom_line_size) +
-  geom_smooth(method = "lm", color = "red", size = geom_line_size) +
-  scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
-  labs(
-    x = "", 
-    y = "Shoplifting Thefts", 
-    title = "Shoplifting Thefts", 
-    caption = boilerplate_caption
-    )
+# df.crimes %>%
+#   filter(subcategory == "Shoplifting") %>%
+#   group_by(date) %>%
+#   summarize(offenses = n()) %>%
+#   ggplot(aes(date, offenses)) +
+#   geom_point(size = point_size, alpha = point_alpha) +
+#   geom_smooth(method = "auto", color = "blue", size = geom_line_size) +
+#   geom_smooth(method = "lm", color = "red", size = geom_line_size) +
+#   scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
+#   labs(
+#     x = "", 
+#     y = "Shoplifting Thefts", 
+#     title = "Shoplifting Thefts", 
+#     caption = boilerplate_caption
+#     )
 ```
 
 ```{r plot.firearm_thefts, fig.pos="H", fig.width=10, fig.height=7.5}
-df.crimes %>%
-  filter(category %in% c("THEFT") & subcategory %in% c("Firearm")) %>%
-  group_by(date) %>%
-  summarize(offenses = n()) %>%
-  ggplot(aes(date, offenses)) + 
-  geom_point(size = point_size, alpha = point_alpha) +
-  geom_smooth(method = "auto", color = "blue", size = geom_line_size) +
-  geom_smooth(method = "lm", color = "red", size = geom_line_size) +
-  scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
-  labs(
-    x = "", 
-    y = "Firearm Thefts", 
-    title = "Firearm Thefts", 
-    caption = boilerplate_caption
-    )
+# df.crimes %>%
+#   filter(category %in% c("THEFT") & subcategory %in% c("Firearm")) %>%
+#   group_by(date) %>%
+#   summarize(offenses = n()) %>%
+#   ggplot(aes(date, offenses)) + 
+#   geom_point(size = point_size, alpha = point_alpha) +
+#   geom_smooth(method = "auto", color = "blue", size = geom_line_size) +
+#   geom_smooth(method = "lm", color = "red", size = geom_line_size) +
+#   scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
+#   labs(
+#     x = "", 
+#     y = "Firearm Thefts", 
+#     title = "Firearm Thefts", 
+#     caption = boilerplate_caption
+#     )
 ```
 
 ```{r plot.burglaries_over_time, fig.pos="H", fig.width=10, fig.height=7.5}
-df.crimes %>%
-  filter(category %in% c("BURGLARY")) %>%
-  group_by(date) %>%
-  summarize(offenses = n()) %>%
-  ggplot(aes(date, offenses)) + 
-  geom_point(size = point_size, alpha = point_alpha) +
-  geom_smooth(method = "auto", color = "blue", size = geom_line_size) +
-  geom_smooth(method = "lm", color = "red", size = geom_line_size) +
-  scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
-  labs(
-    x = "", 
-    y = "Burglaries", 
-    title = "Overall Burglaries", 
-    caption = boilerplate_caption
-    ) 
+# df.crimes %>%
+#   filter(category %in% c("BURGLARY")) %>%
+#   group_by(date) %>%
+#   summarize(offenses = n()) %>%
+#   ggplot(aes(date, offenses)) + 
+#   geom_point(size = point_size, alpha = point_alpha) +
+#   geom_smooth(method = "auto", color = "blue", size = geom_line_size) +
+#   geom_smooth(method = "lm", color = "red", size = geom_line_size) +
+#   scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
+#   labs(
+#     x = "", 
+#     y = "Burglaries", 
+#     title = "Overall Burglaries", 
+#     caption = boilerplate_caption
+#     ) 
 ```
 
 ```{r plot.burglaries_seasonally_adjusted, fig.pos="H", fig.width=10, fig.height=7.5}
 # Total Offenses by date
 model_data <- df.crimes %>%
-  filter(category == "BURGLARY") %>%
+  filter(offense == "BURGLARY") %>%
   group_by(date) %>%
   summarize(offenses = n())
 
@@ -413,62 +401,62 @@ plot(ts.crime_sa, main = "Burglaries, Seasonally Adjusted", xlab = "", ylab = "B
 ```
 
 ```{r plot.residential_burglaries, fig.pos="H", fig.width=10, fig.height=7.5}
-df.crimes %>%
-  filter(category %in% c("BURGLARY") & subcategory %in% c("Residential")) %>%
-  group_by(date) %>%
-  summarize(offenses = n()) %>%
-  ggplot(aes(date, offenses)) + 
-  geom_point(size = point_size, alpha = point_alpha) +
-  geom_smooth(method = "auto", color = "blue", size = geom_line_size) +
-  geom_smooth(method = "lm", color = "red", size = geom_line_size) +
-  scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
-  labs(
-    x = "", 
-    y = "Residential Burglaries", 
-    title = "Residential Burglaries", 
-    caption = boilerplate_caption
-    )
+# df.crimes %>%
+#   filter(category %in% c("BURGLARY") & subcategory %in% c("Residential")) %>%
+#   group_by(date) %>%
+#   summarize(offenses = n()) %>%
+#   ggplot(aes(date, offenses)) + 
+#   geom_point(size = point_size, alpha = point_alpha) +
+#   geom_smooth(method = "auto", color = "blue", size = geom_line_size) +
+#   geom_smooth(method = "lm", color = "red", size = geom_line_size) +
+#   scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
+#   labs(
+#     x = "", 
+#     y = "Residential Burglaries", 
+#     title = "Residential Burglaries", 
+#     caption = boilerplate_caption
+#     )
 ```
 
 ```{r plot.commercial_burglaries, fig.pos="H", fig.width=10, fig.height=7.5}
-df.crimes %>%
-  filter(category %in% c("BURGLARY") & subcategory %in% c("Commercial")) %>%
-  group_by(date) %>%
-  summarize(offenses = n()) %>%
-  ggplot(aes(date, offenses)) + 
-  geom_point(size = point_size, alpha = point_alpha) +
-  geom_smooth(method = "auto", color = "blue", size = geom_line_size) +
-  geom_smooth(method = "lm", color = "red", size = geom_line_size) +
-  scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
-  labs(
-    x = "", 
-    y = "Commercial Burglaries", 
-    title = "Commercial Burglaries", 
-    caption = boilerplate_caption
-    )
+# df.crimes %>%
+#   filter(category %in% c("BURGLARY") & subcategory %in% c("Commercial")) %>%
+#   group_by(date) %>%
+#   summarize(offenses = n()) %>%
+#   ggplot(aes(date, offenses)) + 
+#   geom_point(size = point_size, alpha = point_alpha) +
+#   geom_smooth(method = "auto", color = "blue", size = geom_line_size) +
+#   geom_smooth(method = "lm", color = "red", size = geom_line_size) +
+#   scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
+#   labs(
+#     x = "", 
+#     y = "Commercial Burglaries", 
+#     title = "Commercial Burglaries", 
+#     caption = boilerplate_caption
+#     )
 ```
 
 ```{r plot.shoplifting_thefts, fig.pos="H", fig.width=10, fig.height=7.5}
-df.crimes %>%
-  filter(category %in% c("THEFT") & subcategory %in% c("Shoplifting")) %>%
-  group_by(date) %>%
-  summarize(offenses = n()) %>%
-  ggplot(aes(date, offenses)) + 
-  geom_point(size = point_size, alpha = point_alpha) +
-  geom_smooth(method = "auto", color = "blue", size = geom_line_size) +
-  geom_smooth(method = "lm", color = "red", size = geom_line_size) +
-  scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
-  labs(
-    x = "", 
-    y = "Shoplifting", 
-    title = "Shoplifting Thefts", 
-    caption = boilerplate_caption
-    )
+# df.crimes %>%
+#   filter(category %in% c("THEFT") & subcategory %in% c("Shoplifting")) %>%
+#   group_by(date) %>%
+#   summarize(offenses = n()) %>%
+#   ggplot(aes(date, offenses)) + 
+#   geom_point(size = point_size, alpha = point_alpha) +
+#   geom_smooth(method = "auto", color = "blue", size = geom_line_size) +
+#   geom_smooth(method = "lm", color = "red", size = geom_line_size) +
+#   scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
+#   labs(
+#     x = "", 
+#     y = "Shoplifting", 
+#     title = "Shoplifting Thefts", 
+#     caption = boilerplate_caption
+#     )
 ```
 
 ```{r plot.tomv_over_time, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
-  filter(category %in% c("VEH. THEFT")) %>%
+  filter(offense %in% c("VEH. THEFT")) %>%
   group_by(date) %>%
   summarize(offenses = n()) %>%
   ggplot(aes(date, offenses)) + 
@@ -486,7 +474,7 @@ df.crimes %>%
 
 ```{r plot.assault_over_time, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
-  filter(category %in% c("ASSAULT")) %>%
+  filter(offense %in% c("ASSAULT")) %>%
   group_by(date) %>%
   summarize(offenses = n()) %>%
   ggplot(aes(date, offenses)) + 
@@ -504,7 +492,7 @@ df.crimes %>%
 
 ```{r plot.rape_over_time, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
-  filter(category %in% c("RAPE")) %>%
+  filter(offense %in% c("RAPE")) %>%
   group_by(date) %>%
   summarize(offenses = n()) %>%
   ggplot(aes(date, offenses)) + 
@@ -587,7 +575,7 @@ ggplot(a, aes(x = reorder(district, -n, sum), y = n, fill = violence, label = n)
   labs(
     x = "Police Districts", 
     y = "Offenses", 
-    title = "Offense Types by District, 2017-2020", 
+    title = "Offense Violence by District, 2017-2020", 
     caption = paste(data_source_str, cc_by_sa, sep = "\n")
     )
 ```
@@ -648,14 +636,14 @@ a %>% ggplot(aes(x = month)) +
 ```{r plot.ytd_offenses_by_type, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
   filter(year == 2020) %>%
-  count(category) %>%
-  ggplot(aes(reorder(category, -n), n, label = n)) +
+  count(offense) %>%
+  ggplot(aes(reorder(offense, -n), n, label = n)) +
   geom_col() +
   geom_text(vjust = -0.5) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.25, hjust=1)) +
   labs(
     x = "", 
-    title = "Types of Offenses, 2020 YTD", 
+    title = "Offense Types, 2020 YTD", 
     caption = boilerplate_caption
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
@@ -663,14 +651,14 @@ df.crimes %>%
 
 ```{r plot.total_offenses_by_type, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
-  count(category) %>%
-  ggplot(aes(reorder(category, -n), n, label = n)) +
+  count(offense) %>%
+  ggplot(aes(reorder(offense, -n), n, label = n)) +
   geom_col() +
   geom_text(vjust = -0.5) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.25, hjust=1)) +
   labs(
     x = "", 
-    title = "Types of Offenses, 2017 - 2020", 
+    title = "Offense Types, 2017 - 2020", 
     caption = boilerplate_caption
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
@@ -759,7 +747,7 @@ df.crimes %>%
 ```{r plot.assault_time_series_decomposition, fig.pos="H", fig.width=10, fig.height=7.5}
 # Total Offenses by date
 model_data <- df.crimes %>%
-  filter(category == "ASSAULT") %>%
+  filter(offense == "ASSAULT") %>%
   group_by(date) %>%
   summarize(offenses = n())
 
@@ -780,7 +768,7 @@ plot(ts.crime_stl, main = "Assault Time Series Decomposition")
 
 ```{r plot.arson_by_district, fig.pos="H", fig.width=10, fig.height=7.5}
 a <- df.crimes %>%
-  filter(category == "ARSON") %>%
+  filter(offense == "ARSON") %>%
   group_by(district) %>%
   summarize(count = n())
 
@@ -802,7 +790,7 @@ ggplot(data = a, aes(reorder(district, -count), count, label = count)) +
 
 ```{r plot.boxplot_avg_daily_burglaries_by_month, fig.pos="H", fig.width=10, fig.height=7.5}
 a <- df.crimes %>% 
-  filter(category == "BURGLARY") %>%
+  filter(offense == "BURGLARY") %>%
   group_by(day=floor_date(date, "day")) %>%
   mutate(day.count = n()) %>%
   group_by(month=floor_date(date, "month"))
@@ -820,7 +808,7 @@ a %>% ggplot(aes(x = month)) +
 ```{r plot.burglary_time_series_decomposition, fig.pos="H", fig.width=10, fig.height=7.5}
 # Total Offenses by date
 model_data <- df.crimes %>%
-  filter(category == "BURGLARY") %>%
+  filter(offense == "BURGLARY") %>%
   group_by(date) %>%
   summarize(offenses = n())
 
@@ -841,7 +829,7 @@ plot(ts.crime_stl, main = "Burglary Time Series Decomposition")
 
 ```{r plot.boxplot_avg_daily_thefts_by_month, fig.pos="H", fig.width=10, fig.height=7.5}
 a <- df.crimes %>% 
-  filter(category == "THEFT") %>%
+  filter(offense == "THEFT") %>%
   group_by(day=floor_date(date, "day")) %>%
   mutate(day.count = n()) %>%
   group_by(month=floor_date(date, "month"))
@@ -859,7 +847,7 @@ a %>% ggplot(aes(x = month)) +
 ```{r plot.theft_time_series_decomposition, fig.pos="H", fig.width=10, fig.height=7.5}
 # Total Offenses by date
 model_data <- df.crimes %>%
-  filter(category == "THEFT") %>%
+  filter(offense == "THEFT") %>%
   group_by(date) %>%
   summarize(offenses = n())
 
@@ -891,7 +879,7 @@ ylab="Thefts")
 ```{r plot.robbery_time_series_decomposition, fig.pos="H", fig.width=10, fig.height=7.5}
 # Total Offenses by date
 model_data <- df.crimes %>%
-  filter(category == "ROBBERY") %>%
+  filter(offense == "ROBBERY") %>%
   group_by(date) %>%
   summarize(offenses = n())
 
@@ -912,7 +900,7 @@ plot(ts.crime_stl, main = "Robbery Time Series Decomposition")
 
 ```{r plot.boxplot_avg_daily_vehtheft_by_month, fig.pos="H", fig.width=10, fig.height=7.5}
 a <- df.crimes %>% 
-  filter(category == "VEH. THEFT") %>%
+  filter(offense == "VEH. THEFT") %>%
   group_by(day=floor_date(date, "day")) %>%
   mutate(day.count = n()) %>%
   group_by(month=floor_date(date, "month"))
@@ -930,7 +918,7 @@ a %>% ggplot(aes(x = month)) +
 ```{r plot.veh_theft_time_series_decomposition, fig.pos="H", fig.width=10, fig.height=7.5}
 # Total Offenses by date
 model_data <- df.crimes %>%
-  filter(category == "VEH. THEFT") %>%
+  filter(offense == "VEH. THEFT") %>%
   group_by(date) %>%
   summarize(offenses = n())
 

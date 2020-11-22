@@ -32,11 +32,11 @@ Of non-violent crimes, theft is the most common. This includes shoplifting, burg
 
 ## Seasonality
 
-When we're looking at events as they happen over time we must consider **seasonality**. Crime in Spokane definitely follows seasonal trends throughout the year. We can use this seasonality to make predictions and give context to increases or decreases in crime. Here's a decomposition of overall crime data:
+When we're looking at events as they happen over time we must consider [*seasonality*](https://en.wikipedia.org/wiki/Seasonality). Crime in Spokane definitely follows seasonal trends occurring throughout the year. We can use this seasonality to make predictions and give context to increases or decreases in crime. Data that follows a seasonal trend can be broken down ("decomposed") into its consituent parts. Here's a decomposition of overall crime data:
 
 ![Overall Decomposition](./figures/plot.crime_time_series_decomposition-1.png)
 
-The "seasonal" section of the plot above shows an obvious, repeating cycle that occurs each year. There's also a downward trend (in the "trend" section) that started to plateau mid-2019. Once we've identified seasonal cycles it's possible to idependently visualize what crime is doing:
+The "seasonal" section of the plot above shows an obvious, repeating cycle that occurs each year. There's also a downward trend line. Once we've identified seasonal cycles it's possible to visualize what crime is doing independent of the expected change:
 
 ![Overall Offenses, Seasonally Adjusted](./figures/plot.crime_seasonally_adjusted-1.png)
 
@@ -87,8 +87,6 @@ Most crime in Spokane is "non-violent", including theft and burglary.
 
 ![Burglaries, September 12, 2017 Onward](./figures/table.burglary.png)
 
-![Shoplifting, September 12, 2017 Onward](./figures/table.theft_shoplifting.png)
-
 ![Motor Vehicle Thefts, September 12, 2017 Onward](./figures/table.veh.%20theft.png)
 
 ### Violent Crime
@@ -126,7 +124,7 @@ There are many public resources that we leverage for data analysis. All are open
 
 There are limitations to the analysis that's possible using CompStat data provided by the city. While detailed information about Spokane crime does eventually get reported in the [FBI's NBIRS program](https://crime-data-explorer.fr.cloud.gov/downloads-and-docs), there is often a year's lag or more before the public can download it. For example, 2018's data was made available in September 2019. As of February 2020, only data from 2018 is available. It will likely be summer of 2020 before 2019's data can be downloaded and analyzed. In the meantime, we only have the less-detailed CompStat data to work with. More in-depth analysis of the detailed FBI data will become a separate project.
 
-It should also be noted that the weekly CompStat data may not accurately reflect the final offense someone is charged with. For example, simple assault may become homicide if the victim later dies from their injuries. Shoplifting could become "Retail Theft With Special Circumstances" if it's found the offender was actually part of a larger shoplifing ring. CompStat reports are not retroactively updated to reflect the final disposition of an offense.
+It should also be noted that the weekly CompStat data may not accurately reflect the final offense someone is charged with. For example, simple assault may become homicide if the victim later dies from their injuries. Shoplifting could become "Retail Theft With Special Circumstances" if it's found the offender was part of a larger shoplifing ring. **CompStat reports are not retroactively updated to reflect the final disposition of an offense.**
 
 In the SPD's CompStat data, locations of sexual assault offenses are not included in order to protect the victim's privacy. While we know how many sexual assaults are reported and the general policing district that they occurred, it's not possible to correlate that type of assault with specific locations. When locations are included in weekly CompStat reports, they are sometimes documented only as an intersection of two roads, with no street numbers or direction. If an address is included in CompStat data, the street number is rounded - a robbery at "1215 E. Main Street" may become "1200 E. Main Street". Sometimes low-numbered locations are documented as "0 E. Main Street". This makes density or "heat" mapping difficult, and the resulting graphics unreliable.
 
