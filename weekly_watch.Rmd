@@ -1,7 +1,7 @@
 ---
 title: "Spokane Weekly Watch"
 author: "Tyler Hart"
-date: "2020-10-21"
+date: "2020-12-21"
 output:
   pdf_document:
     fig_caption: yes
@@ -24,6 +24,7 @@ header-includes:
 
 ```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
 library(tidyverse)
+library(ggrepel)
 library(forecast)
 library(tseries)
 library(stringr)
@@ -33,6 +34,7 @@ library(lunar)
 library(kableExtra)
 library(magick)
 library(webshot)
+library(dygraphs)
 library(knitr)
 knitr::opts_chunk$set(
   echo = FALSE, 
@@ -227,9 +229,10 @@ daily_offenses %>%
 
 ```{r plot.monthly_offense_totals, fig.width=10, fig.height=7.5}
 summarized_crimes %>%
-  ggplot(aes(date, sum.monthly_offenses)) +
-  geom_point(size = point_size, alpha = point_alpha) +
+  ggplot(aes(date, sum.monthly_offenses, label = sum.monthly_offenses)) +
   geom_smooth(size = geom_line_size) +
+  geom_point(size = point_size, alpha = point_alpha) +
+  geom_text_repel() +
   labs(
   x = "",
   y = "Offenses",
@@ -242,9 +245,10 @@ theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
 ```{r plot.avg_daily_offenses_by_month, fig.pos="H", fig.width=10, fig.height=7.5}
 summarized_crimes %>%
-  ggplot(aes(date, avg.daily_offenses)) +
-  geom_point(size = point_size, alpha = point_alpha) +
+  ggplot(aes(date, avg.daily_offenses, label = round(avg.daily_offenses))) +
   geom_smooth(size = geom_line_size) +
+  geom_point(size = point_size, alpha = point_alpha) +
+  geom_text_repel() +
   labs(
   x = "",
   y = "Avg. Daily Offenses",
@@ -576,6 +580,23 @@ ggplot(a, aes(x = reorder(district, -n, sum), y = n, fill = violence, label = n)
     x = "Police Districts", 
     y = "Offenses", 
     title = "Offense Violence by District, 2017-2020", 
+    caption = paste(data_source_str, cc_by_sa, sep = "\n")
+    )
+```
+
+```{r plot.ytd_offenses_by_violence_district, fig.pos="H", fig.width=10, fig.height=7.5}
+a <- df.crimes %>%
+  filter(year == 2020 & !district %in% c("OTH", NA, "SPA","SPB","SPC","SPD")) %>%
+  count(district, violence)
+  
+ggplot(a, aes(x = reorder(district, -n, sum), y = n, fill = violence, label = n)) +
+  geom_col() +
+  geom_text(position = position_stack(vjust = .5)) +
+  scale_fill_manual("Offense Type", values = c("Non-Violent" = "cadetblue3", "Violent" = "coral1")) +
+  labs(
+    x = "Police Districts", 
+    y = "Offenses", 
+    title = "Offense Violence by District, 2020 YTD", 
     caption = paste(data_source_str, cc_by_sa, sep = "\n")
     )
 ```
