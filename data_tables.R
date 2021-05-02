@@ -69,7 +69,7 @@ kable(
 
 ### Districts ###
 df.district_summary <- df.crimes %>%
-  filter(date >= "2020-01-01") %>%
+  filter(date >= "2021-01-01") %>%
   group_by(district) %>%
   summarize(dist_sum = n())
 
@@ -77,11 +77,11 @@ df.district_summary$percentage <- round(
   df.district_summary$dist_sum / sum(df.district_summary$dist_sum), 3
   ) * 100
 
-# Districts 2020 YTD
+# Districts 2021 YTD
 kable(
   df.district_summary[order(-df.district_summary$dist_sum),], 
   col.names = c("District", "Offenses", "Percentage"), 
-  caption = "Police District Offenses, 2020 YTD"
+  caption = "Police District Offenses, 2021 YTD"
   ) %>% 
   kable_styling(
     bootstrap_options = c("bordered", "condensed", "striped"), 
@@ -131,7 +131,7 @@ kable(
 # See https://stackoverflow.com/questions/45385897/how-to-round-all-the-values-of-a-prop-table-in-r-in-one-line,
 # https://stackoverflow.com/questions/44528173/using-table-in-dplyr-chain
 
-table_year_vec <- c(2020,2019,2018,2017)
+table_year_vec <- c(2021,2020,2019,2018,2017)
 
 for (table_year in table_year_vec) {
   
@@ -179,7 +179,7 @@ df.monthly_summary <- df.crimes %>%
 
 kable(
   spread(df.monthly_summary, key = year, value = total.offenses), 
-  col.names = c("Month", 2017, 2018, 2019, 2020), 
+  col.names = c("Month", 2017, 2018, 2019, 2020, 2021), 
   caption = "Total Offenses"
   ) %>% 
   kable_styling(
@@ -218,7 +218,7 @@ for (table_offense in table_offense_vec) {
   tryCatch(
     kable(
       spread(df.monthly_summary, key = year, value = total_count), 
-      col.names = c("Month", 2017, 2018, 2019, 2020), 
+      col.names = c("Month", 2017, 2018, 2019, 2020, 2021), 
       caption = str_to_title(table_offense, locale = "en")
     ),
     error = function(e) kable(
