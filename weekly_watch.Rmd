@@ -1,7 +1,7 @@
 ---
 title: "Spokane Weekly Watch"
 author: "Tyler Hart"
-date: "2021-03-29"
+date: "2021-07-12"
 output:
   pdf_document:
     fig_caption: yes
@@ -91,9 +91,13 @@ daily_offenses <- df.crimes %>%
   group_by(date) %>%
   summarize(offenses = n())
 
+write.csv(daily_offenses, file = "daily_offenses.csv")
+
 daily_offenses_violence <- df.crimes %>%
   group_by(date, violence) %>%
   summarize(offenses = n())
+
+write.csv(daily_offenses_violence, file = "daily_offenses_violence.csv")
 
 # Summarized daily offenses by month
 summarized_crimes <- df.crimes %>%
