@@ -312,6 +312,6 @@
   <use xlink:href="#glyph2-10" x="41.761719" y="82.65625"/>
   <use xlink:href="#glyph2-8" x="41.761719" y="75.982422"/>
 </g>
-<path style="fill:none;stroke-width:0.75;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 59.039063 466.558594 L 689.761719 466.558594 L 689.761719 59.039063 L 59.039063 59.039063 L 59.039063 466.558594 "/>
+<path style="fill:none;stroke-width:0.75;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 59.039063 466.558594 L 689.761719 466.558594 L 689.761719 59.039063 L 59.039063 59.039063 Z M 59.039063 466.558594 "/>
 </g>
 </svg>
