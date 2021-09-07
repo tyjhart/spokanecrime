@@ -1,7 +1,7 @@
 ---
-title: "Spokane Weekly Watch"
+title: "Spokane Crime Analysis Project"
 author: "Tyler Hart"
-date: "2021-07-12"
+date: "2021-09-07"
 output:
   pdf_document:
     fig_caption: yes
@@ -122,7 +122,9 @@ model_data <- df.crimes %>%
 # Modeling start, end numerical dates
 start_date <- as.numeric(as.Date("2017-08-01") - as.Date("2017-01-01")) # First 2017 observed date
 end_date <- as.numeric(max(model_data$date) - as.Date("2021-01-01")) # Last 2021 observed date
-freq <- 365 # Time series frequency
+
+# Time series frequency
+freq <- 365
 
 # Time series data
 ts.crimes <- ts(model_data, start = c(2018,1), end = c(2021,end_date), frequency = freq)
@@ -138,7 +140,7 @@ daily_offenses %>%
   geom_smooth(method = "lm", color = "red", size = geom_line_size) +
   labs(
     x = "", 
-    y = "Offenses", 
+    y = "Daily Offenses", 
     title = "Total Offenses", 
     caption = paste(data_source_str, cc_by_sa, sep = "\n")
     )
@@ -163,6 +165,7 @@ daily_offenses_violence %>%
   ggplot(aes(date, offenses)) + 
   geom_point(aes(color = violence), size = point_size, alpha = point_alpha) +
   scale_color_manual(values = c("cadetblue3","coral1")) +
+  theme(legend.position = c(0.925, 0.925), legend.background = element_rect(size=0.5, linetype="solid", colour ="black")) +
   labs(
     x = "", 
     y = "Offenses", 
@@ -224,12 +227,12 @@ daily_offenses %>%
   geom_point(size = point_size, alpha = point_alpha) +
   geom_smooth(method = "loess", color = "blue", size = geom_line_size) +
   geom_smooth(method = "lm", color = "red", fullrange = TRUE, size = geom_line_size) +
-  scale_x_date(limits = as.Date(c("2017-09-03","2024-01-01")), date_breaks = "1 year", date_labels = "%Y") +
+  scale_x_date(limits = as.Date(c("2017-09-03","2028-01-01")), date_breaks = "1 year", date_labels = "%Y") +
   labs(
     x = "", 
     y = "Offenses", 
-    title = "Linear Mean Projection, Average Daily Offenses",
-    subtitle = "CI 0.95",
+    title = "Projection, Average Daily Offenses",
+    subtitle = "CI 0.95, linear mean projections",
     caption = paste(data_source_str, cc_by_sa, sep = "\n")
     )
 ```
@@ -299,7 +302,7 @@ theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
 ```{r plot.weekly_offense_comparisons, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
-  filter(date >= "2017-09-12") %>%
+  filter(date >= "2018-01-01") %>%
 group_by(year,num.week) %>%
 summarize(offenses = n()) %>%
 ggplot(aes(num.week, offenses, color = year)) +
@@ -465,6 +468,7 @@ df.crimes %>%
   geom_col() +
   geom_text(position = position_stack(vjust = .5)) +
   scale_fill_manual("Offense Type", values = c("Non-Violent" = "cadetblue3", "Violent" = "coral1")) +
+  theme(legend.position = c(0.925, 0.925), legend.background = element_rect(size=0.5, linetype="solid", colour ="black")) +
   labs(
     x = "Police Districts", 
     y = "Offenses", 
@@ -481,6 +485,7 @@ df.crimes %>%
   geom_col() +
   geom_text(position = position_stack(vjust = .5)) +
   scale_fill_manual("Offense Type", values = c("Non-Violent" = "cadetblue3", "Violent" = "coral1")) +
+  theme(legend.position = c(0.925, 0.925), legend.background = element_rect(size=0.5, linetype="solid", colour ="black")) +
   labs(
     x = "Police Districts", 
     y = "Offenses", 
