@@ -1,7 +1,7 @@
 ---
-title: "Spokane Crime Analysis Project"
+title: "Washington Crime Analysis Project"
 author: "Tyler Hart"
-date: "2021-09-07"
+date: "2021-10-11"
 output:
   pdf_document:
     fig_caption: yes
@@ -52,10 +52,14 @@ knitr::opts_chunk$set(
 library(kableExtra)
 library(lubridate)
 
-source("./text_import.R") # Build crime data frame
+source("./text_import.R") # Build Spokane crime data frame
+source("./Bellevue_Data_Import.R") # Build Bellevue crime data frame
+source("./Tacoma_Data_Import.R") # Build Bellevue crime data frame
 #source("./categorize_offenses.R") # Categorize offense names
 source("./categorize_violence.R") # Categorize violent / non-violent
 source("./lunar_seasons.R") # Lunar phase, seasons
+
+source("./additional_parse.R") # Build Spokane crime data frame
 
 # GGPlot geometry options
 point_alpha = 0.5
@@ -81,53 +85,6 @@ levels(df.crimes$lunar_phase)[levels(df.crimes$lunar_phase)=="Waning gibbous"] <
 levels(df.crimes$lunar_phase)[levels(df.crimes$lunar_phase)=="Waning crescent"] <- "Waning Cres."
 levels(df.crimes$lunar_phase)[levels(df.crimes$lunar_phase)=="Waxing crescent"] <- "Waxing Cres."
 levels(df.crimes$lunar_phase)[levels(df.crimes$lunar_phase)=="Waxing gibbous"] <- "Waxing Gibb."
-
-### Prune old / incomplete data ###
-df.crimes <- df.crimes %>%
-  filter(date >= "2017-08-01")
-
-### Summarized daily offenses ###
-daily_offenses <- df.crimes %>%
-  group_by(date) %>%
-  summarize(offenses = n())
-
-write.csv(daily_offenses, file = "daily_offenses.csv")
-
-daily_offenses_violence <- df.crimes %>%
-  group_by(date, violence) %>%
-  summarize(offenses = n())
-
-write.csv(daily_offenses_violence, file = "daily_offenses_violence.csv")
-
-# Summarized daily offenses by month
-summarized_crimes <- df.crimes %>%
-  group_by(year, num.month, num.day) %>%
-  summarize(daily_offenses = n()) %>%
-  group_by(year, num.month) %>%
-  summarize(
-    avg.daily_offenses = mean(daily_offenses), 
-    sum.monthly_offenses = sum(daily_offenses)
-    )
-
-summarized_crimes$date <- with(summarized_crimes, paste(year, num.month, "01" ,sep="-"))
-summarized_crimes$date <- as.Date(summarized_crimes$date, format = "%Y-%m-%d")
-summarized_crimes <- subset(summarized_crimes, select = c(date, avg.daily_offenses, sum.monthly_offenses))
-
-### Data for Modeling ###
-model_data <- df.crimes %>%
-  filter(date >= "2018-01-01") %>%
-  group_by(date) %>%
-  summarize(offenses = n())
-
-# Modeling start, end numerical dates
-start_date <- as.numeric(as.Date("2017-08-01") - as.Date("2017-01-01")) # First 2017 observed date
-end_date <- as.numeric(max(model_data$date) - as.Date("2021-01-01")) # Last 2021 observed date
-
-# Time series frequency
-freq <- 365
-
-# Time series data
-ts.crimes <- ts(model_data, start = c(2018,1), end = c(2021,end_date), frequency = freq)
 ```
 
 # Total Offenses
@@ -146,12 +103,40 @@ daily_offenses %>%
     )
 ```
 
+```{r plot.Tacoma_Offenses_Over_Time, fig.pos="H", fig.width=10, fig.height=7.5}
+Tacoma_Daily_Offenses %>%
+  ggplot(aes(date, offenses)) + 
+  geom_point(size = point_size, alpha = point_alpha) +
+  geom_smooth(method = "auto", color = "blue", size = geom_line_size) +
+  geom_smooth(method = "lm", color = "red", size = geom_line_size) +
+  labs(
+    x = "", 
+    y = "Daily Offenses", 
+    title = "Tacoma Total Offenses", 
+    caption = paste(data_source_str, cc_by_sa, sep = "\n")
+    )
+```
+
+```{r plot.Bellevue_Offenses_Over_Time, fig.pos="H", fig.width=10, fig.height=7.5}
+Bellevue_Daily_Offenses %>%
+  ggplot(aes(date, offenses)) + 
+  geom_point(size = point_size, alpha = point_alpha) +
+  geom_smooth(method = "auto", color = "blue", size = geom_line_size) +
+  geom_smooth(method = "lm", color = "red", size = geom_line_size) +
+  labs(
+    x = "", 
+    y = "Daily Offenses", 
+    title = "Bellevue Total Offenses", 
+    caption = paste(data_source_str, cc_by_sa, sep = "\n")
+    )
+```
+
 ```{r plot.crime_time_series_decomposition, fig.pos="H", fig.width=10, fig.height=7.5}
 # Decompose, plot time series
 ts.crime_stl <- stl(ts.crimes[,2],"periodic", robust = TRUE)
 # summary(ts.crime_stl)
 # IQR(ts.crimes[,2])
-autoplot(ts.crime_stl, main = "Crime Seasonal Decomposition")
+autoplot(ts.crime_stl, main = "Spokane Crime Seasonal Decomposition")
 ```
 
 ```{r plot.crime_seasonally_adjusted, fig.pos="H", fig.width=10, fig.height=7.5}
@@ -616,6 +601,34 @@ df.crimes %>%
   labs(
     x = "", 
     title = "Offenses by Day, 2018", 
+    caption = boilerplate_caption
+    ) +
+  scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
+```
+
+```{r plot.Spokane_Offenses_By_Weekday, fig.pos="H", fig.width=10, fig.height=7.5}
+df.crimes %>%
+  count(dow) %>%
+  ggplot(aes(fct_relevel(dow,"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"), n, label = n)) +
+  geom_col() +
+  geom_text(vjust = -0.5) +
+  labs(
+    x = "", 
+    title = "Spokane Offenses by Day", 
+    caption = boilerplate_caption
+    ) +
+  scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
+```
+
+```{r plot.Bellevue_Offenses_By_Weekday, fig.pos="H", fig.width=10, fig.height=7.5}
+df.bellevue_crimes %>%
+  count(dow) %>%
+  ggplot(aes(fct_relevel(dow,"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"), n, label = n)) +
+  geom_col() +
+  geom_text(vjust = -0.5) +
+  labs(
+    x = "", 
+    title = "Bellevue Offenses by Day", 
     caption = boilerplate_caption
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))

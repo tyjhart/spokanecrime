@@ -1,4 +1,4 @@
-files = list.files(path = "./csv_files/", pattern = "\\.txt$", full.names = TRUE)
+files = list.files(path = "./data_files/Spokane/", pattern = "\\.txt$", full.names = TRUE)
 df.crimes = lapply(files, read.delim, header = FALSE, stringsAsFactors = FALSE) %>% bind_rows()
 
 # Upper-case all entries
