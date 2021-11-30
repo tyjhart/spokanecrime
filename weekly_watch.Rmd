@@ -1,7 +1,7 @@
 ---
 title: "Washington Crime Analysis Project"
 author: "Tyler Hart"
-date: "2021-10-11"
+date: "2021-11-29"
 output:
   pdf_document:
     fig_caption: yes
@@ -133,7 +133,8 @@ Bellevue_Daily_Offenses %>%
 
 ```{r plot.crime_time_series_decomposition, fig.pos="H", fig.width=10, fig.height=7.5}
 # Decompose, plot time series
-ts.crime_stl <- stl(ts.crimes[,2],"periodic", robust = TRUE)
+#ts.crime_stl <- stl(ts.crimes[,2],"periodic", robust = TRUE)
+ts.crime_stl <- mstl(ts.crimes[,2], lambda = "auto")
 # summary(ts.crime_stl)
 # IQR(ts.crimes[,2])
 autoplot(ts.crime_stl, main = "Spokane Crime Seasonal Decomposition")
