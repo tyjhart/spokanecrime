@@ -23,7 +23,7 @@ kable(
     full_width=FALSE, font_size=12
   ) %>%
   add_footnote(boilerplate_caption, notation = "none") %>%
-  as_image(file = "./figures/table.annual_totals.png")
+  save_kable(., file = "./figures/table.annual_totals.png")
 
 
 
