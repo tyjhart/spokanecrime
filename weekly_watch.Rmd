@@ -1,19 +1,19 @@
 ---
 title: "Washington Crime Analysis Project"
 author: "Tyler Hart"
-date: "2021-11-29"
+date: "2022-01-10"
 output:
+  html_document:
+    df_print: paged
+  word_document:
+    toc: yes
+    toc_depth: '2'
   pdf_document:
     fig_caption: yes
     keep_tex: yes
     number_sections: yes
     toc: yes
     toc_depth: 2
-  word_document:
-    toc: yes
-    toc_depth: '2'
-  html_document:
-    df_print: paged
 margin: 0.5in
 classoption: landscape
 header-includes:
@@ -93,7 +93,7 @@ levels(df.crimes$lunar_phase)[levels(df.crimes$lunar_phase)=="Waxing gibbous"] <
 daily_offenses %>%
   ggplot(aes(date, offenses)) + 
   geom_point(size = point_size, alpha = point_alpha) +
-  geom_smooth(method = "auto", color = "blue", size = geom_line_size) +
+  geom_smooth(method = NULL, color = "blue", size = geom_line_size) +
   geom_smooth(method = "lm", color = "red", size = geom_line_size) +
   labs(
     x = "", 
@@ -319,7 +319,8 @@ df.crimes %>%
     y = "Thefts", 
     title = "Overall Thefts", 
     caption = boilerplate_caption
-    ) 
+    ) +
+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
 ```{r plot.burglaries_seasonally_adjusted, fig.pos="H", fig.width=10, fig.height=7.5}
@@ -358,7 +359,8 @@ df.crimes %>%
     y = "Vehicle Thefts", 
     title = "Vehicle Thefts", 
     caption = boilerplate_caption
-    )
+    ) +
+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
 ```{r plot.assault_over_time, fig.pos="H", fig.width=10, fig.height=7.5}
@@ -376,7 +378,8 @@ df.crimes %>%
     y = "Assaults", 
     title = "Assaults", 
     caption = boilerplate_caption
-    )
+    ) +
+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
 ```{r plot.rape_over_time, fig.pos="H", fig.width=10, fig.height=7.5}
@@ -394,7 +397,8 @@ df.crimes %>%
     y = "Sexual Assaults", 
     title = "Sexual Assaults", 
     caption = boilerplate_caption
-    ) 
+    ) +
+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
 ```
 
 # Police Districts
@@ -516,19 +520,21 @@ df.crimes %>%
   facet_grid(rows = vars(district))
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+```{r plot.district_nas_over_time, fig.pos="H", fig.width=10, fig.height=7.5}
+df.crimes %>%
+  filter(is.na(district)) %>%
+  group_by(date) %>%
+  summarize(offenses = n()) %>%
+  ggplot(aes(date, offenses)) + 
+  geom_point(size = point_size, alpha = point_alpha) +
+  geom_smooth(method = NULL, color = "blue", size = geom_line_size) +
+  labs(
+    x = "", 
+    y = "Offenses Missing District", 
+    title = "Offenses Without a Police District", 
+    caption = boilerplate_caption
+    ) 
+```
 
 
 ```{r plot.ytd_offenses_by_type, fig.pos="H", fig.width=10, fig.height=7.5}
