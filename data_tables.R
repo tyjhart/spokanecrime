@@ -81,7 +81,7 @@ df.district_summary$percentage <- round(
 kable(
   df.district_summary[order(-df.district_summary$dist_sum),], 
   col.names = c("District", "Offenses", "Percentage"), 
-  caption = "Police District Offenses, 2021 YTD"
+  caption = "Police District Offenses, 2022 YTD"
   ) %>% 
   kable_styling(
     bootstrap_options = c("bordered", "condensed", "striped"), 
