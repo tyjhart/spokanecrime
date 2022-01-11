@@ -12,6 +12,9 @@ df.crimes$V1 <- gsub("*IBR PURPOSES*", NA, df.crimes$V1)
 # Remove newly-empty rows
 df.crimes <- df.crimes %>% filter(!is.na(.$V1))
 
+# Export raw text for auditing to make sure I'm not losing my mind
+write.table(df.crimes, file = './raw_data.txt', sep = "\t", row.names = FALSE)
+
 
 ### A/C ###
 df.crimes$ac <- NA
