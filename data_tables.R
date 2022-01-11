@@ -3,7 +3,7 @@
 # so this functionality has been moved to a separate file.
 
 # Data table source note
-boilerplate_caption <- "SOURCE: Spokane Police Department CompStat"
+boilerplate_caption <- "Data Source: Spokane Police Department CompStat"
 cc_by_sa <- "Licensed CC-BY-SA 4.0, Tyler Hart"
 boilerplate_caption <- paste(boilerplate_caption, cc_by_sa, sep = "\n")
 
@@ -26,8 +26,7 @@ kable(
   save_kable(., file = "./figures/table.annual_totals.png")
 
 
-
-### Totals by offense ###
+### Annual totals by offense ###
 df.annual_offense_totals <- df.crimes %>%
   group_by(year,offense) %>%
   {table(.$year,.$offense)}
@@ -68,16 +67,17 @@ kable(
 
 
 ### Districts ###
+
+# Districts 2022 YTD
 df.district_summary <- df.crimes %>%
-  filter(date >= "2021-01-01") %>%
+  filter(date >= "2022-01-01") %>%
   group_by(district) %>%
   summarize(dist_sum = n())
 
 df.district_summary$percentage <- round(
   df.district_summary$dist_sum / sum(df.district_summary$dist_sum), 3
-  ) * 100
+) * 100
 
-# Districts 2021 YTD
 kable(
   df.district_summary[order(-df.district_summary$dist_sum),], 
   col.names = c("District", "Offenses", "Percentage"), 
@@ -90,15 +90,17 @@ kable(
   add_footnote(boilerplate_caption, notation = "none") %>%
   as_image(file = "./figures/table.district_stats_ytd.png")
 
+
+
+# Districts total, all years
 df.district_summary <- df.crimes %>%
   group_by(district) %>%
   summarize(dist_sum = n())
 
 df.district_summary$percentage <- round(
   df.district_summary$dist_sum / sum(df.district_summary$dist_sum), 3
-  ) * 100
+) * 100
 
-# Districts Total
 kable(
   df.district_summary[order(-df.district_summary$dist_sum),], 
   col.names = c("District", "Offenses", "Percentage"), 
@@ -131,7 +133,7 @@ kable(
 # See https://stackoverflow.com/questions/45385897/how-to-round-all-the-values-of-a-prop-table-in-r-in-one-line,
 # https://stackoverflow.com/questions/44528173/using-table-in-dplyr-chain
 
-table_year_vec <- c(2021,2020,2019,2018,2017)
+table_year_vec <- c(2022,2021,2020,2019,2018,2017)
 
 for (table_year in table_year_vec) {
   
@@ -172,14 +174,14 @@ for (table_year in table_year_vec) {
 
 
 
-### All Offenses ###
+### All Offenses by year, month ###
 df.monthly_summary <- df.crimes %>% 
   group_by(year, num.month) %>%
   summarize(total.offenses = n())
 
 kable(
   spread(df.monthly_summary, key = year, value = total.offenses), 
-  col.names = c("Month", 2017, 2018, 2019, 2020, 2021), 
+  col.names = c("Month", 2017, 2018, 2019, 2020, 2021, 2022), 
   caption = "Total Offenses"
   ) %>% 
   kable_styling(
@@ -197,13 +199,13 @@ table_offense_vec <- c(
   'ARSON',
   'ASSAULT',
   'BURGLARY',
+  'DRIVE-BY',
   'MURDER',
   'RAPE',
   'ROBBERY',
   'TAKING VEH.',
   'THEFT',
-  'VEH. THEFT',
-  'VEH. PROWL'
+  'VEH. THEFT'
 )
 
 for (table_offense in table_offense_vec) {
@@ -218,12 +220,12 @@ for (table_offense in table_offense_vec) {
   tryCatch(
     kable(
       spread(df.monthly_summary, key = year, value = total_count), 
-      col.names = c("Month", 2017, 2018, 2019, 2020, 2021), 
+      col.names = c("Month", 2017, 2018, 2019, 2020, 2021, 2022), 
       caption = str_to_title(table_offense, locale = "en")
     ),
     error = function(e) kable(
       spread(df.monthly_summary, key = year, value = total_count), 
-      col.names = c("Month", 2017, 2018, 2019), 
+      col.names = c("Month", 2017, 2018, 2019, 2020, 2021), 
       caption = str_to_title(table_offense, locale = "en")
     ) 
   ) %>%
@@ -234,49 +236,4 @@ for (table_offense in table_offense_vec) {
     ) %>%
     add_footnote(boilerplate_caption, notation = "none") %>%
     as_image(file = filename)
-  
-  # tryCatch(lm(formula1, data), error = function(e) lm(formula2, data))
-  # 
-  # kable(
-  #   spread(df.monthly_summary, key = year, value = total_count), 
-  #   col.names = c("Month", 2017, 2018, 2019, 2020), 
-  #   caption = str_to_title(table_offense, locale = "en")
-  # ) %>% 
-  #   kable_styling(
-  #     bootstrap_options = c("bordered", "condensed", "striped"), 
-  #     full_width=FALSE, 
-  #     font_size=12
-  #   ) %>%
-  #   as_image(file = filename)
 }
-
-
-
-### By Theft Suboffense ###
-# table_suboffense_vec <- c(
-#   'Shoplifting',
-#   'Firearm'
-# )
-# 
-# for (table_suboffense in table_suboffense_vec) {
-#   
-#   filename <- paste0("./figures/table.theft_",tolower(table_suboffense),".png")
-#   
-#   df.monthly_summary <- df.crimes %>% 
-#     filter(offense == 'THEFT' & suboffense == table_suboffense) %>%
-#     group_by(year, num.month) %>%
-#     summarize(total_count = n())
-#   
-#   kable(
-#     spread(df.monthly_summary, key = year, value = total_count), 
-#     col.names = c("Month", 2017, 2018, 2019, 2020), 
-#     caption = paste0(str_to_title(table_suboffense, locale = "en"), " Thefts")
-#   ) %>% 
-#     kable_styling(
-#       bootstrap_options = c("bordered", "condensed", "striped"), 
-#       full_width=FALSE, 
-#       font_size=12
-#     ) %>%
-#     add_footnote(boilerplate_caption, notation = "none") %>%
-#     as_image(file = filename)
-# }
