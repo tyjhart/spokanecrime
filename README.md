@@ -1,36 +1,36 @@
-# CompStat Weekly Watch
+# Washington Crime Analysis Project
 
-This data analysis project is dedicated to discovering, analyzing, and visualizing crime data in Spokane, WA. Informed residents can make better decisions about where to live, raise families, work, and play in our wonderful city with up-to-date information on crime. With data in-hand, residents can engage actively and factually with local leaders and law enforcement. Using Computer Statistics (CompStat) [data provided by Spokane Police Department (SPD)](https://my.spokanecity.org/police/prevention/compstat/) we're able to analyze crime that has already happened, discover trends in the data, and make predictions.
+This data analysis project is dedicated to discovering, analyzing, and visualizing crime data in Spokane, WA and around the state. Informed residents can make better decisions about where to live, raise families, work, and play in our wonderful city with up-to-date information on crime. With data in-hand, residents can engage actively and factually with local leaders and law enforcement. Using Computer Statistics (CompStat) [data provided by Spokane Police Department (SPD)](https://my.spokanecity.org/police/prevention/compstat/) we're able to analyze crime that has already happened, discover trends in the data, and make predictions.
 
 Currently, the SPD makes weekly CompStat reports available each Monday. Reports cover reported crime for the prior week in PDF format, broken down by policing districts. We crawl the PDF files, extract data, and transform it into a format useful for analysis and visualization.
 
-1. [Overall Statistics](#overall-statistics)
-1. [Seasonality](#seasonality)
-1. [Police District Statistics](#police-district-statistics)
-1. [Types of Offenses](#types-of-offenses)
-1. [Lunar Phases](#lunar-phases)
-1. [Data Sources](#data-sources)
-1. [Data Limitations](#data-limitations)
-1. [Violence Classifications](#violence-and-crime-classifications)
-1. [Contact](#contact)
+1. [Overall Statistics](#overall-statistics "Overall Statistics")
+1. [Seasonality](#seasonality "Seasonality")
+1. [Police District Statistics](#police-district-statistics "Police District Statistics")
+1. [Types of Offenses](#types-of-offenses "Types of Offenses")
+1. [Lunar Phases](#lunar-phases "Lunar Phases")
+1. [Data Sources](#data-sources "Data Sources")
+1. [Data Limitations](#data-limitations "Data Limitations")
+1. [Violence Classifications](#violence-and-crime-classifications "Violence Classifications")
+1. [Contact](#contact "Contact")
 
 ## Overall Statistics
 
 Looking at overall statistics gives us a good starting point from which to explore crime over time and specific types of offenses. From September 12, 2017 onward we see an overall downward trend in reported crime:
 
-![CompStat Total Offenses](./figures/plot.offenses_over_time-1.png)
+![CompStat Total Offenses](./figures/plot.offenses_over_time-1.png "Total offenses figure")
 
 We have data for full years beginning in 2018 for comparison:
 
-![Annual Offenses](./figures/table.annual_totals.png)
+![Annual Offenses](./figures/table.annual_totals.png "Annual offenses table")
 
 The majority of crime in Spokane is non-violent, though assaults, robbery, and other violent crimes do occur with some regularity:
 
-![Non-Violent & Violent Crime](./figures/plot.offenses_over_time_violence-1.png)
+![Non-Violent & Violent Crime](./figures/plot.offenses_over_time_violence-1.png "Non-violent and violent crime figure")
 
 We can also look at the same information, but split up by policing districts:
 
-![Offenses by Police District & Violence](./figures/plot.total_offenses_by_violence_district-1.png)
+![Offenses by Police District & Violence](./figures/plot.total_offenses_by_violence_district-1.png "Offenses by district, violence figure")
 
 Of non-violent crimes, theft is the most common. This includes shoplifting, burglary (residential and commercial), and motor vehicle thefts.
 
@@ -134,11 +134,15 @@ It should be noted that the weekly CompStat data may not accurately reflect the 
 
 ### Locations
 
-In the SPD's CompStat data, locations of sexual assault offenses are not included in order to protect the victim's privacy. While we know how many sexual assaults are reported and the general policing district that they occurred, it's not possible to correlate that type of assault with specific locations. When locations are included in weekly CompStat reports, they are sometimes documented only as an intersection of two roads, with no street numbers or direction. If an address is included in CompStat data, the street number is rounded - a robbery at "1215 E. Main Street" may become "1200 E. Main Street". Sometimes low-numbered locations are documented as "0 E. Main Street". This makes density or "heat" mapping difficult, and the resulting graphics unreliable.
+In the SPD's CompStat data, locations of sexual assault offenses are not included in order to protect the victim's privacy. While we know how many sexual assaults are reported and the general policing district that they occurred, it's not possible to correlate that type of assault with specific locations.
+
+When locations are included for other offenses, they are sometimes documented only as an intersection of two roads, with no street numbers or direction. If an address is included in CompStat data, the street number is rounded - a robbery at "1215 E. Main Street" may become "1200 E. Main Street". Sometimes low-numbered locations are documented as "0 E. Main Street". This makes density or "heat" mapping difficult, and the resulting graphics unreliable.
 
 ### Legal Nuance
 
-There are some distinctions made in the data provided by SPD, and these reflect the definition of certain offenses in the state of Washington. For example, while purse snatching is robbery in that property is being taken from somebody in-person, it's not the same as being robbed at gunpoint or carjacked. Ideally the perpetrator grabs the purse and flees, without brandishing a weapon or harming the victim otherwise. In the raw data, there are a number of offenses listed as "ROBBERY 2D PERSON (NOT PURSE SNATCHING)". So while the victim's purse was taken in-person, we won't see it listed as a robbery. This is not so much a shortcoming of the data as it's a nuanced legal distinction. It's not made clear in CompStat reports exactly how offenses are defined and categorised.
+There are some distinctions made in the data provided by SPD, and these reflect the definition of certain offenses in the state of Washington. For example, while purse snatching is robbery in that property is being taken from somebody in-person, it's not the same as being robbed at gunpoint or carjacked. Ideally the perpetrator grabs the purse and flees, without brandishing a weapon or harming the victim otherwise.
+
+In the raw data, there are a number of offenses listed as "ROBBERY 2D PERSON (NOT PURSE SNATCHING)". So while the victim's purse was taken in-person and they were "robbed", we won't see it listed as a robbery. This is not so much a shortcoming of the data as it's a nuanced legal distinction. Spokane Police don't categorize offenses, e.g. violent and non-violent, in CompStat reports, so we're left to do that ourselves.
 
 ### Missing Data
 
