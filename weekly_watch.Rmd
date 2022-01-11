@@ -420,7 +420,7 @@ Spokane has a total of eight police districts. Those eight are divided evenly be
 
 ```{r plot.ytd_offenses_by_district, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
-  filter(year == 2021 & !district %in% c("OTH", NA)) %>%
+  filter(year == 2022 & !district %in% c("OTH", NA)) %>%
   group_by(district) %>%
   summarize(count = n()) %>%
   ggplot(aes(reorder(district, -count), count, label = count)) +
@@ -428,7 +428,7 @@ df.crimes %>%
   geom_text(vjust = -0.5) +
   labs(
     x = "Police Districts", 
-    title = "Offenses by Police District, 2021 YTD", 
+    title = "Offenses by Police District, 2022 YTD", 
     caption = boilerplate_caption_exclude_dist
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
@@ -444,7 +444,7 @@ df.crimes %>%
   geom_text(vjust = -0.5) +
   labs(
     x = "Police Districts", 
-    title = "Offenses by Police District, 2017 - 2021",
+    title = "Offenses by Police District, 2017 - 2022",
     caption = boilerplate_caption_exclude_dist
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
@@ -462,14 +462,14 @@ df.crimes %>%
   labs(
     x = "Police Districts", 
     y = "Offenses", 
-    title = "Offense Violence by District, 2017-2021", 
+    title = "Offense Violence by District, 2017-2022", 
     caption = paste(data_source_str, cc_by_sa, sep = "\n")
     )
 ```
 
 ```{r plot.ytd_offenses_by_violence_district, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
-  filter(year == 2021 & !district %in% c("OTH", NA, "SPA","SPB","SPC","SPD")) %>%
+  filter(year == 2022 & !district %in% c("OTH", NA, "SPA","SPB","SPC","SPD")) %>%
   count(district, violence) %>%
   ggplot(aes(x = reorder(district, -n, sum), y = n, fill = violence, label = n)) +
   geom_col() +
@@ -479,7 +479,7 @@ df.crimes %>%
   labs(
     x = "Police Districts", 
     y = "Offenses", 
-    title = "Offense Violence by District, 2021 YTD", 
+    title = "Offense Violence by District, 2022 YTD", 
     caption = paste(data_source_str, cc_by_sa, sep = "\n")
     )
 ```
@@ -539,7 +539,7 @@ df.crimes %>%
 
 ```{r plot.ytd_offenses_by_type, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
-  filter(year == 2021) %>%
+  filter(year == 2022) %>%
   count(offense) %>%
   ggplot(aes(reorder(offense, -n), n, label = n)) +
   geom_col() +
@@ -547,7 +547,7 @@ df.crimes %>%
   theme(axis.text.x = element_text(angle = 90, vjust = 0.25, hjust=1)) +
   labs(
     x = "", 
-    title = "Offense Types, 2021 YTD", 
+    title = "Offense Types, 2022 YTD", 
     caption = boilerplate_caption
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
@@ -562,7 +562,7 @@ df.crimes %>%
   theme(axis.text.x = element_text(angle = 90, vjust = 0.25, hjust=1)) +
   labs(
     x = "", 
-    title = "Offense Types, 2017 - 2021", 
+    title = "Offense Types, 2017 - 2022", 
     caption = boilerplate_caption
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
@@ -570,14 +570,14 @@ df.crimes %>%
 
 ```{r plot.ytd_offenses_by_weekday, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
-  filter(year == 2021) %>%
+  filter(year == 2022) %>%
   count(dow) %>%
   ggplot(aes(fct_relevel(dow,"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"), n, label = n)) +
   geom_col() +
   geom_text(vjust = -0.5) +
   labs(
     x = "", 
-    title = "Offenses by Day, 2021 YTD", 
+    title = "Offenses by Day, 2022 YTD", 
     caption = boilerplate_caption
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
