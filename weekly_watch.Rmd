@@ -3,17 +3,17 @@ title: "Washington Crime Analysis Project"
 author: "Tyler Hart"
 date: "2022-01-10"
 output:
-  html_document:
-    df_print: paged
-  word_document:
-    toc: yes
-    toc_depth: '2'
   pdf_document:
     fig_caption: yes
     keep_tex: yes
     number_sections: yes
     toc: yes
     toc_depth: 2
+  word_document:
+    toc: yes
+    toc_depth: '2'
+  html_document:
+    df_print: paged
 margin: 0.5in
 classoption: landscape
 header-includes:
@@ -420,7 +420,7 @@ Spokane has a total of eight police districts. Those eight are divided evenly be
 
 ```{r plot.ytd_offenses_by_district, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
-  filter(year == 2022 & !district %in% c("OTH", NA)) %>%
+  filter(year == 2022) %>%
   group_by(district) %>%
   summarize(count = n()) %>%
   ggplot(aes(reorder(district, -count), count, label = count)) +
@@ -436,7 +436,6 @@ df.crimes %>%
 
 ```{r plot.total_offenses_by_district, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
-  filter(!district %in% c("OTH", NA, "SPA","SPB","SPC","SPD")) %>%
   group_by(district) %>%
   summarize(count = n()) %>%
   ggplot(aes(reorder(district, -count), count, label = count)) +
@@ -452,7 +451,6 @@ df.crimes %>%
 
 ```{r plot.total_offenses_by_violence_district, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
-  filter(!district %in% c("OTH", NA, "SPA","SPB","SPC","SPD")) %>%
   count(district, violence) %>% 
   ggplot(aes(x = reorder(district, -n, sum), y = n, fill = violence, label = n)) +
   geom_col() +
@@ -469,7 +467,7 @@ df.crimes %>%
 
 ```{r plot.ytd_offenses_by_violence_district, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
-  filter(year == 2022 & !district %in% c("OTH", NA, "SPA","SPB","SPC","SPD")) %>%
+  filter(year == 2022) %>%
   count(district, violence) %>%
   ggplot(aes(x = reorder(district, -n, sum), y = n, fill = violence, label = n)) +
   geom_col() +
@@ -527,7 +525,6 @@ df.crimes %>%
   summarize(offenses = n()) %>%
   ggplot(aes(date, offenses)) + 
   geom_point(size = point_size, alpha = point_alpha) +
-  geom_smooth(method = NULL, color = "blue", size = geom_line_size) +
   labs(
     x = "", 
     y = "Offenses Missing District", 
@@ -583,6 +580,36 @@ df.crimes %>%
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
 
+```{r plot.2021_offenses_by_weekday, fig.pos="H", fig.width=10, fig.height=7.5}
+df.crimes %>%
+  filter(year == 2021) %>%
+  count(dow) %>%
+  ggplot(aes(fct_relevel(dow,"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"), n, label = n)) +
+  geom_col() +
+  geom_text(vjust = -0.5) +
+  labs(
+    x = "", 
+    title = "Offenses by Day, 2021", 
+    caption = boilerplate_caption
+    ) +
+  scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
+```
+
+```{r plot.2020_offenses_by_weekday, fig.pos="H", fig.width=10, fig.height=7.5}
+df.crimes %>%
+  filter(year == 2020) %>%
+  count(dow) %>%
+  ggplot(aes(fct_relevel(dow,"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"), n, label = n)) +
+  geom_col() +
+  geom_text(vjust = -0.5) +
+  labs(
+    x = "", 
+    title = "Offenses by Day, 2020", 
+    caption = boilerplate_caption
+    ) +
+  scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
+```
+
 ```{r plot.2019_offenses_by_weekday, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
   filter(year == 2019) %>%
@@ -621,7 +648,7 @@ df.crimes %>%
   geom_text(vjust = -0.5) +
   labs(
     x = "", 
-    title = "Spokane Offenses by Day", 
+    title = "Spokane Offenses by Day 2017 - 2022", 
     caption = boilerplate_caption
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
