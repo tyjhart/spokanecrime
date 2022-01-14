@@ -22,9 +22,25 @@ Looking at overall statistics gives us a good starting point from which to explo
 
 We have data for full years beginning in 2018 for comparison:
 
-![Annual Offenses](./figures/table.annual_totals.png "Annual offenses table")
+|Year | Total|
+|:----|-----:|
+|2018 | 17418|
+|2019 | 14434|
+|2020 | 13321|
+|2021 | 12125|
+|2022 |   242|
 
 The majority of crime in Spokane is non-violent, though assaults, robbery, and other violent crimes do occur with some regularity:
+
+|     | ARSON| ASSAULT| BURGLARY| DRIVE-BY| HARASSMENT| HOMICIDE| INTIMIDATE| MANSLAUGHTER| MURDER| POISON| RAPE| ROBBERY| TAKING VEH.| THEFT| VEH. THEFT| VEH. PROWL| VEH. TRESPASS|
+|:----|-----:|-------:|--------:|--------:|----------:|--------:|----------:|------------:|------:|------:|----:|-------:|-----------:|-----:|----------:|----------:|-------------:|
+|2018 |    41|     883|     2150|       18|         63|        1|         40|            0|      8|      0|  301|     310|          70| 11649|       1623|        258|             3|
+|2019 |    42|     750|     1858|       19|         70|        0|          4|            0|      5|      0|  217|     290|          52|  9912|       1205|         10|             0|
+|2020 |    99|     687|     1949|       26|         52|        0|          0|            1|     10|      1|  190|     266|          31|  8937|       1072|          0|             0|
+|2021 |   101|     731|     1699|       30|         64|        0|          0|            0|     10|      1|  219|     260|          63|  7865|       1081|          1|             0|
+|2022 |     0|      12|       35|        1|          0|        0|          0|            0|      0|      0|    7|       4|           3|   150|         30|          0|             0|
+
+Here's both types of crime over time:
 
 ![Non-Violent & Violent Crime](./figures/plot.offenses_over_time_violence-1.png "Non-violent and violent crime figure")
 
