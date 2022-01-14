@@ -13,6 +13,10 @@ df.annual_totals <- df.crimes %>%
   group_by(year) %>%
   summarize(annual_total = n())
 
+# Markdown table
+kable(df.annual_totals, col.names = c("Year", "Total"), format = "markdown") %>%
+  save_kable(., file = "./figures/markdown_table.annual_totals.md")
+
 kable(
   df.annual_totals,
   col.names = c("Year", "Total"), 
@@ -33,6 +37,10 @@ df.annual_offense_totals <- df.crimes %>%
 
 df.annual_offense_totals <- df.annual_offense_totals[-1,]
 
+# Markdown table
+kable(df.annual_offense_totals, format = "markdown") %>%
+  save_kable(., file = "./figures/markdown_table.annual_offense_totals.md")
+
 kable(
   df.annual_offense_totals,
   caption = "Annual Totals"
@@ -45,13 +53,16 @@ kable(
   as_image(file = "./figures/table.annual_offense_totals.png")
 
 
-
 ### Totals by violence ###
 df.annual_violence_totals <- df.crimes %>%
   group_by(year,violence) %>%
   {table(.$year,.$violence)}
 
 df.annual_violence_totals <- df.annual_violence_totals[-1,]
+
+# Markdown table
+kable(df.annual_violence_totals, format = "markdown") %>%
+  save_kable(., file = "./figures/markdown_table.annual_violence_totals.md")
 
 kable(
   df.annual_violence_totals,
@@ -63,7 +74,6 @@ kable(
   ) %>%
   add_footnote(boilerplate_caption, notation = "none") %>%
   as_image(file = "./figures/table.annual_violence_totals.png")
-
 
 
 ### Districts ###
@@ -89,8 +99,6 @@ kable(
     ) %>%
   add_footnote(boilerplate_caption, notation = "none") %>%
   as_image(file = "./figures/table.district_stats_ytd.png")
-
-
 
 # Districts total, all years
 df.district_summary <- df.crimes %>%
@@ -195,6 +203,8 @@ kable(
 
 
 ### By offense ###
+
+# Offense vector for table creation
 table_offense_vec <- c(
   'ARSON',
   'ASSAULT',
@@ -208,27 +218,25 @@ table_offense_vec <- c(
   'VEH. THEFT'
 )
 
+# Build count table
+offense_annual_month_counts <- df.crimes %>% count(offense, num.month, year) %>% spread(year, n, fill = NA)
+names(offense_annual_month_counts)[names(offense_annual_month_counts) == "num.month"] <- "Month"
+
 for (table_offense in table_offense_vec) {
   
+  # Build file name
   filename <- paste0("./figures/table.",tolower(table_offense),".png")
-
-  df.monthly_summary <- df.crimes %>% 
-    filter(offense == table_offense) %>%
-    group_by(year, num.month) %>%
-    summarize(total_count = n())
+  markdown_filename <- paste0("./figures/markdown_table.",tolower(table_offense),".md")
   
-  tryCatch(
-    kable(
-      spread(df.monthly_summary, key = year, value = total_count), 
-      col.names = c("Month", 2017, 2018, 2019, 2020, 2021, 2022), 
-      caption = str_to_title(table_offense, locale = "en")
-    ),
-    error = function(e) kable(
-      spread(df.monthly_summary, key = year, value = total_count), 
-      col.names = c("Month", 2017, 2018, 2019, 2020, 2021), 
-      caption = str_to_title(table_offense, locale = "en")
-    ) 
-  ) %>%
+  # Filter for offense
+  df.monthly_summary <- offense_annual_month_counts %>% 
+    filter(offense == table_offense)
+  
+  # Markdown table
+  kable(df.monthly_summary[-1], format = "markdown") %>%
+    save_kable(., file = markdown_filename)
+  
+  kable(df.monthly_summary[-1], caption = str_to_title(table_offense, locale = "en")) %>%
     kable_styling(
       bootstrap_options = c("bordered", "condensed", "striped"), 
       full_width=FALSE, 
