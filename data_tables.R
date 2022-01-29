@@ -11,15 +11,16 @@ boilerplate_caption <- paste(boilerplate_caption, cc_by_sa, sep = "\n")
 df.annual_totals <- df.crimes %>%
   filter(year != 2017) %>%
   group_by(year) %>%
-  summarize(annual_total = n())
+  summarize(Total = n()) %>%
+  mutate(Change=round(((Total - lag(Total,1)) / lag(Total,1)) * 100, 2)) %>%
+  rename(Year = year)
 
 # Markdown table
-kable(df.annual_totals, col.names = c("Year", "Total"), format = "markdown") %>%
+kable(df.annual_totals, format = "markdown") %>%
   save_kable(., file = "./figures/markdown_table.annual_totals.md")
 
 kable(
   df.annual_totals,
-  col.names = c("Year", "Total"), 
   caption = "Annual Totals"
   ) %>%
   kable_styling(
@@ -82,15 +83,16 @@ kable(
 df.district_summary <- df.crimes %>%
   filter(date >= "2022-01-01") %>%
   group_by(district) %>%
-  summarize(dist_sum = n())
+  summarize(dist_sum = n()) %>%
+  mutate(percentage = round(dist_sum / sum(dist_sum),3) * 100) %>%
+  rename(District = district, Total = dist_sum, Percentage = percentage) %>%
+  arrange(desc(Total))
 
-df.district_summary$percentage <- round(
-  df.district_summary$dist_sum / sum(df.district_summary$dist_sum), 3
-) * 100
+kable(df.district_summary, format = "markdown") %>%
+  save_kable(., file = "./figures/markdown_table.district_stats_ytd.md")
 
 kable(
-  df.district_summary[order(-df.district_summary$dist_sum),], 
-  col.names = c("District", "Offenses", "Percentage"), 
+  df.district_summary, 
   caption = "Police District Offenses, 2022 YTD"
   ) %>% 
   kable_styling(
@@ -103,15 +105,16 @@ kable(
 # Districts total, all years
 df.district_summary <- df.crimes %>%
   group_by(district) %>%
-  summarize(dist_sum = n())
+  summarize(dist_sum = n()) %>%
+  mutate(percentage = round(dist_sum / sum(dist_sum),3) * 100) %>%
+  rename(District = district, Total = dist_sum, Percentage = percentage) %>%
+  arrange(desc(Total))
 
-df.district_summary$percentage <- round(
-  df.district_summary$dist_sum / sum(df.district_summary$dist_sum), 3
-) * 100
+kable(df.district_summary, format = "markdown") %>%
+  save_kable(., file = "./figures/markdown_table.district_stats.md")
 
 kable(
-  df.district_summary[order(-df.district_summary$dist_sum),], 
-  col.names = c("District", "Offenses", "Percentage"), 
+  df.district_summary, 
   caption = "Police Districts, All Years"
   ) %>%
   kable_styling(
@@ -181,7 +184,6 @@ for (table_year in table_year_vec) {
 }
 
 
-
 ### All Offenses by year, month ###
 df.monthly_summary <- df.crimes %>% 
   group_by(year, num.month) %>%
@@ -201,7 +203,6 @@ kable(
   as_image(file = "./figures/table.offenses.png") 
 
 
-
 ### By offense ###
 
 # Offense vector for table creation
@@ -218,15 +219,35 @@ table_offense_vec <- c(
   'VEH. THEFT'
 )
 
-# Build count table
-offense_annual_month_counts <- df.crimes %>% count(offense, num.month, year) %>% spread(year, n, fill = NA)
+# Annual counts per offense
+df.annual_offense_totals <- df.crimes %>%
+  filter(year != 2017) %>%
+  group_by(offense, year) %>%
+  summarize(Total = n())
+
+# Build monthly count table
+offense_annual_month_counts <- df.crimes %>% 
+  count(offense, num.month, year) %>% 
+  spread(year, n, fill = NA)
+
 names(offense_annual_month_counts)[names(offense_annual_month_counts) == "num.month"] <- "Month"
 
 for (table_offense in table_offense_vec) {
   
-  # Build file name
+  # File names
   filename <- paste0("./figures/table.",tolower(table_offense),".png")
-  markdown_filename <- paste0("./figures/markdown_table.",tolower(table_offense),".md")
+  markdown_filename <- paste0("./figures/markdown_table_monthly.",tolower(table_offense),".md")
+  markdown_filename_annual <- paste0("./figures/markdown_table_annual.",tolower(table_offense),".md")
+  
+  # Annual offense totals and change
+  df.annual_offense_totals %>%
+    filter(offense == table_offense) %>%
+    mutate(Change=round(((Total - lag(Total,1)) / lag(Total,1)) * 100, 2)) %>%
+    rename(Year = year, `Annual % Change` = Change) %>%
+    ungroup() %>%
+    select(., -c(offense)) %>%
+    kable(., format = "markdown") %>%
+    save_kable(., file = markdown_filename_annual)
   
   # Filter for offense
   df.monthly_summary <- offense_annual_month_counts %>% 
