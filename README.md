@@ -22,13 +22,14 @@ Looking at overall statistics gives us a good starting point from which to explo
 
 We have data for full years beginning in 2018 for comparison:
 
-|Year | Total| Change|
-|:----|-----:|------:|
-|2018 | 17418|     NA|
-|2019 | 14434| -17.13|
-|2020 | 13321|  -7.71|
-|2021 | 12125|  -8.98|
-|2022 |   490|     NA|
+|Year | Total| Percentage Change|
+|:----|-----:|-----------------:|
+|2018 | 17418|                NA|
+|2019 | 14434|            -17.13|
+|2020 | 13321|             -7.71|
+|2021 | 12125|             -8.98|
+|2022 |   733|                NA|
+
 
 The majority of crime in Spokane is non-violent, though assaults, robbery, and other violent crimes do occur with some regularity:
 
@@ -38,7 +39,8 @@ The majority of crime in Spokane is non-violent, though assaults, robbery, and o
 |2019 |    42|     750|     1858|       19|         70|        0|          4|            0|      5|      0|  217|     290|          52|  9912|       1205|         10|             0|
 |2020 |    99|     687|     1949|       26|         52|        0|          0|            1|     10|      1|  190|     266|          31|  8937|       1072|          0|             0|
 |2021 |   101|     731|     1699|       30|         64|        0|          0|            0|     10|      1|  219|     260|          63|  7865|       1081|          1|             0|
-|2022 |     2|      26|       69|        1|          1|        0|          0|            0|      0|      0|    9|      10|           3|   309|         60|          0|             0|
+|2022 |     4|      41|      106|        2|          2|        0|          0|            0|      0|      0|   12|      18|           3|   463|         82|          0|             0|
+
 
 Here's both types of crime over time:
 
@@ -62,7 +64,7 @@ The "seasonal" section of the plot above shows an obvious, repeating cycle that 
 
 ## Police District Statistics
 
-The city is divided among eight policing districts, with four (P1, P2, P3, P4) in the "North Police Service Area", and the other four (P5, P6, P7, P8) in the "South". The north and south service areas are separated geographically by the Spokane River. Some offenses are noted as occurring in an "OTH" district with no amplifying information given. Sometimes, an offense will also be listed with no district at all in the weekly reports, possibly due to a data entry error. There was a spike in missing district information beginning in late 2021 and continuing into 2022. Districts designated "SPA", "SPB", "SPC", and "SPD" had also been used in the past but no information is given in the CompStat reports indicating what areas represent.
+The city is divided among eight policing districts, with four (P1, P2, P3, P4) in the "North Police Service Area", and the other four (P5, P6, P7, P8) in the "South". The north and south service areas are separated geographically by the Spokane River. Some offenses are noted as occurring in an "OTH" district with no amplifying information given. Districts designated "SPA", "SPB", "SPC", and "SPD" had also been used in the past but no information is given in the CompStat reports indicating what areas represent. Sometimes, an offense will be listed with no district in the weekly reports, possibly due to a data entry error. There was a spike in missing district information beginning in late 2021 and continuing into 2022.
 
 Here's a graph of offenses with missing district information:
 
@@ -112,7 +114,7 @@ Violent crime includes assault, drive-by shootings, sexual assault, robbery, int
 
 ![Assault, September 12, 2017 Onward](./figures/table.assault.png)
 
-[Robbery data table](./figures/markdown_table_monthly.assault.md)
+[Assault data table](./figures/markdown_table_monthly.assault.md)
 
 ### Sexual Assault
 
