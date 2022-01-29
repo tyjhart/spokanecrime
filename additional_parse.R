@@ -36,11 +36,11 @@ model_data <- df.crimes %>%
   summarize(offenses = n())
 
 # Modeling start, end numerical dates
-start_date <- as.numeric(as.Date("2017-08-01") - as.Date("2017-01-01")) # First 2017 observed date
-end_date <- as.numeric(max(model_data$date) - as.Date("2021-01-01")) # Last 2021 observed date
+start_date <- 1 # First 2018 observed date
+end_date <- as.numeric(max(model_data$date) - as.Date("2022-01-01")) # Last 2021 observed date
 
 # Time series frequency
 freq <- 365
 
 # Time series data
-ts.crimes <- ts(model_data, start = c(2018,1), end = c(2021,end_date), frequency = freq)
+ts.crimes <- ts(model_data, start = c(2018,start_date), end = c(2022,end_date), frequency = freq)
