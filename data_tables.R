@@ -12,8 +12,11 @@ df.annual_totals <- df.crimes %>%
   filter(year != 2017) %>%
   group_by(year) %>%
   summarize(Total = n()) %>%
-  mutate(Change=round(((Total - lag(Total,1)) / lag(Total,1)) * 100, 2)) %>%
+  mutate(`Percentage Change`=round(((Total - lag(Total,1)) / lag(Total,1)) * 100, 2)) %>%
   rename(Year = year)
+
+# Void percentage change calculation for current year
+df.annual_totals[which(df.annual_totals$Year == lubridate::year(Sys.Date())),]$`Percentage Change` <- NA
 
 # Markdown table
 kable(df.annual_totals, format = "markdown") %>%
@@ -144,7 +147,7 @@ kable(
 # See https://stackoverflow.com/questions/45385897/how-to-round-all-the-values-of-a-prop-table-in-r-in-one-line,
 # https://stackoverflow.com/questions/44528173/using-table-in-dplyr-chain
 
-table_year_vec <- c(2022,2021,2020,2019,2018,2017)
+table_year_vec <- c(2022:2017)
 
 for (table_year in table_year_vec) {
   
@@ -240,12 +243,17 @@ for (table_offense in table_offense_vec) {
   markdown_filename_annual <- paste0("./figures/markdown_table_annual.",tolower(table_offense),".md")
   
   # Annual offense totals and change
-  df.annual_offense_totals %>%
+  working_annual_offense_totals <- df.annual_offense_totals %>%
     filter(offense == table_offense) %>%
     mutate(Change=round(((Total - lag(Total,1)) / lag(Total,1)) * 100, 2)) %>%
     rename(Year = year, `Annual % Change` = Change) %>%
     ungroup() %>%
-    select(., -c(offense)) %>%
+    select(., -c(offense)) 
+  
+  # Void percentage change calculation for current year
+  working_annual_offense_totals[which(working_annual_offense_totals$Year == lubridate::year(Sys.Date())),]$`Annual % Change` <- NA
+  
+  working_annual_offense_totals %>%
     kable(., format = "markdown") %>%
     save_kable(., file = markdown_filename_annual)
   
