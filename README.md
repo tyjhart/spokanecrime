@@ -2,7 +2,7 @@
 
 This data analysis project is dedicated to discovering, analyzing, and visualizing crime data in Spokane, WA and around the state. Informed residents can make better decisions about where to live, raise families, work, and play in our wonderful city with up-to-date information on crime. With data in-hand, residents can engage actively and factually with local leaders and law enforcement. Using Computer Statistics (CompStat) [data provided by Spokane Police Department (SPD)](https://my.spokanecity.org/police/prevention/compstat/) we're able to analyze crime that has already happened, discover trends in the data, and make predictions.
 
-Currently, the SPD makes weekly CompStat reports available each Monday. Reports cover reported crime for the prior week in PDF format, broken down by policing districts. We crawl the PDF files, extract data, and transform it into a format useful for analysis and visualization.
+Currently, the SPD makes weekly CompStat reports available each Monday. Reports cover reported crime for the prior week in PDF format, broken down by policing districts. We scrape the PDF files, extract data, and transform it into a format useful for analysis and visualization.
 
 1. [Overall Statistics](#overall-statistics "Overall Statistics")
 1. [Seasonality](#seasonality "Seasonality")
@@ -22,13 +22,13 @@ Looking at overall statistics gives us a good starting point from which to explo
 
 We have data for full years beginning in 2018 for comparison:
 
-|Year | Total|
-|:----|-----:|
-|2018 | 17418|
-|2019 | 14434|
-|2020 | 13321|
-|2021 | 12125|
-|2022 |   242|
+|Year | Total| Change|
+|:----|-----:|------:|
+|2018 | 17418|     NA|
+|2019 | 14434| -17.13|
+|2020 | 13321|  -7.71|
+|2021 | 12125|  -8.98|
+|2022 |   490|     NA|
 
 The majority of crime in Spokane is non-violent, though assaults, robbery, and other violent crimes do occur with some regularity:
 
@@ -38,7 +38,7 @@ The majority of crime in Spokane is non-violent, though assaults, robbery, and o
 |2019 |    42|     750|     1858|       19|         70|        0|          4|            0|      5|      0|  217|     290|          52|  9912|       1205|         10|             0|
 |2020 |    99|     687|     1949|       26|         52|        0|          0|            1|     10|      1|  190|     266|          31|  8937|       1072|          0|             0|
 |2021 |   101|     731|     1699|       30|         64|        0|          0|            0|     10|      1|  219|     260|          63|  7865|       1081|          1|             0|
-|2022 |     0|      12|       35|        1|          0|        0|          0|            0|      0|      0|    7|       4|           3|   150|         30|          0|             0|
+|2022 |     2|      26|       69|        1|          1|        0|          0|            0|      0|      0|    9|      10|           3|   309|         60|          0|             0|
 
 Here's both types of crime over time:
 
@@ -60,64 +60,65 @@ The "seasonal" section of the plot above shows an obvious, repeating cycle that 
 
 ![Overall Offenses, Seasonally Adjusted](./figures/plot.crime_seasonally_adjusted-1.png)
 
-We can do the same thing for offense categories - in this case Burglary:
-
-![Burglary Decomposition](./figures/plot.burglary_time_series_decomposition-1.png)
-
-Here's a visualization of seasonally-adjusted burglaries:
-
-![Burglaries, Seasonally Adjusted](./figures/plot.burglaries_seasonally_adjusted-1.png)
-
 ## Police District Statistics
 
-The city is divided among eight policing districts, with four (P1, P2, P3, P4) in the "North Police Service Area" and the other four (P5, P6, P7, P8) in the "South". The north and south service areas are separated geographically by the Spokane River. Some offenses are noted as occurring in an "OTH" district with no amplifying information given. Rarely, an offense will also be listed with no district at all in the weekly reports, possibly due to a data entry error. Districts designated "SPA", "SPB", "SPC", and "SPD" had been used in the past, but no information is given in the CompStat reports indicating what areas these designations represented. "OTH" and unknown (empty) districts are omitted from the figures below.
+The city is divided among eight policing districts, with four (P1, P2, P3, P4) in the "North Police Service Area", and the other four (P5, P6, P7, P8) in the "South". The north and south service areas are separated geographically by the Spokane River. Some offenses are noted as occurring in an "OTH" district with no amplifying information given. Sometimes, an offense will also be listed with no district at all in the weekly reports, possibly due to a data entry error. There was a spike in missing district information beginning in late 2021 and continuing into 2022. Districts designated "SPA", "SPB", "SPC", and "SPD" had also been used in the past but no information is given in the CompStat reports indicating what areas represent.
 
-So far in 2021, most crime occurred in districts P1, P2, P3, and P4 - all north of the Spokane River. Districts P4 and P2 have the highest overall counts:
+Here's a graph of offenses with missing district information:
 
-![Offenses by Police District, 2020 YTD](./figures/plot.ytd_offenses_by_district-1.png)
+![Missing police district offenses](./figures/plot.district_nas_over_time-1.png)
 
-Districts P1-4 have the highest overall counts of reported crimes from September 2017 onward:
+In fact, there are more "NA" reports in 2022 than any other district:
+
+![Offenses by Police District, 2022 YTD](./figures/plot.ytd_offenses_by_district-1.png)
+
+With that much data missing I'm not able to accurately visualize the count of crimes per-district for late 2021 or 2022. I've emailed SPD about this missing data but have yet to hear back. From September 2017 onward, districts P1-4 have the highest overall counts of reported crimes:
 
 ![Offenses by Police District](./figures/plot.total_offenses_by_district-1.png)
 
-## Types of Offenses
+## Non-Violent Crime
 
-General theft (or larceny), burglary, and theft of motor vehicles continue to be top reported crimes so far in 2021:
+Most crime in Spokane is non-violent. These offenses include burglary, motor vehicle theft, and "ordinary" theft.
 
-![Offenses, 2020 YTD](./figures/plot.ytd_offenses_by_type-1.png)
-
-This follows the trend that's been recorded since mid-2017:
-
-![Offenses, September 12, 2017 Onward](./figures/plot.total_offenses_by_type-1.png)
-
-## Month-Over-Month Statistics
-
-While looking at data week-over-week is often not useful due to how "jumpy" crime statistics can be, month-over-month data can tell a story. Any field in the tables with "NA" value indicates that data either was not or is not yet available.
-
-1. [Non-Violent Crime](#non-violent-crime)
-1. [Violent Crime](#violent-crime)
-
-![Offenses, September 12, 2017 Onward](./figures/table.offenses.png)
-
-### Non-Violent Crime
-
-Most crime in Spokane is "non-violent", including theft and burglary.
+### Theft
 
 ![Thefts, September 12, 2017 Onward](./figures/table.theft.png)
 
+[Theft data table](./figures/markdown_table_monthly.theft.md)
+
+### Burglary
+
 ![Burglaries, September 12, 2017 Onward](./figures/table.burglary.png)
+
+[Burglary data table](./figures/markdown_table_monthly.burglary.md)
+
+### Motor Vehicle Theft
 
 ![Motor Vehicle Thefts, September 12, 2017 Onward](./figures/table.veh.%20theft.png)
 
-### Violent Crime
+[Motor vehicle theft data table](./figures/markdown_table_monthly.veh.%20theft.md)
 
-Violent crime includes assault, sexual assault, robbery, intimidation with a weapon, and carjacking:
+## Violent Crime
+
+Violent crime includes assault, drive-by shootings, sexual assault, robbery, intimidation with a weapon, and carjacking.
+
+### Robbery
 
 ![Robbery, September 12, 2017 Onward](./figures/table.robbery.png)
 
+[Robbery data table](./figures/markdown_table_monthly.robbery.md)
+
+### Assault
+
 ![Assault, September 12, 2017 Onward](./figures/table.assault.png)
 
+[Robbery data table](./figures/markdown_table_monthly.assault.md)
+
+### Sexual Assault
+
 ![Rape, September 12, 2017 Onward](./figures/table.rape.png)
+
+[Sexual assault data table](./figures/markdown_table_monthly.rape.md)
 
 ## Lunar Phases
 
@@ -174,7 +175,7 @@ Unfortunately, we're not able to make true "apples-to-apples" comparisons across
 
 ## Violence and Crime Classifications
 
-In some of the analysis I've made distinctions between violent and non-violent crimes. For the purposes of this project, violent crimes include assault, homicide, robbery, rape, and murder. While this isn't an exhaustive list of all possible violent crime on the books in our state, it fits the data provided by SPD. Each week when new data is processed I verify that every offense is parsed and categorized properly. If additional types of violent crime are committed and reported in the data I'll add them to the list and they'll become part of the classification process.
+In some of the analysis I've made distinctions between violent and non-violent crimes. For the purposes of this project, violent crimes include assault, drive-by shooting, homicide, robbery, rape, and murder. While this isn't an exhaustive list of all possible violent crime on the books in our state, it fits the data provided by SPD. Each week when new data is processed I verify that offenses are parsed and categorized properly. If additional types of violent crime are committed and reported in the data I'll add them to the list and they'll become part of the classification process.
 
 ## Contact
 
