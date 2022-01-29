@@ -1,7 +1,7 @@
 ---
 title: "Washington Crime Analysis Project"
 author: "Tyler Hart"
-date: "2022-01-10"
+date: "2022-01-24"
 output:
   pdf_document:
     fig_caption: yes
@@ -54,7 +54,7 @@ library(lubridate)
 
 source("./text_import.R") # Build Spokane crime data frame
 source("./Bellevue_Data_Import.R") # Build Bellevue crime data frame
-source("./Tacoma_Data_Import.R") # Build Bellevue crime data frame
+source("./Tacoma_Data_Import.R") # Build Tacoma crime data frame
 #source("./categorize_offenses.R") # Categorize offense names
 source("./categorize_violence.R") # Categorize violent / non-violent
 source("./lunar_seasons.R") # Lunar phase, seasons
@@ -69,7 +69,7 @@ geom_line_size = 2
 ### Figure captions ###
 data_source_str <- paste(paste("Created",Sys.Date(), sep = " "),"Data Source: Spokane Police Department CompStat", sep = "; ")
 cc_by_sa <- "Licensed CC-BY-SA 4.0, Tyler Hart"
-excluded_districts_note <- "NOTE: Excluding districts OTH, NA, SPA-D"
+excluded_districts_note <- "NOTE: Excluding districts OTH, SPA-D"
 boilerplate_caption <- paste(data_source_str, cc_by_sa, sep = "\n")
 boilerplate_caption_exclude_dist <- paste(paste(data_source_str, excluded_districts_note, sep = "; "), cc_by_sa, sep = "\n")
 
