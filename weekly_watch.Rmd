@@ -1,19 +1,19 @@
 ---
 title: "Washington Crime Analysis Project"
 author: "Tyler Hart"
-date: "2022-01-24"
+date: "2022-02-07"
 output:
+  html_document:
+    df_print: paged
+  word_document:
+    toc: yes
+    toc_depth: '2'
   pdf_document:
     fig_caption: yes
     keep_tex: yes
     number_sections: yes
     toc: yes
     toc_depth: 2
-  word_document:
-    toc: yes
-    toc_depth: '2'
-  html_document:
-    df_print: paged
 margin: 0.5in
 classoption: landscape
 header-includes:
@@ -67,67 +67,84 @@ point_size = 3
 geom_line_size = 2
 
 ### Figure captions ###
-data_source_str <- paste(paste("Created",Sys.Date(), sep = " "),"Data Source: Spokane Police Department CompStat", sep = "; ")
 cc_by_sa <- "Licensed CC-BY-SA 4.0, Tyler Hart"
-excluded_districts_note <- "NOTE: Excluding districts OTH, SPA-D"
-boilerplate_caption <- paste(data_source_str, cc_by_sa, sep = "\n")
-boilerplate_caption_exclude_dist <- paste(paste(data_source_str, excluded_districts_note, sep = "; "), cc_by_sa, sep = "\n")
 
-### Abbrev. offense names ###
-levels(df.crimes$offense)[levels(df.crimes$offense)=="THEFT OF MOTOR VEHICLE"] <- "VEH. THEFT"
-levels(df.crimes$offense)[levels(df.crimes$offense)=="TAKING MOTOR VEHICLE"] <- "TAKING VEH."
-levels(df.crimes$offense)[levels(df.crimes$offense)=="VEHICLE PROWLING"] <- "VEH. PROWL"
-levels(df.crimes$offense)[levels(df.crimes$offense)=="DRIVE BY SHOOTING"] <- "DRIVE-BY"
-levels(df.crimes$offense)[levels(df.crimes$offense)=="VEHICLE TRESPASS"] <- "VEH. TRESPASS"
+# Spokane
+spokane_data_source_str <- paste(paste("Created",Sys.Date(), sep = " "),"Data Source: Spokane PD CompStat", sep = "; ")
+excluded_districts_note <- "NOTE: Excluding districts SPA-D"
+spokane_caption <- paste(spokane_data_source_str, cc_by_sa, sep = "\n")
+spokane_caption_exclude_dist <- paste(paste(spokane_data_source_str, excluded_districts_note, sep = "; "), cc_by_sa, sep = "\n")
 
-### Moon phase abbreviations ###
-levels(df.crimes$lunar_phase)[levels(df.crimes$lunar_phase)=="Waning gibbous"] <- "Waning Gibb."
-levels(df.crimes$lunar_phase)[levels(df.crimes$lunar_phase)=="Waning crescent"] <- "Waning Cres."
-levels(df.crimes$lunar_phase)[levels(df.crimes$lunar_phase)=="Waxing crescent"] <- "Waxing Cres."
-levels(df.crimes$lunar_phase)[levels(df.crimes$lunar_phase)=="Waxing gibbous"] <- "Waxing Gibb."
+# Bellevue
+bellevue_data_source_str <- paste(paste("Created",Sys.Date(), sep = " "),"Data Source: Bellevue PD", sep = "; ")
+bellevue_caption <- paste(bellevue_data_source_str, cc_by_sa, sep = "\n")
+
+# Tacoma
+tacoma_data_source_str <- paste(paste("Created",Sys.Date(), sep = " "),"Data Source: Tacoma PD", sep = "; ")
+tacoma_caption <- paste(tacoma_data_source_str, cc_by_sa, sep = "\n")
 ```
 
-# Total Offenses
+# Introduction
+
+Three large cities in Washington - Bellevue, Spokane, and Tacoma - make regular crime reports available. Spokane releases its data on a weekly basis. This project collects and parses that data, and provides up-to-date analysis. The same data is formatted and submitted annually to the FBI NIBRS program as well. A lot of work is required to prepare the data for submission to NIBRS, but it's more granular and includes detailed information that weekly reports lack. Unfortunately, it takes a year or more for current data to be available in the NIBRS portal. It will most likely be late-2022 or early-2023 before 2021's data is ready. We use the weekly reports to identify trends happening now and provide up-to-date analysis. NIBRS-based analysis is a separate project. The additional detail from years past informs our weekly analysis and helps us frame questions better.
+
+When this project began it was strictly focused on crime in Spokane. It's since expanded to include other cities with similar population size that also make crime data available regularly. Here are the three covered cities and their population based on Census Bureau estimates for 2020:
+
+| City| Estimated 2020 Population|
+|----:|---------:|
+| Spokane|222,050|
+| Tacoma| 219,995|
+| Bellevue|148,073|
+
+I'd have liked to include the city of Vancouver, as it has a population between Bellevue and Tacoma, but they don't make regular crime data reports available. Seattle is so much larger than all the other cities that I've excluded its crime analysis from this project.
+
+# Incidents Over Time
+
+We visualize incidents over time by totaling up incidents and plotting them daily. Blue and red lines show average values using generalized additive model (GAM) and linear model (LM), respectively. Then we break down data for time series analysis and identify seasonality and trends.
+
+## Spokane
 
 ```{r plot.offenses_over_time, fig.pos="H", fig.width=10, fig.height=7.5}
 daily_offenses %>%
   ggplot(aes(date, offenses)) + 
   geom_point(size = point_size, alpha = point_alpha) +
-  geom_smooth(method = NULL, color = "blue", size = geom_line_size) +
+  geom_smooth(method = "gam", color = "blue", size = geom_line_size) +
   geom_smooth(method = "lm", color = "red", size = geom_line_size) +
   labs(
     x = "", 
-    y = "Daily Offenses", 
-    title = "Total Offenses", 
-    caption = paste(data_source_str, cc_by_sa, sep = "\n")
+    y = "Daily Incidents", 
+    title = "Spokane Total Incidents", 
+    caption = paste(spokane_data_source_str, cc_by_sa, sep = "\n")
     )
 ```
 
+## Tacoma
 ```{r plot.Tacoma_Offenses_Over_Time, fig.pos="H", fig.width=10, fig.height=7.5}
 Tacoma_Daily_Offenses %>%
   ggplot(aes(date, offenses)) + 
   geom_point(size = point_size, alpha = point_alpha) +
-  geom_smooth(method = "auto", color = "blue", size = geom_line_size) +
+  geom_smooth(method = "gam", color = "blue", size = geom_line_size) +
   geom_smooth(method = "lm", color = "red", size = geom_line_size) +
   labs(
     x = "", 
-    y = "Daily Offenses", 
-    title = "Tacoma Total Offenses", 
-    caption = paste(data_source_str, cc_by_sa, sep = "\n")
+    y = "Daily Incidents", 
+    title = "Tacoma Total Incidents", 
+    caption = paste(tacoma_data_source_str, cc_by_sa, sep = "\n")
     )
 ```
 
+## Bellevue
 ```{r plot.Bellevue_Offenses_Over_Time, fig.pos="H", fig.width=10, fig.height=7.5}
 Bellevue_Daily_Offenses %>%
   ggplot(aes(date, offenses)) + 
   geom_point(size = point_size, alpha = point_alpha) +
-  geom_smooth(method = "auto", color = "blue", size = geom_line_size) +
+  geom_smooth(method = "gam", color = "blue", size = geom_line_size) +
   geom_smooth(method = "lm", color = "red", size = geom_line_size) +
   labs(
     x = "", 
-    y = "Daily Offenses", 
-    title = "Bellevue Total Offenses", 
-    caption = paste(data_source_str, cc_by_sa, sep = "\n")
+    y = "Daily Incidents", 
+    title = "Bellevue Total Incidents", 
+    caption = paste(bellevue_data_source_str, cc_by_sa, sep = "\n")
     )
 ```
 
@@ -157,7 +174,7 @@ daily_offenses_violence %>%
     y = "Offenses", 
     color = "Violence",
     title = "Daily Non-Violent & Violent Offenses", 
-    caption = paste(data_source_str, cc_by_sa, sep = "\n")
+    caption = paste(spokane_data_source_str, cc_by_sa, sep = "\n")
     )
 ```
 
@@ -173,7 +190,7 @@ daily_offenses_violence %>%
     y = "Offenses", 
     color = "Violence",
     title = "Daily Non-Violent & Violent Offenses", 
-    caption = paste(data_source_str, cc_by_sa, sep = "\n")
+    caption = paste(spokane_data_source_str, cc_by_sa, sep = "\n")
     )
 ```
 
@@ -188,7 +205,7 @@ daily_offenses_violence %>%
     x = "", 
     y = "Offenses", 
     title = "Daily Violent Offenses", 
-    caption = paste(data_source_str, cc_by_sa, sep = "\n")
+    caption = paste(spokane_data_source_str, cc_by_sa, sep = "\n")
     )
 ```
 
@@ -203,7 +220,7 @@ daily_offenses_violence %>%
     x = "", 
     y = "Offenses", 
     title = "Daily Non-Violent Offenses", 
-    caption = paste(data_source_str, cc_by_sa, sep = "\n")
+    caption = paste(spokane_data_source_str, cc_by_sa, sep = "\n")
     )
 ```
 
@@ -219,7 +236,7 @@ daily_offenses %>%
     y = "Offenses", 
     title = "Projection, Average Daily Offenses",
     subtitle = "CI 0.95, linear mean projections",
-    caption = paste(data_source_str, cc_by_sa, sep = "\n")
+    caption = paste(spokane_data_source_str, cc_by_sa, sep = "\n")
     )
 ```
 
@@ -233,7 +250,7 @@ summarized_crimes %>%
   x = "",
   y = "Offenses",
   title = "Total Monthly Offenses",
-  caption = boilerplate_caption
+  caption = spokane_caption
   ) +
   expand_limits(y = 0) +
 theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
@@ -249,7 +266,7 @@ summarized_crimes %>%
   x = "",
   y = "Avg. Daily Offenses",
   title = "Average Daily Offenses by Month",
-  caption = boilerplate_caption
+  caption = spokane_caption
   ) +
   expand_limits(y = 0) +
 theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
@@ -266,7 +283,7 @@ df.crimes %>%
     x = "", 
     y = "Offenses", 
     title = "Daily Offenses by Month", 
-    caption = paste(data_source_str, cc_by_sa, sep = "\n")
+    caption = paste(spokane_data_source_str, cc_by_sa, sep = "\n")
   )
 ```
 
@@ -281,7 +298,7 @@ labs(
   y = "Offenses",
   title = "Monthly Offenses",
   color = "Year",
-  caption = boilerplate_caption
+  caption = spokane_caption
   ) +
 theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
@@ -298,7 +315,7 @@ labs(
   y = "Offenses",
   title = "Weekly Offenses",
   color = "Year",
-  caption = boilerplate_caption
+  caption = spokane_caption
   ) +
 theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
@@ -318,7 +335,7 @@ df.crimes %>%
     x = "", 
     y = "Thefts", 
     title = "Overall Thefts", 
-    caption = boilerplate_caption
+    caption = spokane_caption
     ) +
 theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
@@ -358,7 +375,7 @@ df.crimes %>%
     x = "", 
     y = "Vehicle Thefts", 
     title = "Vehicle Thefts", 
-    caption = boilerplate_caption
+    caption = spokane_caption
     ) +
 theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
@@ -377,7 +394,7 @@ df.crimes %>%
     x = "", 
     y = "Assaults", 
     title = "Assaults", 
-    caption = boilerplate_caption
+    caption = spokane_caption
     ) +
 theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
@@ -396,7 +413,7 @@ df.crimes %>%
     x = "", 
     y = "Sexual Assaults", 
     title = "Sexual Assaults", 
-    caption = boilerplate_caption
+    caption = spokane_caption
     ) +
 theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
 ```
@@ -429,7 +446,7 @@ df.crimes %>%
   labs(
     x = "Police Districts", 
     title = "Offenses by Police District, 2022 YTD", 
-    caption = boilerplate_caption_exclude_dist
+    caption = spokane_caption_exclude_dist
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
@@ -444,7 +461,7 @@ df.crimes %>%
   labs(
     x = "Police Districts", 
     title = "Offenses by Police District, 2017 - 2022",
-    caption = boilerplate_caption_exclude_dist
+    caption = spokane_caption_exclude_dist
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
@@ -461,7 +478,7 @@ df.crimes %>%
     x = "Police Districts", 
     y = "Offenses", 
     title = "Offense Violence by District, 2017-2022", 
-    caption = paste(data_source_str, cc_by_sa, sep = "\n")
+    caption = paste(spokane_data_source_str, cc_by_sa, sep = "\n")
     )
 ```
 
@@ -478,7 +495,7 @@ df.crimes %>%
     x = "Police Districts", 
     y = "Offenses", 
     title = "Offense Violence by District, 2022 YTD", 
-    caption = paste(data_source_str, cc_by_sa, sep = "\n")
+    caption = paste(spokane_data_source_str, cc_by_sa, sep = "\n")
     )
 ```
 
@@ -496,7 +513,7 @@ df.crimes %>%
     x = "", 
     y = "Offenses", 
     title = "North Policing Districts, Daily Offenses by Month", 
-    caption = paste(data_source_str, cc_by_sa, sep = "\n")
+    caption = paste(spokane_data_source_str, cc_by_sa, sep = "\n")
   ) +
   facet_grid(rows = vars(district))
 ```
@@ -513,7 +530,7 @@ df.crimes %>%
     x = "", 
     y = "Offenses", 
     title = "South Policing Districts, Daily Offenses by Month", 
-    caption = paste(data_source_str, cc_by_sa, sep = "\n")
+    caption = paste(spokane_data_source_str, cc_by_sa, sep = "\n")
   ) +
   facet_grid(rows = vars(district))
 ```
@@ -529,7 +546,7 @@ df.crimes %>%
     x = "", 
     y = "Offenses Missing District", 
     title = "Offenses Without a Police District", 
-    caption = boilerplate_caption
+    caption = spokane_caption
     ) 
 ```
 
@@ -545,7 +562,7 @@ df.crimes %>%
   labs(
     x = "", 
     title = "Offense Types, 2022 YTD", 
-    caption = boilerplate_caption
+    caption = spokane_caption
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
@@ -560,7 +577,7 @@ df.crimes %>%
   labs(
     x = "", 
     title = "Offense Types, 2017 - 2022", 
-    caption = boilerplate_caption
+    caption = spokane_caption
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
@@ -575,7 +592,7 @@ df.crimes %>%
   labs(
     x = "", 
     title = "Offenses by Day, 2022 YTD", 
-    caption = boilerplate_caption
+    caption = spokane_caption
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
@@ -590,7 +607,7 @@ df.crimes %>%
   labs(
     x = "", 
     title = "Offenses by Day, 2021", 
-    caption = boilerplate_caption
+    caption = spokane_caption
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
@@ -605,7 +622,7 @@ df.crimes %>%
   labs(
     x = "", 
     title = "Offenses by Day, 2020", 
-    caption = boilerplate_caption
+    caption = spokane_caption
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
@@ -620,7 +637,7 @@ df.crimes %>%
   labs(
     x = "", 
     title = "Offenses by Day, 2019", 
-    caption = boilerplate_caption
+    caption = spokane_caption
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
@@ -635,7 +652,7 @@ df.crimes %>%
   labs(
     x = "", 
     title = "Offenses by Day, 2018", 
-    caption = boilerplate_caption
+    caption = spokane_caption
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
@@ -649,7 +666,7 @@ df.crimes %>%
   labs(
     x = "", 
     title = "Spokane Offenses by Day 2017 - 2022", 
-    caption = boilerplate_caption
+    caption = spokane_caption
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
@@ -663,7 +680,7 @@ df.bellevue_crimes %>%
   labs(
     x = "", 
     title = "Bellevue Offenses by Day", 
-    caption = boilerplate_caption
+    caption = spokane_caption
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
@@ -678,7 +695,7 @@ df.crimes %>%
   labs(
     x = "Lunar Phases", 
     title = "Offenses by Lunar Phase", 
-    caption = boilerplate_caption
+    caption = spokane_caption
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
@@ -694,7 +711,7 @@ df.crimes %>%
   labs(
     x = "Lunar Phase", 
     title = "Violent Offenses by Lunar Phase", 
-    caption = boilerplate_caption
+    caption = spokane_caption
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
@@ -736,7 +753,7 @@ df.crimes %>%
   labs(
     x = "Police Districts", 
     title = "Arson by Police District", 
-    caption = boilerplate_caption_exclude_dist
+    caption = spokane_caption_exclude_dist
     ) +
   scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
 ```
@@ -756,7 +773,7 @@ df.crimes %>%
     x = "", 
     y = "Burglaries", 
     title = "Daily Burglaries by Month", 
-    caption = paste(data_source_str, cc_by_sa, sep = "\n")
+    caption = paste(spokane_data_source_str, cc_by_sa, sep = "\n")
   )
 ```
 
@@ -794,7 +811,7 @@ df.crimes %>%
     x = "", 
     y = "Thefts", 
     title = "Daily Thefts by Month", 
-    caption = paste(data_source_str, cc_by_sa, sep = "\n")
+    caption = paste(spokane_data_source_str, cc_by_sa, sep = "\n")
   )
 ```
 
@@ -864,7 +881,7 @@ df.crimes %>%
     x = "", 
     y = "Vehicle Thefts", 
     title = "Daily Vehicle Thefts by Month", 
-    caption = paste(data_source_str, cc_by_sa, sep = "\n")
+    caption = paste(spokane_data_source_str, cc_by_sa, sep = "\n")
   )
 ```
 
