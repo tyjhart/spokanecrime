@@ -38,7 +38,7 @@ While CompStat data does exist prior to 2018, the reporting standards changed an
 
 Here are the average daily incidents by month:
 
-![Spokane Average Daily Incidents by Month](./figures/plot.avg_daily_offenses_by_month)
+![Spokane Average Daily Incidents by Month](./figures/plot.avg_daily_offenses_by_month-1.png)
 
 ### By Incident Type
 
