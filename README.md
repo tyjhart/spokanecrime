@@ -16,20 +16,31 @@ Currently, the SPD makes weekly CompStat reports available each Monday. Reports 
 
 ## Overall Statistics
 
-Looking at overall statistics gives us a good starting point from which to explore crime over time and specific types of offenses. From September 12, 2017 onward we see an overall downward trend in reported crime:
+Looking at overall statistics gives us a good starting point from which to explore crime over time and specific types of incidents. From September 2017 onward we see an overall downward trend in reported crime:
 
 ![CompStat Total Offenses](./figures/plot.offenses_over_time-1.png "Total offenses figure")
 
-We have data for full years beginning in 2018 for comparison:
+### By Year
 
-|Year | Total| Percentage Change|
-|:----|-----:|-----------------:|
-|2018 | 17418|                NA|
-|2019 | 14434|            -17.13|
-|2020 | 13321|             -7.71|
-|2021 | 12125|             -8.98|
-|2022 |   733|                NA|
+We have CompStat data for full years beginning in 2018 for comparison:
 
+|Year | Total Incidents| Percentage Change| Per Capita (100k)|
+|:----|---------------:|-----------------:|-----------------:|
+|2018 |           17418|                NA|              7844|
+|2019 |           14434|            -17.13|              6500|
+|2020 |           13321|             -7.71|              5999|
+|2021 |           12125|             -8.98|              5460|
+|2022 |            1253|                NA|                NA|
+
+While CompStat data does exist prior to 2018, the reporting standards changed and some reports are missing. I'm not able to make accurate comparisons with years prior to 2018.
+
+### By Month
+
+Here are the average daily incidents by month:
+
+![Spokane Average Daily Incidents by Month](./figures/plot.avg_daily_offenses_by_month)
+
+### By Incident Type
 
 The majority of crime in Spokane is non-violent, though assaults, robbery, and other violent crimes do occur with some regularity:
 
@@ -39,16 +50,11 @@ The majority of crime in Spokane is non-violent, though assaults, robbery, and o
 |2019 |    42|     750|     1858|       19|         70|        0|          4|            0|      5|      0|  217|     290|          52|  9912|       1205|         10|             0|
 |2020 |    99|     687|     1949|       26|         52|        0|          0|            1|     10|      1|  190|     266|          31|  8937|       1072|          0|             0|
 |2021 |   101|     731|     1699|       30|         64|        0|          0|            0|     10|      1|  219|     260|          63|  7865|       1081|          1|             0|
-|2022 |     4|      41|      106|        2|          2|        0|          0|            0|      0|      0|   12|      18|           3|   463|         82|          0|             0|
+|2022 |     6|      61|      174|        2|          3|        0|          1|            0|      0|      0|   20|      29|           4|   798|        155|          0|             0|
 
-
-Here's both types of crime over time:
+Here's both types of crime shown over time:
 
 ![Non-Violent & Violent Crime](./figures/plot.offenses_over_time_violence-1.png "Non-violent and violent crime figure")
-
-We can also look at the same information, but split up by policing districts:
-
-![Offenses by Police District & Violence](./figures/plot.total_offenses_by_violence_district-1.png "Offenses by district, violence figure")
 
 Of non-violent crimes, theft is the most common. This includes shoplifting, burglary (residential and commercial), and motor vehicle thefts.
 
@@ -145,11 +151,11 @@ There are many public resources that we leverage for data analysis. All are open
 
 ## Data Limitations
 
-There are limitations to the analysis that's possible using CompStat data provided by the city. While detailed information about Spokane crime does eventually get reported in the [FBI's NBIRS program](https://crime-data-explorer.fr.cloud.gov/downloads-and-docs), there is often a year's lag or more before the public can download it. For example, 2018's data was made available in September 2019. As of May 2021, only data from 2019 is available. It will likely be late-2022 or sometime in 2023 before 2021's data can be downloaded and analyzed. In the meantime, we only have the less-detailed CompStat data to work with. More in-depth analysis of the detailed FBI data will become a separate project when I have time.
+There are limitations to the analysis that's possible using CompStat data provided by the city. While detailed information about Spokane crime does eventually get reported in the [FBI's NBIRS program](https://crime-data-explorer.fr.cloud.gov/downloads-and-docs), there is often a year's lag or more before the public can download it. For example, 2018's data was made available in September 2019. As of January 2022, the most current data available is for 2020. It will likely be late-2022 or sometime in 2023 before 2021's data can be downloaded and analyzed. In the meantime, we only have the less-detailed CompStat data to work with. More in-depth analysis of the detailed FBI data will become a separate project when I have time.
 
 ### Final Offenses
 
-It should be noted that the weekly CompStat data may not accurately reflect the final offense someone is charged with. For example, simple assault may become homicide if the victim later dies from their injuries. Shoplifting could become "Retail Theft With Special Circumstances" if it's found the offender was part of a larger shoplifing ring. **CompStat reports are not retroactively updated to reflect the final disposition of an offense.** With that being said, there is more than enough data to identify trends over time and make predictions.
+Weekly CompStat data may not accurately reflect the final offense someone is charged with. For example, simple assault may become homicide if the victim later dies from their injuries. Shoplifting could become "Retail Theft With Special Circumstances" if it's found the offender was part of a larger shoplifing ring. **CompStat reports are not retroactively updated to reflect the final disposition of an offense.** With that being said, there is more than enough data to identify trends over time and make predictions.
 
 ### Locations
 
