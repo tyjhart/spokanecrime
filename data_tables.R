@@ -24,7 +24,7 @@ df.annual_totals[which(df.annual_totals$Year == lubridate::year(Sys.Date())),]$`
 
 # Markdown table
 kable(df.annual_totals, format = "markdown") %>%
-  save_kable(., file = "./figures/markdown_table.annual_totals.md")
+  save_kable(., file = "./tables/markdown_table.annual_totals.md")
 
 kable(
   df.annual_totals,
@@ -35,7 +35,7 @@ kable(
     full_width=FALSE, font_size=12
   ) %>%
   add_footnote(boilerplate_caption, notation = "none") %>%
-  save_kable(., file = "./figures/table.annual_totals.png")
+  save_kable(., file = "./tables/table.annual_totals.png")
 
 
 ### Annual totals by offense ###
@@ -47,7 +47,7 @@ df.annual_offense_totals <- df.annual_offense_totals[-1,]
 
 # Markdown table
 kable(df.annual_offense_totals, format = "markdown") %>%
-  save_kable(., file = "./figures/markdown_table.annual_offense_totals.md")
+  save_kable(., file = "./tables/markdown_table.annual_offense_totals.md")
 
 kable(
   df.annual_offense_totals,
@@ -58,7 +58,7 @@ kable(
     full_width=FALSE, font_size=12
   ) %>%
   add_footnote(boilerplate_caption, notation = "none") %>%
-  as_image(file = "./figures/table.annual_offense_totals.png")
+  as_image(file = "./tables/table.annual_offense_totals.png")
 
 
 ### Totals by violence ###
@@ -70,7 +70,7 @@ df.annual_violence_totals <- df.annual_violence_totals[-1,]
 
 # Markdown table
 kable(df.annual_violence_totals, format = "markdown") %>%
-  save_kable(., file = "./figures/markdown_table.annual_violence_totals.md")
+  save_kable(., file = "./tables/markdown_table.annual_violence_totals.md")
 
 kable(
   df.annual_violence_totals,
@@ -81,7 +81,7 @@ kable(
     full_width=FALSE, font_size=12
   ) %>%
   add_footnote(boilerplate_caption, notation = "none") %>%
-  as_image(file = "./figures/table.annual_violence_totals.png")
+  as_image(file = "./tables/table.annual_violence_totals.png")
 
 
 ### Districts ###
@@ -96,7 +96,7 @@ df.district_summary <- df.crimes %>%
   arrange(desc(Total))
 
 kable(df.district_summary, format = "markdown") %>%
-  save_kable(., file = "./figures/markdown_table.district_stats_ytd.md")
+  save_kable(., file = "./tables/markdown_table.district_stats_ytd.md")
 
 kable(
   df.district_summary, 
@@ -107,7 +107,7 @@ kable(
     full_width=FALSE, font_size=12
     ) %>%
   add_footnote(boilerplate_caption, notation = "none") %>%
-  as_image(file = "./figures/table.district_stats_ytd.png")
+  as_image(file = "./tables/table.district_stats_ytd.png")
 
 # Districts total, all years
 df.district_summary <- df.crimes %>%
@@ -118,7 +118,7 @@ df.district_summary <- df.crimes %>%
   arrange(desc(Total))
 
 kable(df.district_summary, format = "markdown") %>%
-  save_kable(., file = "./figures/markdown_table.district_stats.md")
+  save_kable(., file = "./tables/markdown_table.district_stats.md")
 
 kable(
   df.district_summary, 
@@ -130,7 +130,7 @@ kable(
     font_size=12
     ) %>%
   add_footnote(boilerplate_caption, notation = "none") %>%
-  as_image(file = "./figures/table.district_stats_total.png")
+  as_image(file = "./tables/table.district_stats_total.png")
 
 # District non-violent, violent percentages
 kable(
@@ -145,7 +145,7 @@ kable(
     full_width=FALSE, font_size=12
   ) %>%
   add_footnote(boilerplate_caption, notation = "none") %>%
-  as_image(file = "./figures/table.district_violence_proportion.png")
+  as_image(file = "./tables/table.district_violence_proportion.png")
 
 # District, offense proportion tables by year
 # See https://stackoverflow.com/questions/45385897/how-to-round-all-the-values-of-a-prop-table-in-r-in-one-line,
@@ -155,7 +155,7 @@ table_year_vec <- c(2022:2017)
 
 for (table_year in table_year_vec) {
   
-  filename <- paste0("./figures/table.",tolower(table_year),"_district_offense_proportion.png")
+  filename <- paste0("./tables/table.",tolower(table_year),"_district_offense_proportion.png")
   
   kable(
     df.crimes %>% 
@@ -174,7 +174,7 @@ for (table_year in table_year_vec) {
 
 for (table_year in table_year_vec) {
   
-  filename <- paste0("./figures/table.",tolower(table_year),"_district_violence_proportion.png")
+  filename <- paste0("./tables/table.",tolower(table_year),"_district_violence_proportion.png")
   
   kable(
     df.crimes %>% 
@@ -207,7 +207,7 @@ kable(
     font_size=12
     ) %>%
   add_footnote(boilerplate_caption, notation = "none") %>%
-  as_image(file = "./figures/table.offenses.png") 
+  as_image(file = "./tables/table.offenses.png") 
 
 
 ### By offense ###
@@ -242,9 +242,9 @@ names(offense_annual_month_counts)[names(offense_annual_month_counts) == "num.mo
 for (table_offense in table_offense_vec) {
   
   # File names
-  filename <- paste0("./figures/table.",tolower(table_offense),".png")
-  markdown_filename <- paste0("./figures/markdown_table_monthly.",tolower(table_offense),".md")
-  markdown_filename_annual <- paste0("./figures/markdown_table_annual.",tolower(table_offense),".md")
+  filename <- paste0("./tables/table.",tolower(table_offense),".png")
+  markdown_filename <- paste0("./tables/markdown_table_monthly.",tolower(table_offense),".md")
+  markdown_filename_annual <- paste0("./tables/markdown_table_annual.",tolower(table_offense),".md")
   
   # Annual offense totals and change
   working_annual_offense_totals <- df.annual_offense_totals %>%
@@ -270,7 +270,7 @@ for (table_offense in table_offense_vec) {
   kable(df.monthly_summary[-1], format = "markdown") %>%
     save_kable(., file = markdown_filename)
   
-  kable(df.monthly_summary[-1], caption = str_to_title(table_offense, locale = "en")) %>%
+  kable(df.monthly_summary[-1]) %>%
     kable_styling(
       bootstrap_options = c("bordered", "condensed", "striped"), 
       full_width=FALSE, 
