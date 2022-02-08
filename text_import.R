@@ -204,6 +204,13 @@ df.crimes$offense[grep("PET ANIMALS TAKING CONCEALING", df.crimes$offense)] <- "
 
 df.crimes$offense <- as.factor(df.crimes$offense)
 
+# Abbrev. offense names
+levels(df.crimes$offense)[levels(df.crimes$offense)=="THEFT OF MOTOR VEHICLE"] <- "VEH. THEFT"
+levels(df.crimes$offense)[levels(df.crimes$offense)=="TAKING MOTOR VEHICLE"] <- "TAKING VEH."
+levels(df.crimes$offense)[levels(df.crimes$offense)=="VEHICLE PROWLING"] <- "VEH. PROWL"
+levels(df.crimes$offense)[levels(df.crimes$offense)=="DRIVE BY SHOOTING"] <- "DRIVE-BY"
+levels(df.crimes$offense)[levels(df.crimes$offense)=="VEHICLE TRESPASS"] <- "VEH. TRESPASS"
+
 ### Offense Subcategories ###
 
 # df.crimes$subcategory <- NA
