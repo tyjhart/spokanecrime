@@ -90,21 +90,21 @@ Most crime in Spokane is non-violent. These offenses include burglary, motor veh
 
 ### Theft
 
-![Thefts, September 12, 2017 Onward](./figures/table.theft.png)
+![Thefts, September 12, 2017 Onward](./tables/table.theft.png)
 
-[Theft data table](./figures/markdown_table_monthly.theft.md)
+[Theft data table](./tables/markdown_table_monthly.theft.md)
 
 ### Burglary
 
-![Burglaries, September 12, 2017 Onward](./figures/table.burglary.png)
+![Burglaries, September 12, 2017 Onward](./tables/table.burglary.png)
 
-[Burglary data table](./figures/markdown_table_monthly.burglary.md)
+[Burglary data table](./tables/markdown_table_monthly.burglary.md)
 
 ### Motor Vehicle Theft
 
-![Motor Vehicle Thefts, September 12, 2017 Onward](./figures/table.veh.%20theft.png)
+![Motor Vehicle Thefts, September 12, 2017 Onward](./tables/table.veh.%20theft.png)
 
-[Motor vehicle theft data table](./figures/markdown_table_monthly.veh.%20theft.md)
+[Motor vehicle theft data table](./tables/markdown_table_monthly.veh.%20theft.md)
 
 ## Violent Crime
 
@@ -112,21 +112,21 @@ Violent crime includes assault, drive-by shootings, sexual assault, robbery, int
 
 ### Robbery
 
-![Robbery, September 12, 2017 Onward](./figures/table.robbery.png)
+![Robbery, September 12, 2017 Onward](./tables/table.robbery.png)
 
-[Robbery data table](./figures/markdown_table_monthly.robbery.md)
+[Robbery data table](./tables/markdown_table_monthly.robbery.md)
 
 ### Assault
 
-![Assault, September 12, 2017 Onward](./figures/table.assault.png)
+![Assault, September 12, 2017 Onward](./tables/table.assault.png)
 
-[Assault data table](./figures/markdown_table_monthly.assault.md)
+[Assault data table](./tables/markdown_table_monthly.assault.md)
 
 ### Sexual Assault
 
-![Rape, September 12, 2017 Onward](./figures/table.rape.png)
+![Rape, September 12, 2017 Onward](./tables/table.rape.png)
 
-[Sexual assault data table](./figures/markdown_table_monthly.rape.md)
+[Sexual assault data table](./tables/markdown_table_monthly.rape.md)
 
 ## Lunar Phases
 
