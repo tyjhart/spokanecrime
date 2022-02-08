@@ -2,7 +2,10 @@
 # Functionality to export table images. Kable "as_image" takes forever to run,
 # so this functionality has been moved to a separate file.
 
-# Data table source note
+# Variables
+spokane_population <- 222050
+
+# Data table source notes
 boilerplate_caption <- "Data Source: Spokane Police Department CompStat"
 cc_by_sa <- "Licensed CC-BY-SA 4.0, Tyler Hart"
 boilerplate_caption <- paste(boilerplate_caption, cc_by_sa, sep = "\n")
@@ -12,11 +15,12 @@ df.annual_totals <- df.crimes %>%
   filter(year != 2017) %>%
   group_by(year) %>%
   summarize(Total = n()) %>%
-  mutate(`Percentage Change`=round(((Total - lag(Total,1)) / lag(Total,1)) * 100, 2)) %>%
-  rename(Year = year)
+  mutate(`Percentage Change`=round(((Total - lag(Total,1)) / lag(Total,1)) * 100, 2),`Per Capita (100k)` = round((Total / spokane_population) * 100000)) %>%
+  rename(Year = year, `Total Incidents` = Total)
 
-# Void percentage change calculation for current year
+# Void calculations for current year
 df.annual_totals[which(df.annual_totals$Year == lubridate::year(Sys.Date())),]$`Percentage Change` <- NA
+df.annual_totals[which(df.annual_totals$Year == lubridate::year(Sys.Date())),]$`Per Capita (100k)` <- NA
 
 # Markdown table
 kable(df.annual_totals, format = "markdown") %>%
@@ -207,7 +211,7 @@ kable(
 
 
 ### By offense ###
-
+#
 # Offense vector for table creation
 table_offense_vec <- c(
   'ARSON',
@@ -245,13 +249,14 @@ for (table_offense in table_offense_vec) {
   # Annual offense totals and change
   working_annual_offense_totals <- df.annual_offense_totals %>%
     filter(offense == table_offense) %>%
-    mutate(Change=round(((Total - lag(Total,1)) / lag(Total,1)) * 100, 2)) %>%
-    rename(Year = year, `Annual % Change` = Change) %>%
+    mutate(Change=round(((Total - lag(Total,1)) / lag(Total,1)) * 100, 2), `Per Capita (100k)` = round((Total / spokane_population) * 100000)) %>%
+    rename(Year = year, `Annual % Change` = Change, `Total Incidents` = Total) %>%
     ungroup() %>%
     select(., -c(offense)) 
   
   # Void percentage change calculation for current year
   working_annual_offense_totals[which(working_annual_offense_totals$Year == lubridate::year(Sys.Date())),]$`Annual % Change` <- NA
+  working_annual_offense_totals[which(working_annual_offense_totals$Year == lubridate::year(Sys.Date())),]$`Per Capita (100k)` <- NA
   
   working_annual_offense_totals %>%
     kable(., format = "markdown") %>%
