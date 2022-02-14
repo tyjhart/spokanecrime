@@ -1,7 +1,7 @@
 ---
 title: "Washington Crime Analysis Project"
 author: "Tyler Hart"
-date: "2022-02-07"
+date: "2022-02-14"
 output:
   html_document:
     df_print: paged
@@ -330,7 +330,7 @@ df.crimes %>%
   geom_point(size = point_size, alpha = point_alpha) +
   geom_smooth(method = "auto", color = "blue", size = geom_line_size) +
   geom_smooth(method = "lm", color = "red", size = geom_line_size) +
-  scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
+  scale_x_date(date_breaks = "1 year", date_labels = "%Y") +
   labs(
     x = "", 
     y = "Thefts", 
@@ -431,8 +431,6 @@ Spokane has a total of eight police districts. Those eight are divided evenly be
 * P7: Southwest District
 * P8: Downtown District
 * OTH: Other District
-
-![District YTD Totals](./figures/table.district_stats_ytd.png)
 
 
 ```{r plot.ytd_offenses_by_district, fig.pos="H", fig.width=10, fig.height=7.5}
