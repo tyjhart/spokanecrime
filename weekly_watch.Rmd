@@ -1,19 +1,19 @@
 ---
 title: "Washington Crime Analysis Project"
 author: "Tyler Hart"
-date: "2022-02-14"
+date: "2022-02-21"
 output:
-  html_document:
-    df_print: paged
-  word_document:
-    toc: yes
-    toc_depth: '2'
   pdf_document:
     fig_caption: yes
     keep_tex: yes
     number_sections: yes
     toc: yes
     toc_depth: 2
+  word_document:
+    toc: yes
+    toc_depth: '2'
+  html_document:
+    df_print: paged
 margin: 0.5in
 classoption: landscape
 header-includes:
