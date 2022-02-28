@@ -1,19 +1,19 @@
 ---
 title: "Washington Crime Analysis Project"
 author: "Tyler Hart"
-date: "2022-02-21"
+date: "2022-02-28"
 output:
+  html_document:
+    df_print: paged
+  word_document:
+    toc: yes
+    toc_depth: '2'
   pdf_document:
     fig_caption: yes
     keep_tex: yes
     number_sections: yes
     toc: yes
     toc_depth: 2
-  word_document:
-    toc: yes
-    toc_depth: '2'
-  html_document:
-    df_print: paged
 margin: 0.5in
 classoption: landscape
 header-includes:
@@ -160,7 +160,7 @@ autoplot(ts.crime_stl, main = "Spokane Crime Seasonal Decomposition")
 ```{r plot.crime_seasonally_adjusted, fig.pos="H", fig.width=10, fig.height=7.5}
 # Decompose time series
 ts.crime_sa <- seasadj(ts.crime_stl) # Adjust for seasonality
-autoplot(ts.crime_sa, main = "Offenses, Seasonally Adjusted", xlab = "", ylab = "Daily Offenses")
+autoplot(ts.crime_sa, main = "Incidents, Seasonally Adjusted", xlab = "", ylab = "Daily Incidents")
 ```
 
 ```{r plot.offenses_over_time_violence, fig.pos="H", fig.width=10, fig.height=7.5}
@@ -171,9 +171,9 @@ daily_offenses_violence %>%
   theme(legend.position = c(0.925, 0.925), legend.background = element_rect(size=0.5, linetype="solid", colour ="black")) +
   labs(
     x = "", 
-    y = "Offenses", 
+    y = "Incidents", 
     color = "Violence",
-    title = "Daily Non-Violent & Violent Offenses", 
+    title = "Daily Non-Violent & Violent Incidents", 
     caption = paste(spokane_data_source_str, cc_by_sa, sep = "\n")
     )
 ```
@@ -187,9 +187,9 @@ daily_offenses_violence %>%
   facet_wrap( ~ violence, ncol = 1, scales = "free") +
   labs(
     x = "", 
-    y = "Offenses", 
+    y = "Incidents", 
     color = "Violence",
-    title = "Daily Non-Violent & Violent Offenses", 
+    title = "Daily Non-Violent & Violent Incidents", 
     caption = paste(spokane_data_source_str, cc_by_sa, sep = "\n")
     )
 ```
@@ -203,8 +203,8 @@ daily_offenses_violence %>%
   geom_smooth(method = "lm", color = "red", size = geom_line_size) +
   labs(
     x = "", 
-    y = "Offenses", 
-    title = "Daily Violent Offenses", 
+    y = "Incidents", 
+    title = "Daily Violent Incidents", 
     caption = paste(spokane_data_source_str, cc_by_sa, sep = "\n")
     )
 ```
@@ -218,8 +218,8 @@ daily_offenses_violence %>%
   geom_smooth(method = "lm", color = "red", size = geom_line_size) +
   labs(
     x = "", 
-    y = "Offenses", 
-    title = "Daily Non-Violent Offenses", 
+    y = "Incidents", 
+    title = "Daily Non-Violent Incidents", 
     caption = paste(spokane_data_source_str, cc_by_sa, sep = "\n")
     )
 ```
@@ -233,8 +233,8 @@ daily_offenses %>%
   scale_x_date(limits = as.Date(c("2017-09-03","2028-01-01")), date_breaks = "1 year", date_labels = "%Y") +
   labs(
     x = "", 
-    y = "Offenses", 
-    title = "Projection, Average Daily Offenses",
+    y = "Incidents", 
+    title = "Projection, Average Daily Incidents",
     subtitle = "CI 0.95, linear mean projections",
     caption = paste(spokane_data_source_str, cc_by_sa, sep = "\n")
     )
@@ -248,8 +248,8 @@ summarized_crimes %>%
   geom_text_repel() +
   labs(
   x = "",
-  y = "Offenses",
-  title = "Total Monthly Offenses",
+  y = "Incidents",
+  title = "Total Monthly Incidents",
   caption = spokane_caption
   ) +
   expand_limits(y = 0) +
@@ -264,8 +264,8 @@ summarized_crimes %>%
   geom_text_repel() +
   labs(
   x = "",
-  y = "Avg. Daily Offenses",
-  title = "Average Daily Offenses by Month",
+  y = "Avg. Daily Incidents",
+  title = "Average Daily Incidents by Month",
   caption = spokane_caption
   ) +
   expand_limits(y = 0) +
@@ -281,8 +281,8 @@ df.crimes %>%
   geom_boxplot(aes(y = day.count, group = month)) +
   labs(
     x = "", 
-    y = "Offenses", 
-    title = "Daily Offenses by Month", 
+    y = "Incidents", 
+    title = "Daily Incidents by Month", 
     caption = paste(spokane_data_source_str, cc_by_sa, sep = "\n")
   )
 ```
@@ -295,8 +295,8 @@ ggplot(aes(num.month, offenses, color = year)) +
 geom_point(size = point_size, alpha = point_alpha) +
 labs(
   x = "Month",
-  y = "Offenses",
-  title = "Monthly Offenses",
+  y = "Incidents",
+  title = "Monthly Incidents",
   color = "Year",
   caption = spokane_caption
   ) +
@@ -312,8 +312,8 @@ ggplot(aes(num.week, offenses, color = year)) +
 geom_point(size = point_size, alpha = point_alpha) +
 labs(
   x = "Week",
-  y = "Offenses",
-  title = "Weekly Offenses",
+  y = "Incidents",
+  title = "Weekly Incidents",
   color = "Year",
   caption = spokane_caption
   ) +
@@ -420,7 +420,7 @@ theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
 # Police Districts
 
-Spokane has a total of eight police districts. Those eight are divided evenly between two main groups, the North and South Police Service Areas. The Spokane River separates the two service areas, with Division St. and other major thoroughfares serving as boundaries. Districts P1 - P4 are north of the Spokane River. Districts P5 - P8 are south of the river. Some offenses in the CompStat reports are listed as "OTH", meaning "Other".
+Spokane has a total of eight police districts. Those eight are divided evenly between two main groups, the North and South Police Service Areas. The Spokane River separates the two service areas, with Division St. and other major thoroughfares serving as boundaries. Districts P1 - P4 are north of the Spokane River. Districts P5 - P8 are south of the river. Some incidents in the CompStat reports are listed as "OTH", meaning "Other".
 
 * P1: Northwest District
 * P2: Central District
@@ -443,10 +443,10 @@ df.crimes %>%
   geom_text(vjust = -0.5) +
   labs(
     x = "Police Districts", 
-    title = "Offenses by Police District, 2022 YTD", 
+    title = "Incidents by Police District, 2022 YTD", 
     caption = spokane_caption_exclude_dist
     ) +
-  scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
+  scale_y_continuous("Incidents", labels = comma, expand = c(.1, .1))
 ```
 
 ```{r plot.total_offenses_by_district, fig.pos="H", fig.width=10, fig.height=7.5}
@@ -458,10 +458,10 @@ df.crimes %>%
   geom_text(vjust = -0.5) +
   labs(
     x = "Police Districts", 
-    title = "Offenses by Police District, 2017 - 2022",
+    title = "Incidents by Police District, 2017 - 2022",
     caption = spokane_caption_exclude_dist
     ) +
-  scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
+  scale_y_continuous("Incidents", labels = comma, expand = c(.1, .1))
 ```
 
 ```{r plot.total_offenses_by_violence_district, fig.pos="H", fig.width=10, fig.height=7.5}
@@ -474,8 +474,8 @@ df.crimes %>%
   theme(legend.position = c(0.925, 0.925), legend.background = element_rect(size=0.5, linetype="solid", colour ="black")) +
   labs(
     x = "Police Districts", 
-    y = "Offenses", 
-    title = "Offense Violence by District, 2017-2022", 
+    y = "Incidents", 
+    title = "Incident Violence by District, 2017-2022", 
     caption = paste(spokane_data_source_str, cc_by_sa, sep = "\n")
     )
 ```
@@ -491,8 +491,8 @@ df.crimes %>%
   theme(legend.position = c(0.925, 0.925), legend.background = element_rect(size=0.5, linetype="solid", colour ="black")) +
   labs(
     x = "Police Districts", 
-    y = "Offenses", 
-    title = "Offense Violence by District, 2022 YTD", 
+    y = "Incidents", 
+    title = "Incident Violence by District, 2022 YTD", 
     caption = paste(spokane_data_source_str, cc_by_sa, sep = "\n")
     )
 ```
@@ -509,8 +509,8 @@ df.crimes %>%
   geom_boxplot(aes(y = day.count, group = month)) +
   labs(
     x = "", 
-    y = "Offenses", 
-    title = "North Policing Districts, Daily Offenses by Month", 
+    y = "Incidents", 
+    title = "North Policing Districts, Daily Incidents by Month", 
     caption = paste(spokane_data_source_str, cc_by_sa, sep = "\n")
   ) +
   facet_grid(rows = vars(district))
@@ -526,8 +526,8 @@ df.crimes %>%
   geom_boxplot(aes(y = day.count, group = month)) +
   labs(
     x = "", 
-    y = "Offenses", 
-    title = "South Policing Districts, Daily Offenses by Month", 
+    y = "Incidents", 
+    title = "South Policing Districts, Daily Incidents by Month", 
     caption = paste(spokane_data_source_str, cc_by_sa, sep = "\n")
   ) +
   facet_grid(rows = vars(district))
@@ -542,8 +542,8 @@ df.crimes %>%
   geom_point(size = point_size, alpha = point_alpha) +
   labs(
     x = "", 
-    y = "Offenses Missing District", 
-    title = "Offenses Without a Police District", 
+    y = "Incidents Missing District", 
+    title = "Incidents Without a Police District", 
     caption = spokane_caption
     ) 
 ```
@@ -559,10 +559,10 @@ df.crimes %>%
   theme(axis.text.x = element_text(angle = 90, vjust = 0.25, hjust=1)) +
   labs(
     x = "", 
-    title = "Offense Types, 2022 YTD", 
+    title = "Incident Types, 2022 YTD", 
     caption = spokane_caption
     ) +
-  scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
+  scale_y_continuous("Incidents", labels = comma, expand = c(.1, .1))
 ```
 
 ```{r plot.total_offenses_by_type, fig.pos="H", fig.width=10, fig.height=7.5}
@@ -574,10 +574,10 @@ df.crimes %>%
   theme(axis.text.x = element_text(angle = 90, vjust = 0.25, hjust=1)) +
   labs(
     x = "", 
-    title = "Offense Types, 2017 - 2022", 
+    title = "Incident Types, 2017 - 2022", 
     caption = spokane_caption
     ) +
-  scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
+  scale_y_continuous("Incidents", labels = comma, expand = c(.1, .1))
 ```
 
 ```{r plot.ytd_offenses_by_weekday, fig.pos="H", fig.width=10, fig.height=7.5}
@@ -589,10 +589,10 @@ df.crimes %>%
   geom_text(vjust = -0.5) +
   labs(
     x = "", 
-    title = "Offenses by Day, 2022 YTD", 
+    title = "Incidents by Day, 2022 YTD", 
     caption = spokane_caption
     ) +
-  scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
+  scale_y_continuous("Incidents", labels = comma, expand = c(.1, .1))
 ```
 
 ```{r plot.2021_offenses_by_weekday, fig.pos="H", fig.width=10, fig.height=7.5}
@@ -604,10 +604,10 @@ df.crimes %>%
   geom_text(vjust = -0.5) +
   labs(
     x = "", 
-    title = "Offenses by Day, 2021", 
+    title = "Incidents by Day, 2021", 
     caption = spokane_caption
     ) +
-  scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
+  scale_y_continuous("Incidents", labels = comma, expand = c(.1, .1))
 ```
 
 ```{r plot.2020_offenses_by_weekday, fig.pos="H", fig.width=10, fig.height=7.5}
@@ -619,10 +619,10 @@ df.crimes %>%
   geom_text(vjust = -0.5) +
   labs(
     x = "", 
-    title = "Offenses by Day, 2020", 
+    title = "Incidents by Day, 2020", 
     caption = spokane_caption
     ) +
-  scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
+  scale_y_continuous("Incidents", labels = comma, expand = c(.1, .1))
 ```
 
 ```{r plot.2019_offenses_by_weekday, fig.pos="H", fig.width=10, fig.height=7.5}
@@ -634,10 +634,10 @@ df.crimes %>%
   geom_text(vjust = -0.5) +
   labs(
     x = "", 
-    title = "Offenses by Day, 2019", 
+    title = "Incidents by Day, 2019", 
     caption = spokane_caption
     ) +
-  scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
+  scale_y_continuous("Incidents", labels = comma, expand = c(.1, .1))
 ```
 
 ```{r plot.2018_offenses_by_weekday, fig.pos="H", fig.width=10, fig.height=7.5}
@@ -649,10 +649,10 @@ df.crimes %>%
   geom_text(vjust = -0.5) +
   labs(
     x = "", 
-    title = "Offenses by Day, 2018", 
+    title = "Incidents by Day, 2018", 
     caption = spokane_caption
     ) +
-  scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
+  scale_y_continuous("Incidents", labels = comma, expand = c(.1, .1))
 ```
 
 ```{r plot.Spokane_Offenses_By_Weekday, fig.pos="H", fig.width=10, fig.height=7.5}
@@ -663,10 +663,10 @@ df.crimes %>%
   geom_text(vjust = -0.5) +
   labs(
     x = "", 
-    title = "Spokane Offenses by Day 2017 - 2022", 
+    title = "Spokane Incidents by Day 2017 - 2022", 
     caption = spokane_caption
     ) +
-  scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
+  scale_y_continuous("Incidents", labels = comma, expand = c(.1, .1))
 ```
 
 ```{r plot.Bellevue_Offenses_By_Weekday, fig.pos="H", fig.width=10, fig.height=7.5}
@@ -677,10 +677,10 @@ df.bellevue_crimes %>%
   geom_text(vjust = -0.5) +
   labs(
     x = "", 
-    title = "Bellevue Offenses by Day", 
+    title = "Bellevue Incidents by Day", 
     caption = spokane_caption
     ) +
-  scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
+  scale_y_continuous("Incidents", labels = comma, expand = c(.1, .1))
 ```
 
 ```{r plot.offenses_by_lunar_phase, fig.pos="H", fig.width=10, fig.height=7.5}
@@ -692,10 +692,10 @@ df.crimes %>%
   theme(axis.text.x = element_text(angle = 90, vjust = 0.25, hjust=1)) +
   labs(
     x = "Lunar Phases", 
-    title = "Offenses by Lunar Phase", 
+    title = "Incidents by Lunar Phase", 
     caption = spokane_caption
     ) +
-  scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
+  scale_y_continuous("Incidents", labels = comma, expand = c(.1, .1))
 ```
 
 ```{r plot.violent_offenses_by_lunar_phase, fig.pos="H", fig.width=10, fig.height=7.5}
@@ -708,10 +708,10 @@ df.crimes %>%
   theme(axis.text.x = element_text(angle = 90, vjust = 0.25, hjust=1)) +
   labs(
     x = "Lunar Phase", 
-    title = "Violent Offenses by Lunar Phase", 
+    title = "Violent Incidents by Lunar Phase", 
     caption = spokane_caption
     ) +
-  scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
+  scale_y_continuous("Incidents", labels = comma, expand = c(.1, .1))
 ```
 
 # Seasonal
@@ -753,7 +753,7 @@ df.crimes %>%
     title = "Arson by Police District", 
     caption = spokane_caption_exclude_dist
     ) +
-  scale_y_continuous("Offenses", labels = comma, expand = c(.1, .1))
+  scale_y_continuous("Incidents", labels = comma, expand = c(.1, .1))
 ```
 
 
