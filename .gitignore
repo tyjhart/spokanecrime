@@ -1,6 +1,15 @@
 # Figures directory (for now)
 # /figures/
 
+# Annual reports director
+/annual_reports/
+
+# NIBRS until it's ready
+/nibrs/
+
+# For temp cleanup
+/cleanup/
+
 # CSV files in the project directory
 *.csv
 
