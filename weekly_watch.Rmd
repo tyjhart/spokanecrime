@@ -1,7 +1,7 @@
 ---
 title: "Washington Crime Analysis Project"
 author: "Tyler Hart"
-date: "2022-03-14"
+date: "2022-03-28"
 output:
   html_document:
     df_print: paged
@@ -52,12 +52,12 @@ knitr::opts_chunk$set(
 library(kableExtra)
 library(lubridate)
 
-source("./text_import.R") # Build Spokane crime data frame
-source("./Bellevue_Data_Import.R") # Build Bellevue crime data frame
-source("./Tacoma_Data_Import.R") # Build Tacoma crime data frame
+source("./data_import/text_import.R") # Build Spokane crime data frame
+source("./data_import/Bellevue_Data_Import.R") # Build Bellevue crime data frame
+source("./data_import/Tacoma_Data_Import.R") # Build Tacoma crime data frame
 #source("./categorize_offenses.R") # Categorize offense names
-source("./categorize_violence.R") # Categorize violent / non-violent
-source("./lunar_seasons.R") # Lunar phase, seasons
+source("./data_import/categorize_violence.R") # Categorize violent / non-violent
+source("./data_import/lunar_seasons.R") # Lunar phase, seasons
 
 source("./additional_parse.R") # Build Spokane crime data frame
 
