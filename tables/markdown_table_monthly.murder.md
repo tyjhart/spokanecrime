@@ -3,7 +3,7 @@
 |01    |   NA|   NA|    1|   NA|   NA|   NA|
 |02    |   NA|   NA|   NA|    1|   NA|   NA|
 |03    |   NA|    1|   NA|   NA|    1|    2|
-|04    |   NA|    1|    1|   NA|    2|   NA|
+|04    |   NA|    1|    1|   NA|    2|    1|
 |05    |   NA|    1|   NA|    1|    1|   NA|
 |06    |   NA|    1|   NA|    1|    1|   NA|
 |07    |   NA|    1|    1|   NA|   NA|   NA|

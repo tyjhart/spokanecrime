@@ -30,7 +30,7 @@ We have CompStat data for full years beginning in 2018 for comparison:
 |2019 |           14434|            -17.13|              6500|
 |2020 |           13321|             -7.71|              5999|
 |2021 |           12125|             -8.98|              5460|
-|2022 |            3507|                NA|                NA|
+|2022 |            3790|                NA|                NA|
 
 While CompStat data does exist prior to 2018, the reporting standards changed and some reports are missing. I'm not able to make accurate comparisons with years prior to 2018.
 
@@ -50,7 +50,7 @@ The majority of crime in Spokane is non-violent, though assaults, robbery, and o
 |2019 |    42|     750|     1858|       19|         70|        0|          4|            0|      5|      0|  217|     290|          52|  9912|       1205|         10|             0|
 |2020 |    99|     687|     1949|       26|         52|        0|          0|            1|     10|      1|  190|     266|          31|  8937|       1072|          0|             0|
 |2021 |   101|     731|     1699|       30|         64|        0|          0|            0|     10|      1|  219|     260|          63|  7865|       1081|          1|             0|
-|2022 |    17|     175|      416|       14|         16|        0|          1|            0|      2|      0|   54|      79|          20|  2307|        406|          0|             0|
+|2022 |    18|     191|      450|       16|         16|        0|          1|            0|      3|      0|   55|      86|          21|  2495|        438|          0|             0|
 
 Here's both types of crime shown over time:
 
