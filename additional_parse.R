@@ -37,7 +37,7 @@ model_data <- df.crimes %>%
 
 # Modeling start, end numerical dates
 start_date <- 1 # First 2018 observed date
-end_date <- as.numeric(max(model_data$date) - as.Date("2022-01-01")) # Last 2021 observed date
+end_date <- as.numeric(max(model_data$date) - as.Date("2022-01-01")) # Last 2022 observed date
 
 # Time series frequency
 freq <- 365
