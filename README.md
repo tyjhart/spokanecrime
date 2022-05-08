@@ -30,7 +30,7 @@ We have CompStat data for full years beginning in 2018 for comparison:
 |2019 |           14434|            -17.13|              6500|
 |2020 |           13321|             -7.71|              5999|
 |2021 |           12125|             -8.98|              5460|
-|2022 |            4061|                NA|                NA|
+|2022 |            4559|                NA|                NA|
 
 While CompStat data does exist prior to 2018, the reporting standards changed and some reports are missing. I'm not able to make accurate comparisons with years prior to 2018.
 
@@ -46,11 +46,12 @@ The majority of crime in Spokane is non-violent, though assaults, robbery, and o
 
 |     | ARSON| ASSAULT| BURGLARY| DRIVE-BY| HARASSMENT| HOMICIDE| INTIMIDATE| MANSLAUGHTER| MURDER| POISON| RAPE| ROBBERY| TAKING VEH.| THEFT| VEH. THEFT| VEH. PROWL| VEH. TRESPASS|
 |:----|-----:|-------:|--------:|--------:|----------:|--------:|----------:|------------:|------:|------:|----:|-------:|-----------:|-----:|----------:|----------:|-------------:|
+|2017 |    26|     310|      804|        8|         16|        0|         31|            0|      1|      0|  115|     112|          22|  4632|        625|        113|             0|
 |2018 |    41|     883|     2150|       18|         63|        1|         40|            0|      8|      0|  301|     310|          70| 11649|       1623|        258|             3|
 |2019 |    42|     750|     1858|       19|         70|        0|          4|            0|      5|      0|  217|     290|          52|  9912|       1205|         10|             0|
 |2020 |    99|     687|     1949|       26|         52|        0|          0|            1|     10|      1|  190|     266|          31|  8937|       1072|          0|             0|
 |2021 |   101|     731|     1699|       30|         64|        0|          0|            0|     10|      1|  219|     260|          63|  7865|       1081|          1|             0|
-|2022 |    18|     203|      476|       17|         19|        0|          1|            0|      4|      0|   60|      88|          23|  2694|        458|          0|             0|
+|2022 |    22|     229|      537|       19|         20|        0|          1|            0|      4|      0|   70|      97|          24|  3015|        521|          0|             0|
 
 Here's both types of crime shown over time:
 
@@ -90,19 +91,58 @@ Most crime in Spokane is non-violent. These offenses include burglary, motor veh
 
 ### Theft
 
-![Thefts, September 12, 2017 Onward](./tables/table.theft.png)
+|Month | 2017| 2018| 2019| 2020| 2021| 2022|
+|:-----|----:|----:|----:|----:|----:|----:|
+|01    |   NA| 1007|  817|  769|  761|  693|
+|02    |   NA|  783|  616|  755|  528|  793|
+|03    |   NA|  902|  736|  662|  618|  794|
+|04    |   NA|  901|  919|  675|  601|  735|
+|05    |   NA| 1006|  993|  693|  642|   NA|
+|06    |   NA| 1042|  898|  721|  684|   NA|
+|07    |   NA| 1118|  924|  787|  654|   NA|
+|08    |  918| 1006|  906|  856|  718|   NA|
+|09    |  862|  977|  853|  820|  703|   NA|
+|10    |  935| 1029|  756|  856|  578|   NA|
+|11    |  932| 1017|  715|  648|  642|   NA|
+|12    |  985|  861|  779|  695|  736|   NA|
 
 [Theft data table](./tables/markdown_table_monthly.theft.md)
 
 ### Burglary
 
-![Burglaries, September 12, 2017 Onward](./tables/table.burglary.png)
+|Month | 2017| 2018| 2019| 2020| 2021| 2022|
+|:-----|----:|----:|----:|----:|----:|----:|
+|01    |   NA|  175|  167|  155|  146|  156|
+|02    |   NA|  118|  117|  141|  118|  128|
+|03    |   NA|  128|  135|  175|  143|  124|
+|04    |   NA|  173|  171|  160|  117|  129|
+|05    |   NA|  177|  185|  157|  134|   NA|
+|06    |   NA|  171|  170|  166|  146|   NA|
+|07    |   NA|  197|  179|  187|  137|   NA|
+|08    |  148|  215|  162|  149|  151|   NA|
+|09    |  153|  193|  154|  171|  169|   NA|
+|10    |  159|  203|  146|  172|  148|   NA|
+|11    |  184|  189|  137|  162|  154|   NA|
+|12    |  160|  211|  135|  154|  136|   NA|
 
 [Burglary data table](./tables/markdown_table_monthly.burglary.md)
 
 ### Motor Vehicle Theft
 
-![Motor Vehicle Thefts, September 12, 2017 Onward](./tables/table.veh.%20theft.png)
+|Month | 2017| 2018| 2019| 2020| 2021| 2022|
+|:-----|----:|----:|----:|----:|----:|----:|
+|01    |   NA|  165|   91|  127|   81|  129|
+|02    |   NA|  133|   93|  107|   66|  148|
+|03    |   NA|  120|  100|   81|   56|  125|
+|04    |   NA|   96|   91|   97|   72|  119|
+|05    |   NA|  140|  115|   70|   97|   NA|
+|06    |   NA|  140|  116|   93|   45|   NA|
+|07    |   NA|  136|  117|   95|   94|   NA|
+|08    |   82|  148|   96|   88|  116|   NA|
+|09    |  124|  113|   86|   82|  133|   NA|
+|10    |  123|  137|   92|   73|  106|   NA|
+|11    |  152|  143|   92|   97|  114|   NA|
+|12    |  144|  152|  116|   62|  101|   NA|
 
 [Motor vehicle theft data table](./tables/markdown_table_monthly.veh.%20theft.md)
 
@@ -112,19 +152,58 @@ Violent crime includes assault, drive-by shootings, sexual assault, robbery, int
 
 ### Robbery
 
-![Robbery, September 12, 2017 Onward](./tables/table.robbery.png)
+|Month | 2017| 2018| 2019| 2020| 2021| 2022|
+|:-----|----:|----:|----:|----:|----:|----:|
+|01    |   NA|   26|   28|   23|   13|   25|
+|02    |   NA|   24|   17|   22|   24|   20|
+|03    |   NA|   19|   21|   28|   17|   31|
+|04    |   NA|   15|   19|   24|   26|   21|
+|05    |   NA|   15|   22|   17|   19|   NA|
+|06    |   NA|   21|   24|   21|   28|   NA|
+|07    |   NA|   41|   27|   29|   22|   NA|
+|08    |   18|   32|   28|   25|   21|   NA|
+|09    |   21|   34|   28|   23|   25|   NA|
+|10    |   20|   28|   25|   24|   22|   NA|
+|11    |   19|   23|   26|   10|   24|   NA|
+|12    |   34|   32|   25|   20|   19|   NA|
 
 [Robbery data table](./tables/markdown_table_monthly.robbery.md)
 
 ### Assault
 
-![Assault, September 12, 2017 Onward](./tables/table.assault.png)
+|Month | 2017| 2018| 2019| 2020| 2021| 2022|
+|:-----|----:|----:|----:|----:|----:|----:|
+|01    |   NA|   60|   67|   63|   44|   52|
+|02    |   NA|   69|   43|   48|   53|   55|
+|03    |   NA|   70|   53|   40|   75|   66|
+|04    |   NA|   71|   71|   55|   53|   56|
+|05    |   NA|  100|   74|   71|   68|   NA|
+|06    |   NA|   83|   67|   63|   62|   NA|
+|07    |   NA|   85|   76|   75|   79|   NA|
+|08    |   59|   85|   68|   73|   62|   NA|
+|09    |   65|   65|   71|   46|   62|   NA|
+|10    |   61|   84|   50|   47|   66|   NA|
+|11    |   57|   53|   55|   59|   44|   NA|
+|12    |   68|   58|   55|   47|   63|   NA|
 
 [Assault data table](./tables/markdown_table_monthly.assault.md)
 
 ### Sexual Assault
 
-![Rape, September 12, 2017 Onward](./tables/table.rape.png)
+|Month | 2017| 2018| 2019| 2020| 2021| 2022|
+|:-----|----:|----:|----:|----:|----:|----:|
+|01    |   NA|   17|   27|   14|   16|   17|
+|02    |   NA|   19|   18|   11|   19|   14|
+|03    |   NA|   24|   20|   11|   31|   21|
+|04    |   NA|   25|   18|   14|   24|   18|
+|05    |   NA|   28|   20|   18|   15|   NA|
+|06    |   NA|   41|   21|   22|   23|   NA|
+|07    |   NA|   22|   18|   14|   12|   NA|
+|08    |   11|   31|   24|   20|   16|   NA|
+|09    |   18|   30|   16|   21|   26|   NA|
+|10    |   32|   25|   14|   20|   11|   NA|
+|11    |   28|   20|   12|   14|   15|   NA|
+|12    |   26|   19|    9|   11|   11|   NA|
 
 [Sexual assault data table](./tables/markdown_table_monthly.rape.md)
 

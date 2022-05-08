@@ -26,16 +26,16 @@ df.annual_totals[which(df.annual_totals$Year == lubridate::year(Sys.Date())),]$`
 kable(df.annual_totals, format = "markdown") %>%
   save_kable(., file = "./tables/markdown_table.annual_totals.md")
 
-kable(
-  df.annual_totals,
-  caption = "Annual Totals"
-  ) %>%
-  kable_styling(
-    bootstrap_options = c("bordered", "condensed", "striped"), 
-    full_width=FALSE, font_size=12
-  ) %>%
-  add_footnote(boilerplate_caption, notation = "none") %>%
-  save_kable(., file = "./tables/table.annual_totals.png")
+# kable(
+#   df.annual_totals,
+#   caption = "Annual Totals"
+#   ) %>%
+#   kable_styling(
+#     bootstrap_options = c("bordered", "condensed", "striped"), 
+#     full_width=FALSE, font_size=12
+#   ) %>%
+#   add_footnote(boilerplate_caption, notation = "none") %>%
+#   save_kable(., file = "./tables/table.annual_totals.md")
 
 
 ### Annual totals by offense ###
@@ -49,16 +49,16 @@ df.annual_offense_totals <- df.annual_offense_totals[-1,]
 kable(df.annual_offense_totals, format = "markdown") %>%
   save_kable(., file = "./tables/markdown_table.annual_offense_totals.md")
 
-kable(
-  df.annual_offense_totals,
-  caption = "Annual Totals"
-) %>%
-  kable_styling(
-    bootstrap_options = c("bordered", "condensed", "striped"), 
-    full_width=FALSE, font_size=12
-  ) %>%
-  add_footnote(boilerplate_caption, notation = "none") %>%
-  as_image(file = "./tables/table.annual_offense_totals.png")
+# kable(
+#   df.annual_offense_totals,
+#   caption = "Annual Totals"
+# ) %>%
+#   kable_styling(
+#     bootstrap_options = c("bordered", "condensed", "striped"), 
+#     full_width=FALSE, font_size=12
+#   ) %>%
+#   add_footnote(boilerplate_caption, notation = "none") %>%
+#   as_image(file = "./tables/table.annual_offense_totals.png")
 
 
 ### Totals by violence ###
@@ -72,16 +72,16 @@ df.annual_violence_totals <- df.annual_violence_totals[-1,]
 kable(df.annual_violence_totals, format = "markdown") %>%
   save_kable(., file = "./tables/markdown_table.annual_violence_totals.md")
 
-kable(
-  df.annual_violence_totals,
-  caption = "Annual Non-Violent, Violent Offense Totals"
-) %>%
-  kable_styling(
-    bootstrap_options = c("bordered", "condensed", "striped"), 
-    full_width=FALSE, font_size=12
-  ) %>%
-  add_footnote(boilerplate_caption, notation = "none") %>%
-  as_image(file = "./tables/table.annual_violence_totals.png")
+# kable(
+#   df.annual_violence_totals,
+#   caption = "Annual Non-Violent, Violent Offense Totals"
+# ) %>%
+#   kable_styling(
+#     bootstrap_options = c("bordered", "condensed", "striped"), 
+#     full_width=FALSE, font_size=12
+#   ) %>%
+#   add_footnote(boilerplate_caption, notation = "none") %>%
+#   save_kable(., file = "./tables/table.annual_violence_totals.md")
 
 
 ### Districts ###
@@ -98,16 +98,16 @@ df.district_summary <- df.crimes %>%
 kable(df.district_summary, format = "markdown") %>%
   save_kable(., file = "./tables/markdown_table.district_stats_ytd.md")
 
-kable(
-  df.district_summary, 
-  caption = "Police District Offenses, 2022 YTD"
-  ) %>% 
-  kable_styling(
-    bootstrap_options = c("bordered", "condensed", "striped"), 
-    full_width=FALSE, font_size=12
-    ) %>%
-  add_footnote(boilerplate_caption, notation = "none") %>%
-  as_image(file = "./tables/table.district_stats_ytd.png")
+# kable(
+#   df.district_summary, 
+#   caption = "Police District Offenses, 2022 YTD"
+#   ) %>% 
+#   kable_styling(
+#     bootstrap_options = c("bordered", "condensed", "striped"), 
+#     full_width=FALSE, font_size=12
+#     ) %>%
+#   add_footnote(boilerplate_caption, notation = "none") %>%
+#   save_kable(., file = "./tables/table.district_stats_ytd.md")
 
 # Districts total, all years
 df.district_summary <- df.crimes %>%
@@ -120,75 +120,75 @@ df.district_summary <- df.crimes %>%
 kable(df.district_summary, format = "markdown") %>%
   save_kable(., file = "./tables/markdown_table.district_stats.md")
 
-kable(
-  df.district_summary, 
-  caption = "Police Districts, All Years"
-  ) %>%
-  kable_styling(
-    bootstrap_options = c("bordered", "condensed", "striped"), 
-    full_width=FALSE, 
-    font_size=12
-    ) %>%
-  add_footnote(boilerplate_caption, notation = "none") %>%
-  as_image(file = "./tables/table.district_stats_total.png")
+# kable(
+#   df.district_summary, 
+#   caption = "Police Districts, All Years"
+#   ) %>%
+#   kable_styling(
+#     bootstrap_options = c("bordered", "condensed", "striped"), 
+#     full_width=FALSE, 
+#     font_size=12
+#     ) %>%
+#   add_footnote(boilerplate_caption, notation = "none") %>%
+#   save_kable(., file = "./tables/table.district_stats_total.md")
 
 # District non-violent, violent percentages
-kable(
-  df.crimes %>% 
-    {table(.$district,.$violence)} %>% 
-    prop.table(margin = 2) %>% `*` (100) %>% round(2),
-  col.names = c("Non-Violent %", "Violent %"),
-  caption = "Police District Violence Percentages"
-) %>% 
-  kable_styling(
-    bootstrap_options = c("bordered", "condensed", "striped"), 
-    full_width=FALSE, font_size=12
-  ) %>%
-  add_footnote(boilerplate_caption, notation = "none") %>%
-  as_image(file = "./tables/table.district_violence_proportion.png")
+# kable(
+#   df.crimes %>% 
+#     {table(.$district,.$violence)} %>% 
+#     prop.table(margin = 2) %>% `*` (100) %>% round(2),
+#   col.names = c("Non-Violent %", "Violent %"),
+#   caption = "Police District Violence Percentages"
+# ) %>% 
+#   kable_styling(
+#     bootstrap_options = c("bordered", "condensed", "striped"), 
+#     full_width=FALSE, font_size=12
+#   ) %>%
+#   add_footnote(boilerplate_caption, notation = "none") %>%
+#   save_kable(., file = "./tables/table.district_violence_proportion.md")
 
 # District, offense proportion tables by year
 # See https://stackoverflow.com/questions/45385897/how-to-round-all-the-values-of-a-prop-table-in-r-in-one-line,
 # https://stackoverflow.com/questions/44528173/using-table-in-dplyr-chain
 
-table_year_vec <- c(2022:2017)
-
-for (table_year in table_year_vec) {
-  
-  filename <- paste0("./tables/table.",tolower(table_year),"_district_offense_proportion.png")
-  
-  kable(
-    df.crimes %>% 
-      filter(year == table_year) %>% 
-      {table(.$district,.$offense)} %>% 
-      prop.table(margin = 2) %>% `*` (100) %>% round(2),
-    caption = paste(table_year,"Police District Violence Percentages",sep = " ")
-  ) %>% 
-    kable_styling(
-      bootstrap_options = c("bordered", "condensed", "striped"), 
-      full_width=FALSE, font_size=12
-    ) %>%
-    add_footnote(boilerplate_caption, notation = "none") %>%
-    as_image(file = filename)
-}
-
-for (table_year in table_year_vec) {
-  
-  filename <- paste0("./tables/table.",tolower(table_year),"_district_violence_proportion.png")
-  
-  kable(
-    df.crimes %>% 
-      filter(year == table_year) %>% 
-      {table(.$district,.$violence)} %>% 
-      prop.table(margin = 2) %>% `*` (100) %>% round(2)
-  ) %>% 
-    kable_styling(
-      bootstrap_options = c("bordered", "condensed", "striped"), 
-      full_width=FALSE, font_size=12
-    ) %>%
-    add_footnote(boilerplate_caption, notation = "none") %>%
-    as_image(file = filename)
-}
+# table_year_vec <- c(2022:2017)
+# 
+# for (table_year in table_year_vec) {
+#   
+#   filename <- paste0("./tables/table.",tolower(table_year),"_district_offense_proportion.md")
+#   
+#   kable(
+#     df.crimes %>% 
+#       filter(year == table_year) %>% 
+#       {table(.$district,.$offense)} %>% 
+#       prop.table(margin = 2) %>% `*` (100) %>% round(2),
+#     caption = paste(table_year,"Police District Violence Percentages",sep = " ")
+#   ) %>% 
+#     kable_styling(
+#       bootstrap_options = c("bordered", "condensed", "striped"), 
+#       full_width=FALSE, font_size=12
+#     ) %>%
+#     add_footnote(boilerplate_caption, notation = "none") %>%
+#     save_kable(., file = filename)
+# }
+# 
+# for (table_year in table_year_vec) {
+#   
+#   filename <- paste0("./tables/table.",tolower(table_year),"_district_violence_proportion.md")
+#   
+#   kable(
+#     df.crimes %>% 
+#       filter(year == table_year) %>% 
+#       {table(.$district,.$violence)} %>% 
+#       prop.table(margin = 2) %>% `*` (100) %>% round(2)
+#   ) %>% 
+#     kable_styling(
+#       bootstrap_options = c("bordered", "condensed", "striped"), 
+#       full_width=FALSE, font_size=12
+#     ) %>%
+#     add_footnote(boilerplate_caption, notation = "none") %>%
+#     save_kable(., file = filename)
+# }
 
 
 ### All Offenses by year, month ###
@@ -199,15 +199,22 @@ df.monthly_summary <- df.crimes %>%
 kable(
   spread(df.monthly_summary, key = year, value = total.offenses), 
   col.names = c("Month", 2017, 2018, 2019, 2020, 2021, 2022), 
-  caption = "Total Offenses"
-  ) %>% 
-  kable_styling(
-    bootstrap_options = c("bordered", "condensed", "striped"), 
-    full_width=FALSE, 
-    font_size=12
-    ) %>%
-  add_footnote(boilerplate_caption, notation = "none") %>%
-  as_image(file = "./tables/table.offenses.png") 
+  format = "markdown"
+) %>% 
+  save_kable(., file = "./tables/table.offenses.md")
+
+# kable(
+#   spread(df.monthly_summary, key = year, value = total.offenses), 
+#   col.names = c("Month", 2017, 2018, 2019, 2020, 2021, 2022), 
+#   caption = "Total Offenses"
+#   ) %>% 
+#   kable_styling(
+#     bootstrap_options = c("bordered", "condensed", "striped"), 
+#     full_width=FALSE, 
+#     font_size=12
+#     ) %>%
+#   add_footnote(boilerplate_caption, notation = "none") %>%
+#   save_kable(., file = "./tables/table.offenses.md") 
 
 
 ### By offense ###
@@ -242,7 +249,7 @@ names(offense_annual_month_counts)[names(offense_annual_month_counts) == "num.mo
 for (table_offense in table_offense_vec) {
   
   # File names
-  filename <- paste0("./tables/table.",tolower(table_offense),".png")
+  filename <- paste0("./tables/table.",tolower(table_offense),".md")
   markdown_filename <- paste0("./tables/markdown_table_monthly.",tolower(table_offense),".md")
   markdown_filename_annual <- paste0("./tables/markdown_table_annual.",tolower(table_offense),".md")
   
@@ -270,12 +277,12 @@ for (table_offense in table_offense_vec) {
   kable(df.monthly_summary[-1], format = "markdown") %>%
     save_kable(., file = markdown_filename)
   
-  kable(df.monthly_summary[-1]) %>%
-    kable_styling(
-      bootstrap_options = c("bordered", "condensed", "striped"), 
-      full_width=FALSE, 
-      font_size=12
-    ) %>%
-    add_footnote(boilerplate_caption, notation = "none") %>%
-    as_image(file = filename)
+  # kable(df.monthly_summary[-1]) %>%
+  #   kable_styling(
+  #     bootstrap_options = c("bordered", "condensed", "striped"), 
+  #     full_width=FALSE, 
+  #     font_size=12
+  #   ) %>%
+  #   add_footnote(boilerplate_caption, notation = "none") %>%
+  #   save_kable(., file = filename)
 }

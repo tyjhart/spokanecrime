@@ -1,7 +1,7 @@
 ---
 title: "Washington Crime Analysis Project"
 author: "Tyler Hart"
-date: "2022-04-18"
+date: "2022-05-08"
 output:
   html_document:
     df_print: paged
@@ -53,8 +53,8 @@ library(kableExtra)
 library(lubridate)
 
 source("./data_import/text_import.R") # Build Spokane crime data frame
-source("./data_import/Bellevue_Data_Import.R") # Build Bellevue crime data frame
-source("./data_import/Tacoma_Data_Import.R") # Build Tacoma crime data frame
+#source("./data_import/Bellevue_Data_Import.R") # Build Bellevue crime data frame
+#source("./data_import/Tacoma_Data_Import.R") # Build Tacoma crime data frame
 #source("./categorize_offenses.R") # Categorize offense names
 source("./data_import/categorize_violence.R") # Categorize violent / non-violent
 source("./data_import/lunar_seasons.R") # Lunar phase, seasons
@@ -76,12 +76,12 @@ spokane_caption <- paste(spokane_data_source_str, cc_by_sa, sep = "\n")
 spokane_caption_exclude_dist <- paste(paste(spokane_data_source_str, excluded_districts_note, sep = "; "), cc_by_sa, sep = "\n")
 
 # Bellevue
-bellevue_data_source_str <- paste(paste("Created",Sys.Date(), sep = " "),"Data Source: Bellevue PD", sep = "; ")
-bellevue_caption <- paste(bellevue_data_source_str, cc_by_sa, sep = "\n")
+#bellevue_data_source_str <- paste(paste("Created",Sys.Date(), sep = " "),"Data Source: Bellevue PD", sep = "; ")
+#bellevue_caption <- paste(bellevue_data_source_str, cc_by_sa, sep = "\n")
 
 # Tacoma
-tacoma_data_source_str <- paste(paste("Created",Sys.Date(), sep = " "),"Data Source: Tacoma PD", sep = "; ")
-tacoma_caption <- paste(tacoma_data_source_str, cc_by_sa, sep = "\n")
+#tacoma_data_source_str <- paste(paste("Created",Sys.Date(), sep = " "),"Data Source: Tacoma PD", sep = "; ")
+#tacoma_caption <- paste(tacoma_data_source_str, cc_by_sa, sep = "\n")
 ```
 
 # Introduction
@@ -120,32 +120,32 @@ daily_offenses %>%
 
 ## Tacoma
 ```{r plot.Tacoma_Offenses_Over_Time, fig.pos="H", fig.width=10, fig.height=7.5}
-Tacoma_Daily_Offenses %>%
-  ggplot(aes(date, offenses)) + 
-  geom_point(size = point_size, alpha = point_alpha) +
-  geom_smooth(method = "gam", color = "blue", size = geom_line_size) +
-  geom_smooth(method = "lm", color = "red", size = geom_line_size) +
-  labs(
-    x = "", 
-    y = "Daily Incidents", 
-    title = "Tacoma Total Incidents", 
-    caption = paste(tacoma_data_source_str, cc_by_sa, sep = "\n")
-    )
+# Tacoma_Daily_Offenses %>%
+#   ggplot(aes(date, offenses)) + 
+#   geom_point(size = point_size, alpha = point_alpha) +
+#   geom_smooth(method = "gam", color = "blue", size = geom_line_size) +
+#   geom_smooth(method = "lm", color = "red", size = geom_line_size) +
+#   labs(
+#     x = "", 
+#     y = "Daily Incidents", 
+#     title = "Tacoma Total Incidents", 
+#     caption = paste(tacoma_data_source_str, cc_by_sa, sep = "\n")
+#     )
 ```
 
 ## Bellevue
 ```{r plot.Bellevue_Offenses_Over_Time, fig.pos="H", fig.width=10, fig.height=7.5}
-Bellevue_Daily_Offenses %>%
-  ggplot(aes(date, offenses)) + 
-  geom_point(size = point_size, alpha = point_alpha) +
-  geom_smooth(method = "gam", color = "blue", size = geom_line_size) +
-  geom_smooth(method = "lm", color = "red", size = geom_line_size) +
-  labs(
-    x = "", 
-    y = "Daily Incidents", 
-    title = "Bellevue Total Incidents", 
-    caption = paste(bellevue_data_source_str, cc_by_sa, sep = "\n")
-    )
+# Bellevue_Daily_Offenses %>%
+#   ggplot(aes(date, offenses)) + 
+#   geom_point(size = point_size, alpha = point_alpha) +
+#   geom_smooth(method = "gam", color = "blue", size = geom_line_size) +
+#   geom_smooth(method = "lm", color = "red", size = geom_line_size) +
+#   labs(
+#     x = "", 
+#     y = "Daily Incidents", 
+#     title = "Bellevue Total Incidents", 
+#     caption = paste(bellevue_data_source_str, cc_by_sa, sep = "\n")
+#     )
 ```
 
 ```{r plot.crime_time_series_decomposition, fig.pos="H", fig.width=10, fig.height=7.5}
@@ -670,17 +670,17 @@ df.crimes %>%
 ```
 
 ```{r plot.Bellevue_Offenses_By_Weekday, fig.pos="H", fig.width=10, fig.height=7.5}
-df.bellevue_crimes %>%
-  count(dow) %>%
-  ggplot(aes(fct_relevel(dow,"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"), n, label = n)) +
-  geom_col() +
-  geom_text(vjust = -0.5) +
-  labs(
-    x = "", 
-    title = "Bellevue Incidents by Day", 
-    caption = spokane_caption
-    ) +
-  scale_y_continuous("Incidents", labels = comma, expand = c(.1, .1))
+# df.bellevue_crimes %>%
+#   count(dow) %>%
+#   ggplot(aes(fct_relevel(dow,"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"), n, label = n)) +
+#   geom_col() +
+#   geom_text(vjust = -0.5) +
+#   labs(
+#     x = "", 
+#     title = "Bellevue Incidents by Day", 
+#     caption = spokane_caption
+#     ) +
+#   scale_y_continuous("Incidents", labels = comma, expand = c(.1, .1))
 ```
 
 ```{r plot.offenses_by_lunar_phase, fig.pos="H", fig.width=10, fig.height=7.5}
