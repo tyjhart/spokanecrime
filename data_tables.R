@@ -1,9 +1,12 @@
 ### Data Tables ###
 # Functionality to export table images. Kable "as_image" takes forever to run,
 # so this functionality has been moved to a separate file.
+library(kableExtra)
 
 # Variables
-spokane_population <- 222050
+# Population
+# Check https://www.census.gov/quickfacts/fact/table/spokanecitywashington
+spokane_population <- 229447
 
 # Data table source notes
 boilerplate_caption <- "Data Source: Spokane Police Department CompStat"
@@ -86,9 +89,9 @@ kable(df.annual_violence_totals, format = "markdown") %>%
 
 ### Districts ###
 
-# Districts 2022 YTD
+# Districts 2024 YTD
 df.district_summary <- df.crimes %>%
-  filter(date >= "2022-01-01") %>%
+  filter(date >= "2024-01-01") %>%
   group_by(district) %>%
   summarize(dist_sum = n()) %>%
   mutate(percentage = round(dist_sum / sum(dist_sum),3) * 100) %>%
@@ -198,10 +201,10 @@ df.monthly_summary <- df.crimes %>%
 
 kable(
   spread(df.monthly_summary, key = year, value = total.offenses), 
-  col.names = c("Month", 2017, 2018, 2019, 2020, 2021, 2022), 
+  col.names = c("Month", 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024), 
   format = "markdown"
 ) %>% 
-  save_kable(., file = "./tables/table.offenses.md")
+  save_kable(., file = "./tables/markdown_table.monthly_incidents.md")
 
 # kable(
 #   spread(df.monthly_summary, key = year, value = total.offenses), 

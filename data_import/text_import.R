@@ -4,10 +4,19 @@ df.crimes = lapply(files, read.delim, header = FALSE, stringsAsFactors = FALSE) 
 # Upper-case all entries
 df.crimes$V1 <- toupper(df.crimes$V1)
 
+# Trim any whitespace
+df.crimes$V1 <- trimws(df.crimes$V1)
+
 ### Headers, badge numbers(?) ###
-df.crimes$V1 <- gsub("^SR.*:$", NA, df.crimes$V1)
-df.crimes$V1 <- gsub("^SP.*:$", NA, df.crimes$V1)
+df.crimes$V1 <- gsub("^SC[[:digit:]]{2}", NA, df.crimes$V1)
+df.crimes$V1 <- gsub("^SP", NA, df.crimes$V1)
+df.crimes$V1 <- gsub("^SR", NA, df.crimes$V1)
+df.crimes$V1 <- gsub("^SV", NA, df.crimes$V1)
+df.crimes$V1 <- gsub("^CRHEEPN", NA, df.crimes$V1)
+df.crimes$V1 <- gsub("^LIRBEEP", NA, df.crimes$V1)
 df.crimes$V1 <- gsub("*IBR PURPOSES*", NA, df.crimes$V1)
+df.crimes$V1 <- gsub("REP_BLOCK", NA, df.crimes$V1)
+
 
 # Remove newly-empty rows
 df.crimes <- df.crimes %>% filter(!is.na(.$V1))
@@ -18,10 +27,10 @@ write.table(df.crimes, file = './raw_data.txt', sep = "\t", row.names = FALSE)
 
 ### A/C ###
 df.crimes$ac <- NA
-df.crimes[grep("^C\\s", df.crimes$V1),]$ac <- "C"
-df.crimes[grep("^A\\s", df.crimes$V1),]$ac <- "A"
-df.crimes[grep("^U\\s", df.crimes$V1),]$ac <- "U"
-df.crimes$ac <- as.factor(toupper(df.crimes$ac)) # Factorize
+df.crimes[grep("^C ", df.crimes$V1),]$ac <- "C"
+df.crimes[grep("^A ", df.crimes$V1),]$ac <- "A"
+df.crimes[grep("^U ", df.crimes$V1),]$ac <- "U"
+df.crimes$ac <- as.factor(df.crimes$ac) # Factorize
 
 ### Police districts ###
 df.crimes$district <- NA
@@ -43,19 +52,21 @@ for (district_name in district_grep_vec) {
 df.crimes <- df.crimes %>% mutate(district = replace(district, district %in% c("SPA","SPB","SPC","SPD"),'OTH'))
 
 # Factorize
-df.crimes$district <- as.factor(toupper(df.crimes$district))  
+df.crimes$district <- as.factor(df.crimes$district)  
 ### End districts###
 
 
 ### Dates ###
 df.crimes$date <- NA
+df.crimes$date <- str_extract(df.crimes$V1, '\\d{1,2}/\\d{1,2}/\\d{4}', group = NULL)
 
 # Parsing date
-date_grep_patterns <- '[[:digit:]]+/+[[:digit:]]+/+[[:digit:]]+'
-date_parsing_index <- grep(date_grep_patterns, df.crimes$V1)
-date <- regexpr(date_grep_patterns, df.crimes$V1)
-date <- regmatches(df.crimes$V1, date)
-df.crimes[date_parsing_index,]$date <- date
+#date_grep_patterns <- '[[:digit:]]+/+[[:digit:]]+/+[[:digit:]]+'
+#date_grep_patterns <- '\\d{1,2}/\\d{1,2}/\\d{4}'
+#date_parsing_index <- grep(date_grep_patterns, df.crimes$V1)
+#date <- regexpr(date_grep_patterns, df.crimes$V1)
+#date <- regmatches(df.crimes$V1, date)
+#df.crimes[date_parsing_index,]$date <- date
 
 # Format dates
 df.crimes$date <- as.Date(df.crimes$date, "%m/%d/%Y")
@@ -104,6 +115,7 @@ offense_pattern_vec <- c(
   'ARSON',
   'ASSAULT',
   'BURGLARY',
+  'DEFRAUD PUBLIC UTILITY',
   'DRIVE BY SHOOTING',
   'HARASSMENT',
   'HOMICIDE',
@@ -119,7 +131,8 @@ offense_pattern_vec <- c(
   'THEFT OF MOTOR VEHICLE',
   'TMVWOP',
   'VEHICLE PROWLING',
-  'VEHICLE TRESPASS'
+  'VEHICLE TRESPASS',
+  'VEHICULAR ASSAULT'
 )
 
 # offense_pattern_vec <- c(
@@ -199,6 +212,30 @@ for (offense_pattern in offense_pattern_vec) {
   try(df.crimes[offense_index,]$offense <- offense, silent = TRUE)
 }
 
+offense_pattern_vec <- c(
+  'ARSON',
+  'ASSAULT',
+  'BURGLARY',
+  'DEFRAUD PUBLIC UTILITY',
+  'DRIVE BY SHOOTING',
+  'HARASSMENT',
+  'HOMICIDE',
+  'INTIMIDATE',
+  'MANSLAUGHTER',
+  'MURDER',
+  'POISON',
+  'RAPE',
+  'ROBBERY',
+  'TAKING MOTOR VEHICLE',
+  'PET ANIMALS TAKING CONCEALING',
+  'THEFT',
+  'THEFT OF MOTOR VEHICLE',
+  'TMVWOP',
+  'VEHICLE PROWLING',
+  'VEHICLE TRESPASS',
+  'VEHICULAR ASSAULT'
+)
+
 df.crimes$offense[grep("TMVWOP", df.crimes$offense)] <- "TAKING MOTOR VEHICLE"
 df.crimes$offense[grep("PET ANIMALS TAKING CONCEALING", df.crimes$offense)] <- "THEFT"
 
@@ -276,6 +313,6 @@ levels(df.crimes$offense)[levels(df.crimes$offense)=="VEHICLE TRESPASS"] <- "VEH
 
 
 ### Write CSV ###
-compstat_example_incidents <- c("BURGLARY","ROBBERY","TAKING VEH.","THEFT","VEH. THEFT")
+compstat_example_incidents <- c("BURGLARY","ROBBERY","TAKING VEH.","THEFT","VEHICULAR ASSAULT","VEH. THEFT")
 compstat_examples <- df.crimes[which(df.crimes$offense %in% compstat_example_incidents),]
 write.csv(compstat_examples[c("district","date","offense")], './compstat_export.csv', row.names = FALSE)

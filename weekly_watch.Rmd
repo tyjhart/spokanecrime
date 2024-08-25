@@ -1,19 +1,19 @@
 ---
 title: "Washington Crime Analysis Project"
 author: "Tyler Hart"
-date: "2022-11-04"
+date: "2024-01-23"
 output:
-  html_document:
-    df_print: paged
-  word_document:
-    toc: yes
-    toc_depth: '2'
   pdf_document:
     fig_caption: yes
     keep_tex: yes
     number_sections: yes
     toc: yes
     toc_depth: 2
+  word_document:
+    toc: yes
+    toc_depth: '2'
+  html_document:
+    df_print: paged
 margin: 0.5in
 classoption: landscape
 header-includes:
@@ -31,7 +31,6 @@ library(stringr)
 library(data.table)
 library(scales)
 library(lunar)
-library(kableExtra)
 library(magick)
 library(webshot)
 library(dygraphs)
@@ -49,7 +48,6 @@ knitr::opts_chunk$set(
   dev=c('svg','png'),
   out.width='\\textwidth'
   )
-library(kableExtra)
 library(lubridate)
 
 source("./data_import/text_import.R") # Build Spokane crime data frame
@@ -109,7 +107,6 @@ daily_offenses %>%
   ggplot(aes(date, offenses)) + 
   geom_point(size = point_size, alpha = point_alpha) +
   geom_smooth(method = "gam", color = "blue", size = geom_line_size) +
-  geom_smooth(method = "lm", color = "red", size = geom_line_size) +
   labs(
     x = "", 
     y = "Daily Incidents", 
@@ -183,7 +180,6 @@ daily_offenses_violence %>%
   ggplot(aes(date, offenses)) + 
   geom_point(size = point_size, alpha = point_alpha) +
   geom_smooth(method = "auto", color = "blue", size = geom_line_size) +
-  geom_smooth(method = "lm", color = "red", size = geom_line_size) +
   facet_wrap( ~ violence, ncol = 1, scales = "free") +
   labs(
     x = "", 
@@ -220,22 +216,6 @@ daily_offenses_violence %>%
     x = "", 
     y = "Incidents", 
     title = "Daily Non-Violent Incidents", 
-    caption = paste(spokane_data_source_str, cc_by_sa, sep = "\n")
-    )
-```
-
-```{r plot.offenses_over_time_pred, fig.pos="H", fig.width=10, fig.height=7.5}
-daily_offenses %>%
-  ggplot(aes(date, offenses)) + 
-  geom_point(size = point_size, alpha = point_alpha) +
-  geom_smooth(method = "loess", color = "blue", size = geom_line_size) +
-  geom_smooth(method = "lm", color = "red", fullrange = TRUE, size = geom_line_size) +
-  scale_x_date(limits = as.Date(c("2017-09-03","2028-01-01")), date_breaks = "1 year", date_labels = "%Y") +
-  labs(
-    x = "", 
-    y = "Incidents", 
-    title = "Projection, Average Daily Incidents",
-    subtitle = "CI 0.95, linear mean projections",
     caption = paste(spokane_data_source_str, cc_by_sa, sep = "\n")
     )
 ```
@@ -329,7 +309,6 @@ df.crimes %>%
   ggplot(aes(date, offenses)) + 
   geom_point(size = point_size, alpha = point_alpha) +
   geom_smooth(method = "auto", color = "blue", size = geom_line_size) +
-  geom_smooth(method = "lm", color = "red", size = geom_line_size) +
   scale_x_date(date_breaks = "1 year", date_labels = "%Y") +
   labs(
     x = "", 
@@ -369,7 +348,6 @@ df.crimes %>%
   ggplot(aes(date, offenses)) + 
   geom_point(size = point_size, alpha = point_alpha) +
   geom_smooth(method = "auto", color = "blue", size = geom_line_size) +
-  geom_smooth(method = "lm", color = "red", size = geom_line_size) +
   scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
   labs(
     x = "", 
@@ -388,7 +366,6 @@ df.crimes %>%
   ggplot(aes(date, offenses)) + 
   geom_point(size = point_size, alpha = point_alpha) +
   geom_smooth(method = "auto", color = "blue", size = geom_line_size) +
-  geom_smooth(method = "lm", color = "red", size = geom_line_size) +
   scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
   labs(
     x = "", 
@@ -407,7 +384,6 @@ df.crimes %>%
   ggplot(aes(date, offenses)) + 
   geom_point(size = point_size, alpha = point_alpha) +
   geom_smooth(method = "auto", color = "blue", size = geom_line_size) +
-  geom_smooth(method = "lm", color = "red", size = geom_line_size) +
   scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
   labs(
     x = "", 
@@ -435,7 +411,7 @@ Spokane has a total of eight police districts. Those eight are divided evenly be
 
 ```{r plot.ytd_offenses_by_district, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
-  filter(year == 2022) %>%
+  filter(year == 2023) %>%
   group_by(district) %>%
   summarize(count = n()) %>%
   ggplot(aes(reorder(district, -count), count, label = count)) +
@@ -443,7 +419,7 @@ df.crimes %>%
   geom_text(vjust = -0.5) +
   labs(
     x = "Police Districts", 
-    title = "Incidents by Police District, 2022 YTD", 
+    title = "Incidents by Police District, 2023 YTD", 
     caption = spokane_caption_exclude_dist
     ) +
   scale_y_continuous("Incidents", labels = comma, expand = c(.1, .1))
@@ -458,7 +434,7 @@ df.crimes %>%
   geom_text(vjust = -0.5) +
   labs(
     x = "Police Districts", 
-    title = "Incidents by Police District, 2017 - 2022",
+    title = "Incidents by Police District, 2017 - 2023",
     caption = spokane_caption_exclude_dist
     ) +
   scale_y_continuous("Incidents", labels = comma, expand = c(.1, .1))
@@ -475,14 +451,14 @@ df.crimes %>%
   labs(
     x = "Police Districts", 
     y = "Incidents", 
-    title = "Incident Violence by District, 2017-2022", 
+    title = "Incident Violence by District, 2017-2023", 
     caption = paste(spokane_data_source_str, cc_by_sa, sep = "\n")
     )
 ```
 
 ```{r plot.ytd_offenses_by_violence_district, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
-  filter(year == 2022) %>%
+  filter(year == 2023) %>%
   count(district, violence) %>%
   ggplot(aes(x = reorder(district, -n, sum), y = n, fill = violence, label = n)) +
   geom_col() +
@@ -492,7 +468,7 @@ df.crimes %>%
   labs(
     x = "Police Districts", 
     y = "Incidents", 
-    title = "Incident Violence by District, 2022 YTD", 
+    title = "Incident Violence by District, 2023", 
     caption = paste(spokane_data_source_str, cc_by_sa, sep = "\n")
     )
 ```
@@ -551,7 +527,7 @@ df.crimes %>%
 
 ```{r plot.ytd_offenses_by_type, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
-  filter(year == 2022) %>%
+  filter(year == 2023) %>%
   count(offense) %>%
   ggplot(aes(reorder(offense, -n), n, label = n)) +
   geom_col() +
@@ -559,7 +535,7 @@ df.crimes %>%
   theme(axis.text.x = element_text(angle = 90, vjust = 0.25, hjust=1)) +
   labs(
     x = "", 
-    title = "Incident Types, 2022 YTD", 
+    title = "Incident Types, 2023 YTD", 
     caption = spokane_caption
     ) +
   scale_y_continuous("Incidents", labels = comma, expand = c(.1, .1))
@@ -574,7 +550,7 @@ df.crimes %>%
   theme(axis.text.x = element_text(angle = 90, vjust = 0.25, hjust=1)) +
   labs(
     x = "", 
-    title = "Incident Types, 2017 - 2022", 
+    title = "Incident Types, 2017-2023", 
     caption = spokane_caption
     ) +
   scale_y_continuous("Incidents", labels = comma, expand = c(.1, .1))
@@ -582,14 +558,14 @@ df.crimes %>%
 
 ```{r plot.ytd_offenses_by_weekday, fig.pos="H", fig.width=10, fig.height=7.5}
 df.crimes %>%
-  filter(year == 2022) %>%
+  filter(year == 2023) %>%
   count(dow) %>%
   ggplot(aes(fct_relevel(dow,"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"), n, label = n)) +
   geom_col() +
   geom_text(vjust = -0.5) +
   labs(
     x = "", 
-    title = "Incidents by Day, 2022 YTD", 
+    title = "Incidents by Day, 2023 YTD", 
     caption = spokane_caption
     ) +
   scale_y_continuous("Incidents", labels = comma, expand = c(.1, .1))
@@ -663,7 +639,7 @@ df.crimes %>%
   geom_text(vjust = -0.5) +
   labs(
     x = "", 
-    title = "Spokane Incidents by Day 2017 - 2022", 
+    title = "Spokane Incidents by Day 2017 - 2023", 
     caption = spokane_caption
     ) +
   scale_y_continuous("Incidents", labels = comma, expand = c(.1, .1))
@@ -854,11 +830,11 @@ model_data <- df.crimes %>%
 
 # Calculate start, end numerical dates
 start_date <- as.numeric(as.Date("2017-08-01") - as.Date("2017-01-01")) # First 2017 observed date
-end_date <- as.numeric(as.Date("2021-01-30") - as.Date("2021-01-01")) # Last 2021 observed date
+end_date <- as.numeric(as.Date("2024-01-30") - as.Date("2024-01-01")) # Last 2021 observed date
 freq <- 365 # Time series frequency
 
 ### All data time series ###
-ts.crimes <- ts(model_data, start = c(2017,start_date), end = c(2021,end_date), frequency = freq)
+ts.crimes <- ts(model_data, start = c(2017,start_date), end = c(2024,end_date), frequency = freq)
 
 # Decompose time series
 ts.crime_stl <- stl(ts.crimes[,2],"periodic") # Decompose time series
